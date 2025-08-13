@@ -8,6 +8,7 @@ import Account from './pages/Account';
 import Workers from './pages/Workers';
 import Login from './pages/Login';
 import './styles.css';
+import './mobile-fix.css';
 
 function requireAuth() { 
   return !!localStorage.getItem('adonai_token'); 
