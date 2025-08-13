@@ -2,15 +2,13 @@ services:
   - type: web
     name: adonai-farm-backend
     env: node
-    buildCommand: cd backend && npm install
+    buildCommand: cd backend && npm install && npm run migrate
     startCommand: cd backend && npm start
     envVars:
       - key: JWT_SECRET
         value: adonai_farm_super_secure_secret_2024
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 4000
     healthCheckPath: /api/health
 
   - type: web
