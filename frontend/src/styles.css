@@ -648,158 +648,296 @@ textarea {
 /* Mobile phones */
 @media (max-width: 480px) {
   .header-content {
-    padding: 0 0.75rem;
+    padding: 0 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .logo {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    flex-shrink: 0;
   }
 
   .hero {
-    height: 40vh;
-    margin-bottom: 1.5rem;
+    height: 35vh;
+    margin-bottom: 1rem;
   }
 
   .hero-content h1 {
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
   }
   
   .hero-content p {
-    font-size: 1rem;
-    padding: 0 0.5rem;
+    font-size: 0.95rem;
+    padding: 0 1rem;
+    line-height: 1.4;
   }
 
   .main-content {
-    padding: 0 0.75rem;
+    padding: 0 1rem;
   }
 
   .page-title {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    text-align: center;
   }
   
   .page-title::after {
-    width: 60px;
+    width: 50px;
     height: 3px;
   }
 
   .card {
     padding: 1rem;
     margin-bottom: 1rem;
-    border-radius: 12px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   
   .form-grid {
-    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 0.5rem;
   }
   
   .form-group label {
     font-size: 0.9rem;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    display: block;
   }
   
   input, select, textarea {
-    padding: 0.6rem;
-    font-size: 0.95rem;
-    border-radius: 10px;
+    padding: 0.75rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: 12px;
+    width: 100%;
+    border: 2px solid #e1e8ed;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--light-green);
+    box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+    outline: none;
   }
   
   .btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-    border-radius: 20px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 25px;
+    min-height: 44px; /* Touch-friendly */
+    font-weight: 600;
+    transition: all 0.3s ease;
   }
   
   .btn-small {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    min-height: 40px;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   
   .stat-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 15px;
+    text-align: center;
   }
   
   .stat-number {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-gold);
+    margin-bottom: 0.25rem;
   }
   
   .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    opacity: 0.9;
   }
 
   .animals-grid {
-    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .animal-card {
-    padding: 1rem;
+    padding: 1.25rem;
     border-radius: 15px;
+    border-left: 4px solid var(--accent-gold);
+  }
+  
+  .animal-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
   }
   
   .animal-name {
     font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--primary-green);
+    margin-bottom: 0.25rem;
   }
   
   .animal-type {
     font-size: 0.8rem;
-    padding: 0.2rem 0.6rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--cream);
+    border-radius: 15px;
+    display: inline-block;
+  }
+  
+  .animal-details {
+    margin-bottom: 1rem;
   }
   
   .animal-detail {
-    font-size: 0.85rem;
-    margin-bottom: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+  }
+  
+  .animal-detail strong {
+    color: var(--primary-green);
+    font-weight: 600;
   }
   
   .animal-notes {
     padding: 0.75rem;
     font-size: 0.9rem;
+    background: var(--soft-white);
+    border-radius: 8px;
+    border-left: 3px solid var(--light-green);
+    margin-bottom: 1rem;
   }
   
   .animal-actions {
-    gap: 0.4rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   .gallery-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 1rem;
+  }
+  
+  .gallery-item {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
   
   .gallery-item img {
-    height: 180px;
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
   }
 
   .modal {
-    width: 90%;
-    margin: 0.75rem;
-    padding: 1.25rem;
-    border-radius: 12px;
+    width: 95%;
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
   }
   
   .modal h3 {
     font-size: 1.3rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--primary-green);
   }
   
   .modal p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-bottom: 1.5rem;
+    line-height: 1.5;
   }
   
   .edit-form {
     padding: 1rem;
+    background: var(--soft-white);
+    border-radius: 12px;
+    border: 2px solid var(--light-green);
   }
   
   .message {
-    padding: 0.75rem;
+    padding: 1rem;
     font-size: 0.9rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Mobile Navigation Improvements */
+  .mobile-nav.open {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+  
+  .mobile-nav a {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    text-align: center;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mobile-nav .btn {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Improved Form Layout */
+  .edit-form .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* Better Touch Targets */
+  .animal-actions .btn {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  /* Improved Typography */
+  h1, h2, h3 {
+    line-height: 1.3;
+  }
+  
+  p {
+    line-height: 1.5;
   }
 }
 
