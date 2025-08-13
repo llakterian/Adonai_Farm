@@ -13,8 +13,8 @@ export default function Login() {
     setError(null);
 
     try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const res = await axios.post(api + '/auth/login', { username, password });
+      const api = import.meta.env.VITE_API_URL || '/.netlify/functions';
+      const res = await axios.post(api + '/auth', { username, password });
       localStorage.setItem('adonai_token', res.data.token);
       window.location.href = '/';
     } catch (e) {

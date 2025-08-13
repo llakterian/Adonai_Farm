@@ -1,8 +1,13 @@
-run = "cd backend && npm install && npm run migrate && npm start"
+run = "node start.js"
 modules = ["nodejs-18"]
+hidden = [".config", "package-lock.json"]
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", "package.json"]
 
 [nix]
 channel = "stable-22_11"
 
 [deployment]
-run = ["sh", "-c", "cd backend && npm install && npm run migrate && npm start"]
+run = ["sh", "-c", "npm install && npm start"]
+deploymentTarget = "cloudrun"
