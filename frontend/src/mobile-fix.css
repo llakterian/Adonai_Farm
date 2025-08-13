@@ -1,30 +1,43 @@
-/* MOBILE-FIRST DESIGN - CLEAN AND BEAUTIFUL */
+/* ULTIMATE MOBILE FIX - SIMPLE AND CLEAN */
+/* This will completely override all desktop styles for perfect mobile */
 
-/* Mobile First - Base styles for mobile */
-@media (max-width: 768px) {
-  /* Reset everything for mobile */
+@media screen and (max-width: 768px) {
+  /* RESET EVERYTHING FOR MOBILE */
   * {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
   }
   
-  body {
-    font-size: 14px;
-    line-height: 1.4;
-    margin: 0;
-    padding: 0;
+  html, body {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+  
+  .app {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
 
-  /* Header - Clean mobile header */
+  /* HEADER - SIMPLE AND CLEAN */
+  .header {
+    width: 100% !important;
+  }
+  
   .header-content {
-    padding: 0.75rem 1rem !important;
-    flex-direction: row !important;
+    padding: 1rem !important;
+    display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    min-height: 60px !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
   }
   
   .logo {
-    font-size: 1.4rem !important;
+    font-size: 1.3rem !important;
     flex-shrink: 0 !important;
   }
   
@@ -39,165 +52,156 @@
     background: none !important;
     border: none !important;
     color: white !important;
-    cursor: pointer !important;
   }
 
-  /* Hero - Compact and beautiful */
+  /* HERO - COMPACT */
   .hero {
-    height: 35vh !important;
+    height: 30vh !important;
     margin-bottom: 1rem !important;
+    width: 100% !important;
   }
 
   .hero-content h1 {
-    font-size: 1.8rem !important;
+    font-size: 1.5rem !important;
     margin-bottom: 0.5rem !important;
-    line-height: 1.2 !important;
     padding: 0 1rem !important;
+    text-align: center !important;
   }
   
   .hero-content p {
-    font-size: 1rem !important;
-    padding: 0 1.5rem !important;
-    line-height: 1.4 !important;
+    font-size: 0.9rem !important;
+    padding: 0 1rem !important;
+    text-align: center !important;
   }
 
-  /* Main content - Perfect spacing */
+  /* MAIN CONTENT - ORGANIZED */
   .main-content {
     padding: 0 1rem !important;
+    width: 100% !important;
     max-width: 100% !important;
   }
 
-  /* Page titles */
+  /* PAGE TITLES */
   .page-title {
-    font-size: 1.6rem !important;
+    font-size: 1.4rem !important;
     margin-bottom: 1rem !important;
     text-align: center !important;
-    padding: 0 1rem !important;
-  }
-  
-  .page-title::after {
-    width: 50px !important;
-    height: 3px !important;
-    margin: 0.5rem auto !important;
+    padding: 0 !important;
   }
 
-  /* Cards - Beautiful and organized */
+  /* CARDS - CLEAN AND ORGANIZED */
   .card {
+    width: 100% !important;
     padding: 1rem !important;
-    margin-bottom: 1rem !important;
-    border-radius: 12px !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1) !important;
-    border: 1px solid rgba(45, 80, 22, 0.1) !important;
+    margin: 0 0 1rem 0 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    box-sizing: border-box !important;
   }
 
-  /* Forms - Clean and touch-friendly */
+  /* FORMS - SIMPLE AND CLEAN */
   .form-grid {
+    display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
+    width: 100% !important;
   }
   
   .form-group {
+    width: 100% !important;
     margin-bottom: 1rem !important;
   }
   
   .form-group label {
-    font-size: 0.95rem !important;
-    margin-bottom: 0.5rem !important;
-    font-weight: 600 !important;
     display: block !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
     color: var(--primary-green) !important;
   }
   
   input, select, textarea {
-    padding: 0.75rem !important;
-    font-size: 16px !important; /* Prevents zoom on iOS */
-    border-radius: 8px !important;
     width: 100% !important;
-    border: 2px solid #e1e8ed !important;
-    transition: all 0.3s ease !important;
-    background: white !important;
+    padding: 0.75rem !important;
+    font-size: 16px !important;
+    border: 2px solid #ddd !important;
+    border-radius: 8px !important;
     box-sizing: border-box !important;
-  }
-  
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--light-green) !important;
-    box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1) !important;
-    outline: none !important;
-    transform: none !important;
+    background: white !important;
   }
 
-  /* Buttons - Perfect for mobile */
+  /* BUTTONS - TOUCH FRIENDLY */
   .btn {
-    padding: 0.75rem 1rem !important;
-    font-size: 0.95rem !important;
-    border-radius: 8px !important;
-    min-height: 48px !important;
-    font-weight: 600 !important;
-    transition: all 0.3s ease !important;
     width: 100% !important;
-    margin-bottom: 0.5rem !important;
+    padding: 0.75rem !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
     border: none !important;
+    min-height: 48px !important;
+    margin-bottom: 0.5rem !important;
     cursor: pointer !important;
     box-sizing: border-box !important;
   }
   
   .btn-small {
-    padding: 0.6rem 1rem !important;
-    font-size: 0.9rem !important;
-    min-height: 44px !important;
     width: auto !important;
+    padding: 0.6rem 1rem !important;
+    min-height: 44px !important;
     margin-bottom: 0 !important;
   }
 
   .btn-group {
     display: flex !important;
     flex-direction: column !important;
-    gap: 0.75rem !important;
-    margin-top: 1rem !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
   }
 
-  /* Stats - Beautiful 2x2 grid */
+  /* STATS - 2x2 GRID */
   .stats-grid {
+    display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 1rem !important;
     margin-bottom: 1.5rem !important;
+    width: 100% !important;
   }
   
   .stat-card {
-    padding: 1.25rem !important;
-    border-radius: 12px !important;
+    padding: 1rem !important;
+    border-radius: 10px !important;
     text-align: center !important;
-    min-height: 100px !important;
+    min-height: 80px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
   }
   
   .stat-number {
-    font-size: 1.8rem !important;
+    font-size: 1.6rem !important;
     font-weight: bold !important;
-    color: var(--accent-gold) !important;
     margin-bottom: 0.25rem !important;
-    line-height: 1 !important;
   }
   
   .stat-label {
-    font-size: 0.85rem !important;
-    opacity: 0.9 !important;
-    line-height: 1.2 !important;
+    font-size: 0.8rem !important;
   }
 
-  /* Animals grid - Single column, organized */
+  /* ANIMALS - SINGLE COLUMN */
   .animals-grid {
+    display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
+    width: 100% !important;
   }
   
   .animal-card {
+    width: 100% !important;
     padding: 1rem !important;
-    border-radius: 12px !important;
-    border-left: 4px solid var(--accent-gold) !important;
+    border-radius: 10px !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    border-left: 4px solid var(--accent-gold) !important;
+    box-sizing: border-box !important;
   }
   
   .animal-header {
@@ -205,180 +209,106 @@
     justify-content: space-between !important;
     align-items: flex-start !important;
     margin-bottom: 1rem !important;
-    flex-wrap: nowrap !important;
+    width: 100% !important;
   }
   
   .animal-name {
-    font-size: 1.1rem !important;
+    font-size: 1rem !important;
     font-weight: bold !important;
-    color: var(--primary-green) !important;
     margin-bottom: 0.25rem !important;
-    line-height: 1.2 !important;
   }
   
   .animal-type {
-    font-size: 0.8rem !important;
-    padding: 0.25rem 0.75rem !important;
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 10px !important;
     background: var(--cream) !important;
-    border-radius: 12px !important;
-    display: inline-block !important;
   }
   
   .animal-details {
     margin-bottom: 1rem !important;
+    width: 100% !important;
   }
   
   .animal-detail {
     display: flex !important;
     justify-content: space-between !important;
-    font-size: 0.9rem !important;
+    font-size: 0.85rem !important;
     margin-bottom: 0.5rem !important;
-    padding: 0.25rem 0 !important;
-  }
-  
-  .animal-detail strong {
-    color: var(--primary-green) !important;
-    font-weight: 600 !important;
-  }
-  
-  .animal-notes {
-    padding: 0.75rem !important;
-    font-size: 0.9rem !important;
-    background: var(--soft-white) !important;
-    border-radius: 8px !important;
-    border-left: 3px solid var(--light-green) !important;
-    margin-bottom: 1rem !important;
-    line-height: 1.4 !important;
+    width: 100% !important;
   }
   
   .animal-actions {
     display: flex !important;
     gap: 0.5rem !important;
-    flex-wrap: wrap !important;
+    width: 100% !important;
   }
   
   .animal-actions .btn {
     flex: 1 !important;
-    min-width: 120px !important;
     width: auto !important;
-    margin-bottom: 0 !important;
   }
 
-  /* Gallery - Single column, beautiful */
+  /* GALLERY - SINGLE COLUMN */
   .gallery-grid {
+    display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 1rem !important;
+    width: 100% !important;
   }
   
   .gallery-item {
-    border-radius: 12px !important;
+    width: 100% !important;
+    border-radius: 10px !important;
     overflow: hidden !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
   }
   
   .gallery-item img {
-    height: 200px !important;
     width: 100% !important;
+    height: 200px !important;
     object-fit: cover !important;
   }
 
-  /* Modal - Perfect for mobile */
+  /* MODAL - MOBILE FRIENDLY */
   .modal {
     width: 95% !important;
+    max-width: 95% !important;
     margin: 1rem auto !important;
-    padding: 1.25rem !important;
-    border-radius: 12px !important;
-    max-height: 85vh !important;
+    padding: 1rem !important;
+    border-radius: 10px !important;
+    max-height: 80vh !important;
     overflow-y: auto !important;
   }
-  
-  .modal h3 {
-    font-size: 1.3rem !important;
-    margin-bottom: 1rem !important;
-    color: var(--primary-green) !important;
-  }
-  
-  .modal p {
-    font-size: 0.95rem !important;
-    margin-bottom: 1.5rem !important;
-    line-height: 1.5 !important;
-  }
 
-  /* Edit form - Clean mobile layout */
-  .edit-form {
-    padding: 1rem !important;
-    background: var(--soft-white) !important;
-    border-radius: 8px !important;
-    border: 2px solid var(--light-green) !important;
-  }
-  
-  .edit-form .form-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
-
-  /* Messages - Clean and visible */
-  .message {
-    padding: 1rem !important;
-    font-size: 0.9rem !important;
-    border-radius: 8px !important;
-    margin-bottom: 1rem !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.5rem !important;
-    line-height: 1.4 !important;
-  }
-
-  /* Mobile Navigation - Beautiful */
+  /* MOBILE NAVIGATION */
   .mobile-nav.open {
+    display: flex !important;
+    flex-direction: column !important;
     padding: 1rem !important;
-    gap: 0.75rem !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
   }
   
   .mobile-nav a {
-    padding: 0.75rem 1rem !important;
+    padding: 0.75rem !important;
     border-radius: 8px !important;
-    font-size: 0.95rem !important;
     text-align: center !important;
     min-height: 48px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
-  
-  .mobile-nav .btn {
-    margin-top: 0.5rem !important;
-    width: 100% !important;
-    justify-content: center !important;
-  }
 
-  /* Typography improvements */
-  h1, h2, h3 {
-    line-height: 1.3 !important;
-  }
+  /* TYPOGRAPHY */
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.3rem !important; }
+  h3 { font-size: 1.1rem !important; }
   
-  h2 {
-    font-size: 1.3rem !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  h3 {
-    font-size: 1.2rem !important;
-    margin-bottom: 0.75rem !important;
-  }
-  
-  p {
-    line-height: 1.5 !important;
-    margin-bottom: 1rem !important;
-  }
-
-  /* Remove hover effects on mobile */
+  /* REMOVE HOVER EFFECTS ON MOBILE */
   .card:hover,
   .animal-card:hover,
-  .stat-card:hover {
-    transform: none !important;
-  }
-  
+  .stat-card:hover,
   .btn:hover {
     transform: none !important;
   }
