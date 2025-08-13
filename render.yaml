@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: adonai-farm-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: JWT_SECRET
+        value: adonai_farm_super_secure_secret_2024
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+    healthCheckPath: /api/health
+
+  - type: web
+    name: adonai-farm-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://adonai-farm-backend.onrender.com
