@@ -13,8 +13,8 @@ export default function Login() {
     setError(null);
 
     try {
-      const api = import.meta.env.VITE_API_URL || 'https://adonai-farm-backend.onrender.com';
-      const res = await axios.post(api + '/auth/login', { username, password });
+      const api = import.meta.env.VITE_API_URL || '/.netlify/functions';
+      const res = await axios.post(api + '/auth', { username, password });
       localStorage.setItem('adonai_token', res.data.token);
       window.location.href = '/';
     } catch (e) {
