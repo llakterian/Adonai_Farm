@@ -1,0 +1,43 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"  # Align with backend Dockerfile EXPOSE 4000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    environment:
+      - ENV=production
+      - JWT_SECRET=${JWT_SECRET:-your_production_jwt_secret_change_this_to_something_secure}
+    volumes:
+      - backend_data:/app/data  # Database persistence
+      - backend_uploads:/app/uploads  # Photo uploads persistence
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"  # Align with frontend Dockerfile EXPOSE 80
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      - VITE_API_URL=http://localhost:4000  # For production API calls from browser
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  backend_data:  # Persist SQLite database
+  backend_uploads:  # Persist uploaded photos
