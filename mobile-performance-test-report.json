@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "timestamp": "2025-08-16T14:00:24.321Z",
+    "totalTests": 25,
+    "passedTests": 24,
+    "failedTests": 1,
+    "successRate": 96
+  },
+  "details": {
+    "performance": {
+      "css": {
+        "totalSize": 225262,
+        "fileCount": 6,
+        "mediaQueries": 67,
+        "selectors": 1546,
+        "properties": 5573,
+        "optimizations": [
+          "Hardware acceleration enabled",
+          "Touch scrolling optimized",
+          "Will-change optimization applied",
+          "Overscroll behavior optimized"
+        ]
+      },
+      "metrics": {
+        "criticalCSS": true,
+        "minifiedCSS": true,
+        "efficientSelectors": true,
+        "hardwareAcceleration": true,
+        "optimizedAnimations": true,
+        "loadingStates": true
+      }
+    },
+    "compatibility": {
+      "cssGrid": true,
+      "flexbox": true,
+      "customProperties": true,
+      "mediaQueries": true,
+      "transforms": true,
+      "transitions": true,
+      "prefixes": [
+        "-webkit-"
+      ]
+    },
+    "accessibility": {
+      "focusIndicators": true,
+      "colorContrast": true,
+      "touchTargets": true,
+      "screenReaderSupport": true,
+      "keyboardNavigation": true,
+      "reducedMotion": true,
+      "highContrast": true
+    },
+    "mobile": {
+      "darkTheme": true,
+      "touchTargets": true,
+      "responsiveLayout": true,
+      "accessibilityCompliance": true,
+      "performanceOptimizations": true
+    },
+    "timestamp": "2025-08-16T14:00:24.321Z"
+  },
+  "recommendations": [
+    "Consider CSS minification and compression"
+  ]
+}

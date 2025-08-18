@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /animals
+Allow: /gallery
+Allow: /services
+Allow: /contact
+
+# Disallow admin and private areas
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /login
+
+# Allow search engines to access images
+Allow: /images/
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.webp
+Allow: *.gif
+
+# Sitemap location
+Sitemap: https://adonaifarm.co.ke/sitemap.xml
+
+# Crawl delay (optional - be respectful to server resources)
+Crawl-delay: 1

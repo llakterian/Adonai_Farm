@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+import { mockAnimals } from '../auth.js';
+import { usePermissions, PermissionGate } from '../utils/permissions.jsx';
+import SearchComponent from '../components/SearchComponent.jsx';
+import AnimalShowcase from '../components/AnimalShowcase.jsx';
+import SEOHead from '../components/SEOHead.jsx';
 
 const animalEmojis = {
   'Dairy Cattle': '🐄',
@@ -13,51 +18,67 @@ const animalEmojis = {
 };
 
 export default function Animals() {
+  const location = useLocation();
   const [animals, setAnimals] = useState([]);
+  const [filteredAnimals, setFilteredAnimals] = useState([]);
   const [form, setForm] = useState({ type: 'Dairy Cattle', name: '', dob: '', sex: 'F', notes: '' });
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ type: '', name: '', dob: '', sex: '', notes: '' });
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { canEdit, canDelete, isWorker } = usePermissions();
+
+  // Detect if this is a public route (not dashboard)
+  const isPublicRoute = !location.pathname.startsWith('/dashboard');
 
   useEffect(() => {
     load();
   }, []);
 
-  async function load() {
-    try {
-      setLoading(true);
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      const res = await axios.get(api + '/api/livestock', { 
-        headers: { Authorization: 'Bearer ' + token } 
-      });
-      setAnimals(res.data);
-    } catch (error) {
-      console.error('Error loading animals:', error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Update filtered animals when animals change
+    setFilteredAnimals(animals);
+  }, [animals]);
+
+  function load() {
+    setLoading(true);
+    // Load from localStorage or use mock data
+    const savedAnimals = localStorage.getItem('adonai_animals');
+    if (savedAnimals) {
+      setAnimals(JSON.parse(savedAnimals));
+    } else {
+      setAnimals([...mockAnimals]);
+      localStorage.setItem('adonai_animals', JSON.stringify(mockAnimals));
     }
+    setLoading(false);
   }
 
-  async function add(e) {
+  const handleSearchResults = (results, query, filters) => {
+    if (results === null) {
+      // Clear search - show all animals
+      setFilteredAnimals(animals);
+    } else {
+      // Show search results
+      setFilteredAnimals(results);
+    }
+  };
+
+  function add(e) {
     e.preventDefault();
     if (!form.name.trim()) return;
     
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.post(api + '/api/livestock', form, { 
-        headers: { Authorization: 'Bearer ' + token } 
-      });
-      setForm({ type: 'Dairy Cattle', name: '', dob: '', sex: 'F', notes: '' });
-      load();
-    } catch (error) {
-      console.error('Error adding animal:', error);
-    }
+    const newAnimal = {
+      id: Math.max(...animals.map(a => a.id), 0) + 1,
+      ...form
+    };
+    
+    const updatedAnimals = [...animals, newAnimal];
+    setAnimals(updatedAnimals);
+    localStorage.setItem('adonai_animals', JSON.stringify(updatedAnimals));
+    setForm({ type: 'Dairy Cattle', name: '', dob: '', sex: 'F', notes: '' });
   }
 
-  async function startEdit(animal) {
+  function startEdit(animal) {
     setEditingId(animal.id);
     setEditForm({
       type: animal.type,
@@ -68,22 +89,20 @@ export default function Animals() {
     });
   }
 
-  async function saveEdit(e) {
+  function saveEdit(e) {
     e.preventDefault();
     if (!editForm.name.trim()) return;
     
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.put(api + '/api/livestock/' + editingId, editForm, {
-        headers: { Authorization: 'Bearer ' + token }
-      });
-      setEditingId(null);
-      setEditForm({ type: '', name: '', dob: '', sex: '', notes: '' });
-      load();
-    } catch (error) {
-      console.error('Error updating animal:', error);
-    }
+    const updatedAnimals = animals.map(animal => 
+      animal.id === editingId 
+        ? { id: editingId, ...editForm }
+        : animal
+    );
+    
+    setAnimals(updatedAnimals);
+    localStorage.setItem('adonai_animals', JSON.stringify(updatedAnimals));
+    setEditingId(null);
+    setEditForm({ type: '', name: '', dob: '', sex: '', notes: '' });
   }
 
   function cancelEdit() {
@@ -91,23 +110,38 @@ export default function Animals() {
     setEditForm({ type: '', name: '', dob: '', sex: '', notes: '' });
   }
 
-  async function deleteAnimal(id) {
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.delete(api + '/api/livestock/' + id, {
-        headers: { Authorization: 'Bearer ' + token }
-      });
-      setDeleteConfirm(null);
-      load();
-    } catch (error) {
-      console.error('Error deleting animal:', error);
-    }
+  function deleteAnimal(id) {
+    const updatedAnimals = animals.filter(animal => animal.id !== id);
+    setAnimals(updatedAnimals);
+    localStorage.setItem('adonai_animals', JSON.stringify(updatedAnimals));
+    setDeleteConfirm(null);
   }
 
-  async function exportCSV() {
-    const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-    window.open(api + '/api/reports/animals.csv', '_blank');
+  function exportCSV() {
+    // Create CSV content from animals data
+    const headers = ['ID', 'Type', 'Name', 'Date of Birth', 'Sex', 'Notes'];
+    const csvContent = [
+      headers.join(','),
+      ...animals.map(animal => [
+        animal.id,
+        `"${animal.type}"`,
+        `"${animal.name}"`,
+        animal.dob || '',
+        animal.sex,
+        `"${animal.notes || ''}"`
+      ].join(','))
+    ].join('\n');
+    
+    // Create and download CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `adonai-farm-animals-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 
   const getAnimalAge = (dob) => {
@@ -124,6 +158,45 @@ export default function Animals() {
       return `${years} year${years !== 1 ? 's' : ''}${months > 0 ? ` ${months} month${months !== 1 ? 's' : ''}` : ''}`;
     }
   };
+
+  // If this is a public route, show the public animal showcase
+  if (isPublicRoute) {
+    return (
+      <>
+        <SEOHead 
+          pageType="animals"
+          title="Meet Our Animals - Livestock at Adonai Farm"
+          description="Meet the wonderful animals at Adonai Farm in Kericho, Kenya. Our diverse livestock includes dairy cattle, beef cattle, goats, sheep, and poultry - all raised with care and modern farming practices."
+          keywords={[
+            "Adonai Farm animals",
+            "livestock Kericho Kenya",
+            "farm animals Kenya",
+            "dairy cattle Kericho",
+            "beef cattle Kenya",
+            "goats sheep poultry",
+            "pasture raised animals",
+            "sustainable livestock farming",
+            "animal welfare Kenya",
+            "farm animal tours Kericho"
+          ]}
+          image="/images/adonai1.jpg"
+          url="/animals"
+          breadcrumbs={[
+            { name: "Home", url: "/" },
+            { name: "Our Animals", url: "/animals" }
+          ]}
+          pageData={{
+            animals: animals.map(animal => ({
+              name: animal.name,
+              type: animal.type,
+              description: `A wonderful ${animal.type.toLowerCase()} at Adonai Farm`
+            }))
+          }}
+        />
+        <AnimalShowcase />
+      </>
+    );
+  }
 
   if (loading) {
     return (
@@ -195,72 +268,96 @@ export default function Animals() {
         </div>
       </div>
 
-      {/* Add New Animal Form */}
-      <div className="card">
-        <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>➕ Add New Animal</h2>
-        <form onSubmit={add}>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Animal Type</label>
-              <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
-                <option>Dairy Cattle</option>
-                <option>Beef Cattle</option>
-                <option>Dairy Goat</option>
-                <option>Beef Goat</option>
-                <option>Sheep</option>
-                <option>Pedigree Sheep</option>
-                <option>Chicken</option>
-                <option>Poultry</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Name</label>
-              <input 
-                placeholder="Enter animal name" 
-                value={form.name} 
-                onChange={e => setForm({ ...form, name: e.target.value })}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Date of Birth</label>
-              <input 
-                type="date" 
-                value={form.dob} 
-                onChange={e => setForm({ ...form, dob: e.target.value })} 
-              />
-            </div>
-            <div className="form-group">
-              <label>Sex</label>
-              <select value={form.sex} onChange={e => setForm({ ...form, sex: e.target.value })}>
-                <option value="F">Female</option>
-                <option value="M">Male</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Notes</label>
-              <textarea 
-                value={form.notes} 
-                onChange={e => setForm({ ...form, notes: e.target.value })} 
-                placeholder="Additional notes about the animal..."
-                rows="3"
-              />
-            </div>
+      {/* Advanced Search and Filtering */}
+      <SearchComponent
+        dataType="animals"
+        onResults={handleSearchResults}
+        placeholder="Search animals by name, species, breed, tag number..."
+        showFilters={true}
+        showPresets={true}
+        className="animals-search"
+      />
+
+      {/* Add New Animal Form - Only for Admin and Supervisor */}
+      <PermissionGate 
+        feature="animals" 
+        fallback={
+          <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+            <h3 style={{ color: 'var(--text-light)' }}>👁️ View Only Access</h3>
+            <p style={{ color: 'var(--text-light)' }}>
+              You have read-only access to animal records. Contact an administrator to add or modify animals.
+            </p>
           </div>
-          <div className="btn-group">
-            <button type="submit" className="btn btn-primary">
-              ➕ Add Animal
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={exportCSV}>
-              📊 Export CSV
-            </button>
+        }
+      >
+        {canEdit('animals') && (
+          <div className="card">
+            <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>➕ Add New Animal</h2>
+            <form onSubmit={add}>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Animal Type</label>
+                  <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
+                    <option>Dairy Cattle</option>
+                    <option>Beef Cattle</option>
+                    <option>Dairy Goat</option>
+                    <option>Beef Goat</option>
+                    <option>Sheep</option>
+                    <option>Pedigree Sheep</option>
+                    <option>Chicken</option>
+                    <option>Poultry</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Name</label>
+                  <input 
+                    placeholder="Enter animal name" 
+                    value={form.name} 
+                    onChange={e => setForm({ ...form, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Date of Birth</label>
+                  <input 
+                    type="date" 
+                    value={form.dob} 
+                    onChange={e => setForm({ ...form, dob: e.target.value })} 
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Sex</label>
+                  <select value={form.sex} onChange={e => setForm({ ...form, sex: e.target.value })}>
+                    <option value="F">Female</option>
+                    <option value="M">Male</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Notes</label>
+                  <textarea 
+                    value={form.notes} 
+                    onChange={e => setForm({ ...form, notes: e.target.value })} 
+                    placeholder="Additional notes about the animal..."
+                    rows="3"
+                  />
+                </div>
+              </div>
+              <div className="btn-group">
+                <button type="submit" className="btn btn-primary">
+                  ➕ Add Animal
+                </button>
+                <button type="button" className="btn btn-secondary" onClick={exportCSV}>
+                  📊 Export CSV
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
+        )}
+      </PermissionGate>
 
       {/* Animals Grid */}
       <div className="animals-grid">
-        {animals.map(animal => (
+        {filteredAnimals.map(animal => (
           <div key={animal.id} className="animal-card">
             {editingId === animal.id ? (
               <form onSubmit={saveEdit} className="edit-form">
@@ -364,18 +461,27 @@ export default function Animals() {
                 )}
 
                 <div className="animal-actions">
-                  <button 
-                    className="btn btn-outline btn-small" 
-                    onClick={() => startEdit(animal)}
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button 
-                    className="btn btn-danger btn-small"
-                    onClick={() => setDeleteConfirm(animal.id)}
-                  >
-                    🗑️ Delete
-                  </button>
+                  {canEdit('animals') && (
+                    <button 
+                      className="btn btn-outline btn-small" 
+                      onClick={() => startEdit(animal)}
+                    >
+                      ✏️ Edit
+                    </button>
+                  )}
+                  {canDelete('animals') && (
+                    <button 
+                      className="btn btn-danger btn-small"
+                      onClick={() => setDeleteConfirm(animal.id)}
+                    >
+                      🗑️ Delete
+                    </button>
+                  )}
+                  {!canEdit('animals') && !canDelete('animals') && (
+                    <div style={{ color: 'var(--text-light)', fontSize: '0.9rem', fontStyle: 'italic' }}>
+                      👁️ View only
+                    </div>
+                  )}
                 </div>
               </div>
             )}

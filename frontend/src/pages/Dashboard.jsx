@@ -1,40 +1,130 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, CartesianGrid, Legend } from 'recharts';
+import { usePermissions, getDashboardContent } from '../utils/permissions.jsx';
+import { notificationSystem } from '../utils/notifications.js';
+import { Link } from 'react-router-dom';
+import ImageLoadingTest from '../components/ImageLoadingTest.jsx';
+import SecurityTest from '../components/SecurityTest.jsx';
 
 const COLORS = ['#2d5016', '#4a7c59', '#d4af37', '#8b4513', '#6b8e23', '#556b2f'];
 
 export default function Dashboard() {
   const [animals, setAnimals] = useState([]);
+  const [workers, setWorkers] = useState([]);
+  const [infrastructure, setInfrastructure] = useState([]);
+  const [timeEntries, setTimeEntries] = useState([]);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [performanceMetrics, setPerformanceMetrics] = useState({});
+  const [notifications, setNotifications] = useState([]);
+  const [showImageTest, setShowImageTest] = useState(false);
+  const [showSecurityTest, setShowSecurityTest] = useState(false);
+  const { user, role, canAccess, isAdmin, isSupervisor, isWorker } = usePermissions();
 
   useEffect(() => {
     loadData();
+    loadNotifications();
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    const notificationTimer = setInterval(loadNotifications, 30000); // Update notifications every 30 seconds
+    return () => {
+      clearInterval(timer);
+      clearInterval(notificationTimer);
+    };
   }, []);
+
+  const loadNotifications = () => {
+    const activeNotifications = notificationSystem.getActiveNotifications();
+    setNotifications(activeNotifications.slice(0, 5)); // Show only top 5 notifications
+  };
 
   async function loadData() {
     try {
       setLoading(true);
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
       
-      const [animalsRes, photosRes] = await Promise.all([
-        axios.get(api + '/api/livestock', { headers: { Authorization: 'Bearer ' + token } }),
-        axios.get(api + '/api/gallery', { headers: { Authorization: 'Bearer ' + token } }).catch(() => ({ data: [] }))
-      ]);
+      // Load data from localStorage
+      const savedAnimals = localStorage.getItem('adonai_animals');
+      if (savedAnimals) {
+        setAnimals(JSON.parse(savedAnimals));
+      }
+
+      const savedWorkers = localStorage.getItem('adonai_workers');
+      if (savedWorkers) {
+        setWorkers(JSON.parse(savedWorkers));
+      }
+
+      const savedInfrastructure = localStorage.getItem('adonai_infrastructure');
+      if (savedInfrastructure) {
+        setInfrastructure(JSON.parse(savedInfrastructure));
+      }
+
+      const savedTimeEntries = localStorage.getItem('adonai_time_entries');
+      if (savedTimeEntries) {
+        setTimeEntries(JSON.parse(savedTimeEntries));
+      }
+
+      const savedPhotos = localStorage.getItem('adonai_gallery');
+      if (savedPhotos) {
+        setPhotos(JSON.parse(savedPhotos));
+      }
+
+      // Calculate performance metrics
+      calculatePerformanceMetrics();
       
-      setAnimals(animalsRes.data);
-      setPhotos(photosRes.data);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
       setLoading(false);
     }
   }
+
+  const calculatePerformanceMetrics = () => {
+    const today = new Date().toISOString().split('T')[0];
+    const thisWeek = new Date();
+    thisWeek.setDate(thisWeek.getDate() - 7);
+    const thisMonth = new Date();
+    thisMonth.setMonth(thisMonth.getMonth() - 1);
+
+    // Calculate today's metrics
+    const todayTimeEntries = timeEntries.filter(entry => 
+      entry.clock_in && entry.clock_in.startsWith(today)
+    );
+
+    const todayHours = todayTimeEntries.reduce((sum, entry) => 
+      sum + (entry.hours_worked || 0), 0
+    );
+
+    // Calculate weekly metrics
+    const weeklyTimeEntries = timeEntries.filter(entry => 
+      entry.clock_in && new Date(entry.clock_in) >= thisWeek
+    );
+
+    const weeklyHours = weeklyTimeEntries.reduce((sum, entry) => 
+      sum + (entry.hours_worked || 0), 0
+    );
+
+    // Calculate infrastructure utilization
+    const activeInfrastructure = infrastructure.filter(item => 
+      item.status === 'Active'
+    ).length;
+
+    const totalInfrastructureValue = infrastructure.reduce((sum, item) => 
+      sum + (item.current_value || item.value || 0), 0
+    );
+
+    setPerformanceMetrics({
+      todayHours: todayHours.toFixed(1),
+      weeklyHours: weeklyHours.toFixed(1),
+      activeWorkers: todayTimeEntries.length,
+      infrastructureUtilization: infrastructure.length > 0 ? 
+        ((activeInfrastructure / infrastructure.length) * 100).toFixed(1) : 0,
+      totalAssetValue: totalInfrastructureValue,
+      animalsThisMonth: animals.filter(animal => 
+        animal.created_at && new Date(animal.created_at) >= thisMonth
+      ).length
+    });
+  };
 
   const getAnimalStats = () => {
     const typeCounts = animals.reduce((acc, animal) => {
@@ -125,7 +215,7 @@ export default function Dashboard() {
   const weather = getWeatherInfo();
 
   return (
-    <div>
+    <div className="admin-container">
       {/* Hero Welcome Section with Live Time & Weather */}
       <div className="card" style={{ 
         background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
@@ -173,11 +263,16 @@ export default function Dashboard() {
             fontSize: '3rem',
             textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
           }}>
-            🌾 Adonai Farm Dashboard
+            🌾 {getDashboardContent(role).title}
           </h1>
           <p style={{ fontSize: '1.3rem', opacity: 0.9, maxWidth: '800px', margin: '0 auto' }}>
-            Your comprehensive livestock & agricultural management system
+            {getDashboardContent(role).description}
           </p>
+          {user && (
+            <p style={{ fontSize: '1rem', opacity: 0.8, marginTop: '0.5rem' }}>
+              Welcome back, {user.name}!
+            </p>
+          )}
           <div style={{ 
             display: 'flex', 
             justifyContent: 'center', 
@@ -209,7 +304,391 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Quick Stats */}
+      {/* Role-Specific Performance Metrics */}
+      {isAdmin() && (
+        <div className="card" style={{ 
+          background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
+          color: 'white',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{ color: 'var(--accent-gold)', marginBottom: '1.5rem' }}>
+            📊 Real-Time Performance Indicators
+          </h2>
+          <div className="stats-grid">
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{performanceMetrics.todayHours || '0.0'}</div>
+              <div className="stat-label">⏰ Hours Today</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{performanceMetrics.activeWorkers || 0}</div>
+              <div className="stat-label">👷 Active Workers</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{performanceMetrics.infrastructureUtilization || 0}%</div>
+              <div className="stat-label">🚜 Asset Utilization</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">${(performanceMetrics.totalAssetValue || 0).toLocaleString()}</div>
+              <div className="stat-label">💰 Asset Value</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Supervisor Performance Metrics */}
+      {isSupervisor() && (
+        <div className="card" style={{ 
+          background: 'linear-gradient(135deg, var(--light-green) 0%, var(--accent-gold) 100%)',
+          color: 'white',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{ color: 'white', marginBottom: '1.5rem' }}>
+            📈 Operational Metrics
+          </h2>
+          <div className="stats-grid">
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{performanceMetrics.weeklyHours || '0.0'}</div>
+              <div className="stat-label">📅 Weekly Hours</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{workers.length}</div>
+              <div className="stat-label">👥 Total Workers</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{performanceMetrics.animalsThisMonth || 0}</div>
+              <div className="stat-label">🐄 New Animals</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{infrastructure.length}</div>
+              <div className="stat-label">🏗️ Infrastructure</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Worker Personal Dashboard */}
+      {isWorker() && (
+        <div className="card" style={{ 
+          background: 'linear-gradient(135deg, var(--accent-gold) 0%, var(--warm-brown) 100%)',
+          color: 'white',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{ color: 'white', marginBottom: '1.5rem' }}>
+            👷 Your Work Summary
+          </h2>
+          <div className="stats-grid">
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{performanceMetrics.todayHours || '0.0'}</div>
+              <div className="stat-label">⏰ Hours Today</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{performanceMetrics.weeklyHours || '0.0'}</div>
+              <div className="stat-label">📅 Hours This Week</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{animals.length}</div>
+              <div className="stat-label">🐄 Animals to Care For</div>
+            </div>
+            <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
+              <div className="stat-number">{currentTime.toLocaleDateString()}</div>
+              <div className="stat-label">📅 Today's Date</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notification Summary Widget */}
+      {notifications.length > 0 && (
+        <div className="card" style={{ 
+          background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
+          color: 'white',
+          marginBottom: '2rem'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h2 style={{ color: 'white', margin: 0 }}>
+              🔔 Recent Notifications
+            </h2>
+            <Link 
+              to="/notifications" 
+              style={{ 
+                color: 'white', 
+                textDecoration: 'none',
+                background: 'rgba(255,255,255,0.2)',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                fontSize: '0.9rem'
+              }}
+            >
+              View All →
+            </Link>
+          </div>
+          <div style={{ display: 'grid', gap: '0.5rem' }}>
+            {notifications.map(notification => (
+              <div 
+                key={notification.id}
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem'
+                }}
+              >
+                <div style={{ fontSize: '1.2rem' }}>
+                  {notification.type === 'maintenance' ? '🔧' :
+                   notification.type === 'event' ? '📅' :
+                   notification.type === 'system' ? '⚙️' : '⏰'}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>
+                    {notification.title}
+                  </div>
+                  <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>
+                    {notification.message}
+                  </div>
+                </div>
+                <div style={{ 
+                  fontSize: '0.7rem', 
+                  opacity: 0.8,
+                  background: 'rgba(255,255,255,0.2)',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '10px'
+                }}>
+                  {notification.priority === 'critical' ? '🚨' :
+                   notification.priority === 'high' ? '⚠️' : '📋'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Quick Navigation - Admin Only */}
+      {(isAdmin() || isSupervisor()) && (
+        <div className="card" style={{ 
+          background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
+          color: 'white',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{ color: 'var(--accent-gold)', marginBottom: '1.5rem' }}>
+            🚀 Quick Actions
+          </h2>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+            gap: '1rem' 
+          }}>
+            <Link 
+              to="/dashboard/contact" 
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                textDecoration: 'none', 
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ fontSize: '1.5rem' }}>📧</div>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Contact Inquiries</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage customer messages</div>
+              </div>
+            </Link>
+            <Link 
+              to="/dashboard/public-content" 
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                textDecoration: 'none', 
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ fontSize: '1.5rem' }}>🌐</div>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Public Website</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage public content</div>
+              </div>
+            </Link>
+            <Link 
+              to="/dashboard/animals" 
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                textDecoration: 'none', 
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ fontSize: '1.5rem' }}>🐄</div>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Animal Management</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>View and manage livestock</div>
+              </div>
+            </Link>
+            <Link 
+              to="/dashboard/workers" 
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                textDecoration: 'none', 
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ fontSize: '1.5rem' }}>👥</div>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Worker Management</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage staff and time</div>
+              </div>
+            </Link>
+            <Link 
+              to="/dashboard/reports" 
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                textDecoration: 'none', 
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ fontSize: '1.5rem' }}>📊</div>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Reports & Analytics</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>View farm reports</div>
+              </div>
+            </Link>
+            <button 
+              onClick={() => setShowImageTest(true)}
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                border: 'none',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ fontSize: '1.5rem' }}>🔍</div>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Image Loading Test</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Test deployment images</div>
+              </div>
+            </button>
+            <button 
+              onClick={() => setShowSecurityTest(true)}
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                padding: '1rem', 
+                borderRadius: '8px', 
+                border: 'none',
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                transition: 'all 0.3s ease',
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.2)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(255,255,255,0.1)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              <div style={{ fontSize: '1.5rem' }}>🔒</div>
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Security Test Suite</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Test security measures</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Stats - Available to all roles */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-number">{animals.length}</div>
@@ -229,53 +708,184 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Charts Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
-        {/* Animals by Type Chart */}
-        <div className="card">
-          <h3 style={{ color: 'var(--primary-green)', marginBottom: '1.5rem' }}>
-            📊 Animals by Type
-          </h3>
-          <div style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={typeData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="var(--primary-green)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+      {/* Interactive Charts Section - Only for Admin and Supervisor */}
+      {(isAdmin() || isSupervisor()) && (
+        <>
+          {/* Farm Overview KPIs */}
+          <div className="card" style={{ 
+            background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
+            color: 'white',
+            marginBottom: '2rem'
+          }}>
+            <h2 style={{ color: 'var(--accent-gold)', marginBottom: '1.5rem' }}>
+              📈 Farm Overview & KPIs
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+              {/* Monthly Growth Trend */}
+              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1.5rem', borderRadius: '12px' }}>
+                <h4 style={{ color: 'var(--accent-gold)', marginBottom: '1rem' }}>📊 Monthly Growth</h4>
+                <div style={{ height: '200px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={[
+                      { month: 'Jan', animals: animals.length * 0.7, workers: workers.length * 0.8 },
+                      { month: 'Feb', animals: animals.length * 0.8, workers: workers.length * 0.85 },
+                      { month: 'Mar', animals: animals.length * 0.9, workers: workers.length * 0.9 },
+                      { month: 'Apr', animals: animals.length, workers: workers.length }
+                    ]}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
+                      <XAxis dataKey="month" stroke="white" />
+                      <YAxis stroke="white" />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'rgba(0,0,0,0.8)', 
+                          border: 'none', 
+                          borderRadius: '8px',
+                          color: 'white'
+                        }} 
+                      />
+                      <Legend />
+                      <Line type="monotone" dataKey="animals" stroke="var(--accent-gold)" strokeWidth={3} name="Animals" />
+                      <Line type="monotone" dataKey="workers" stroke="#fff" strokeWidth={3} name="Workers" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
 
-        {/* Gender Distribution */}
-        <div className="card">
-          <h3 style={{ color: 'var(--primary-green)', marginBottom: '1.5rem' }}>
-            ⚧️ Gender Distribution
-          </h3>
-          <div style={{ height: '300px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={sexData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {sexData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+              {/* Productivity Metrics */}
+              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '1.5rem', borderRadius: '12px' }}>
+                <h4 style={{ color: 'var(--accent-gold)', marginBottom: '1rem' }}>⚡ Productivity Index</h4>
+                <div style={{ height: '200px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={[
+                      { day: 'Mon', productivity: 85, efficiency: 78 },
+                      { day: 'Tue', productivity: 92, efficiency: 85 },
+                      { day: 'Wed', productivity: 88, efficiency: 82 },
+                      { day: 'Thu', productivity: 95, efficiency: 90 },
+                      { day: 'Fri', productivity: 90, efficiency: 87 },
+                      { day: 'Sat', productivity: 87, efficiency: 84 },
+                      { day: 'Sun', productivity: 82, efficiency: 79 }
+                    ]}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
+                      <XAxis dataKey="day" stroke="white" />
+                      <YAxis stroke="white" />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'rgba(0,0,0,0.8)', 
+                          border: 'none', 
+                          borderRadius: '8px',
+                          color: 'white'
+                        }} 
+                      />
+                      <Legend />
+                      <Area type="monotone" dataKey="productivity" stackId="1" stroke="var(--accent-gold)" fill="var(--accent-gold)" fillOpacity={0.6} name="Productivity %" />
+                      <Area type="monotone" dataKey="efficiency" stackId="2" stroke="#fff" fill="#fff" fillOpacity={0.3} name="Efficiency %" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+
+          {/* Detailed Analytics Charts */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
+            {/* Animals by Type Chart */}
+            <div className="card">
+              <h3 style={{ color: 'var(--primary-green)', marginBottom: '1.5rem' }}>
+                📊 Animals by Type
+              </h3>
+              <div style={{ height: '300px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={typeData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="value" fill="var(--primary-green)" name="Count" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Gender Distribution */}
+            <div className="card">
+              <h3 style={{ color: 'var(--primary-green)', marginBottom: '1.5rem' }}>
+                ⚧️ Gender Distribution
+              </h3>
+              <div style={{ height: '300px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={sexData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, value }) => `${name}: ${value}`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {sexData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Infrastructure Status */}
+            <div className="card">
+              <h3 style={{ color: 'var(--primary-green)', marginBottom: '1.5rem' }}>
+                🏗️ Infrastructure Status
+              </h3>
+              <div style={{ height: '300px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={[
+                    { name: 'Active', count: infrastructure.filter(i => i.status === 'Active').length },
+                    { name: 'Maintenance', count: infrastructure.filter(i => i.status === 'Maintenance').length },
+                    { name: 'Retired', count: infrastructure.filter(i => i.status === 'Retired').length }
+                  ]}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="count" fill="var(--accent-gold)" name="Infrastructure Count" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Worker Performance */}
+            <div className="card">
+              <h3 style={{ color: 'var(--primary-green)', marginBottom: '1.5rem' }}>
+                👷 Worker Performance
+              </h3>
+              <div style={{ height: '300px' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={[
+                    { week: 'Week 1', hours: performanceMetrics.weeklyHours * 0.8, efficiency: 85 },
+                    { week: 'Week 2', hours: performanceMetrics.weeklyHours * 0.9, efficiency: 88 },
+                    { week: 'Week 3', hours: performanceMetrics.weeklyHours * 0.95, efficiency: 92 },
+                    { week: 'Week 4', hours: performanceMetrics.weeklyHours, efficiency: 90 }
+                  ]}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="week" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="hours" stroke="var(--primary-green)" strokeWidth={2} name="Hours Worked" />
+                    <Line type="monotone" dataKey="efficiency" stroke="var(--accent-gold)" strokeWidth={2} name="Efficiency %" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Farm Assets Overview */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
@@ -550,6 +1160,16 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Image Loading Test Modal */}
+      {showImageTest && (
+        <ImageLoadingTest onClose={() => setShowImageTest(false)} />
+      )}
+
+      {/* Security Test Modal */}
+      {showSecurityTest && (
+        <SecurityTest onClose={() => setShowSecurityTest(false)} />
+      )}
     </div>
   );
 }

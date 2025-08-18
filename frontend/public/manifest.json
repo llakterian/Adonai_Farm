@@ -1,0 +1,146 @@
+{
+  "name": "Adonai Farm Management System",
+  "short_name": "Adonai Farm",
+  "description": "Complete farm management system for livestock, workers, and infrastructure",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f5dc",
+  "theme_color": "#2d5016",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["productivity", "business", "utilities"],
+  "icons": [
+    {
+      "src": "/images/farm-icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/farm-icon-96.png", 
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/farm-icon-128.png",
+      "sizes": "128x128", 
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/farm-icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/farm-icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/farm-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/farm-icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/farm-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/screenshot-mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Dashboard view on mobile"
+    },
+    {
+      "src": "/images/screenshot-mobile-2.png", 
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Animal management on mobile"
+    },
+    {
+      "src": "/images/screenshot-desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png", 
+      "form_factor": "wide",
+      "label": "Dashboard view on desktop"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View farm overview and statistics",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/images/dashboard-icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Animals",
+      "short_name": "Animals", 
+      "description": "Manage livestock and animals",
+      "url": "/animals",
+      "icons": [
+        {
+          "src": "/images/animals-icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Workers",
+      "short_name": "Workers",
+      "description": "Manage farm workers and time tracking", 
+      "url": "/workers",
+      "icons": [
+        {
+          "src": "/images/workers-icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "short_name": "Notifications",
+      "description": "View maintenance reminders and alerts",
+      "url": "/notifications", 
+      "icons": [
+        {
+          "src": "/images/notifications-icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate"
+}

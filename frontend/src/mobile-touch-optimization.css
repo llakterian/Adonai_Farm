@@ -1,0 +1,704 @@
+/* ==============================================
+   MOBILE ADMIN TOUCH OPTIMIZATION
+   Task 4: Optimize mobile admin interface for touch interactions
+   ============================================== */
+
+/* MOBILE TOUCH OPTIMIZATION - ADMIN INTERFACE */
+@media screen and (max-width: 768px) {
+  
+  /* ==============================================
+     TOUCH TARGET SIZE OPTIMIZATION (44px minimum)
+     ============================================== */
+  
+  /* All interactive elements must meet 44px minimum touch target */
+  .admin-container button,
+  .admin-container a,
+  .admin-container input,
+  .admin-container select,
+  .admin-container textarea,
+  .admin-container .btn,
+  .admin-container .admin-tab,
+  .admin-container .btn-logout,
+  .admin-container .btn-view-public {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    line-height: 1.2 !important;
+    border-radius: 8px !important;
+    touch-action: manipulation !important; /* Prevents double-tap zoom */
+  }
+  
+  /* Larger touch targets for primary actions */
+  .admin-container .btn-primary,
+  .admin-container .btn-danger {
+    min-height: 48px !important;
+    padding: 14px 20px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Admin header navigation tabs - touch optimized */
+  .admin-nav-tabs .admin-tab {
+    min-height: 48px !important;
+    min-width: 60px !important;
+    padding: 6px 8px !important;
+    margin: 2px !important;
+    font-size: 11px !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+    border-radius: 8px !important;
+    background: var(--mobile-bg-secondary) !important;
+    color: var(--mobile-text-primary) !important;
+    text-decoration: none !important;
+    flex: 1 !important;
+    max-width: 100px !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  
+  /* Active tab styling */
+  .admin-nav-tabs .admin-tab.active {
+    background: var(--mobile-accent) !important;
+    color: white !important;
+    border-color: var(--mobile-accent) !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Hover effect for tabs */
+  .admin-nav-tabs .admin-tab:hover {
+    background: var(--mobile-accent) !important;
+    color: white !important;
+    border-color: var(--mobile-accent) !important;
+  }
+  
+  /* Enhanced touch feedback for tabs */
+  .admin-nav-tabs .admin-tab:active {
+    transform: scale(0.95) !important;
+    background: var(--mobile-accent) !important;
+    border-color: var(--mobile-accent) !important;
+    color: white !important;
+  }
+  
+  /* Logout button - enhanced touch target */
+  .btn-logout {
+    min-height: 48px !important;
+    min-width: 100px !important;
+    padding: 12px 20px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+  
+  /* View public site button - touch optimized */
+  .btn-view-public {
+    min-height: 48px !important;
+    min-width: 100px !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+  
+  /* ==============================================
+     SMOOTH SCROLLING AND RESPONSIVE LAYOUT
+     ============================================== */
+  
+  /* Enable smooth scrolling throughout admin interface */
+  .admin-container,
+  .admin-container * {
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+  }
+  
+  /* Admin container - mobile optimized layout */
+  .admin-container {
+    padding: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    background-color: var(--mobile-bg-primary) !important;
+    color: var(--mobile-text-primary) !important;
+  }
+  
+  /* Admin header - mobile responsive layout */
+  .admin-header-fixed {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    background: var(--mobile-bg-secondary) !important;
+    border-bottom: 2px solid var(--mobile-border) !important;
+    box-shadow: 0 4px 12px var(--mobile-shadow) !important;
+    width: 100% !important;
+  }
+  
+  .admin-header-content {
+    flex-direction: column !important;
+    padding: 12px !important;
+    gap: 12px !important;
+    min-height: auto !important;
+    align-items: stretch !important;
+  }
+  
+  /* Logo section - mobile layout */
+  .admin-logo-section {
+    order: 1 !important;
+    text-align: center !important;
+    margin-bottom: 8px !important;
+  }
+  
+  .admin-logo-link {
+    font-size: 18px !important;
+    padding: 8px 12px !important;
+    color: var(--mobile-accent) !important;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  /* Navigation tabs - mobile responsive grid */
+  .admin-nav-tabs {
+    order: 2 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  
+  /* User section - mobile layout */
+  .admin-user-section {
+    order: 3 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 8px 0 !important;
+    border-top: 1px solid var(--mobile-border) !important;
+  }
+  
+  .admin-user-info {
+    flex: 1 !important;
+    text-align: left !important;
+  }
+  
+  .admin-user-name {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--mobile-text-primary) !important;
+    display: block !important;
+  }
+  
+  .admin-user-role {
+    font-size: 12px !important;
+    color: var(--mobile-text-secondary) !important;
+    display: block !important;
+  }
+  
+  .admin-actions {
+    display: flex !important;
+    gap: 8px !important;
+    align-items: center !important;
+  }
+  
+  /* ==============================================
+     ENHANCED TOUCH INTERACTIONS
+     ============================================== */
+  
+  /* Touch feedback for all interactive elements */
+  .admin-container button:active,
+  .admin-container .btn:active,
+  .admin-container a:active,
+  .admin-container .card:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s ease !important;
+  }
+  
+  /* Enhanced tap highlight colors */
+  .admin-container * {
+    -webkit-tap-highlight-color: rgba(74, 158, 255, 0.3) !important;
+    tap-highlight-color: rgba(74, 158, 255, 0.3) !important;
+  }
+  
+  /* Cards - touch optimized */
+  .admin-container .card {
+    margin-bottom: 16px !important;
+    padding: 16px !important;
+    border-radius: 12px !important;
+    background: var(--mobile-bg-card) !important;
+    color: var(--mobile-text-primary) !important;
+    border: 1px solid var(--mobile-border) !important;
+    box-shadow: 0 4px 12px var(--mobile-shadow) !important;
+    touch-action: manipulation !important;
+  }
+  
+  /* Stats grid - mobile optimized */
+  .admin-container .stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    margin-bottom: 20px !important;
+  }
+  
+  .admin-container .stat-card {
+    padding: 16px !important;
+    min-height: 80px !important;
+    border-radius: 12px !important;
+    background: var(--mobile-bg-card) !important;
+    color: var(--mobile-text-primary) !important;
+    border: 1px solid var(--mobile-border) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    touch-action: manipulation !important;
+  }
+  
+  .admin-container .stat-number {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: var(--mobile-accent) !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .admin-container .stat-label {
+    font-size: 12px !important;
+    color: var(--mobile-text-secondary) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+  }
+  
+  /* ==============================================
+     FORM ELEMENTS - TOUCH OPTIMIZED
+     ============================================== */
+  
+  /* Form groups - mobile spacing */
+  .admin-container .form-group {
+    margin-bottom: 20px !important;
+  }
+  
+  .admin-container .form-group label {
+    display: block !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--mobile-accent) !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Input fields - touch optimized */
+  .admin-container input,
+  .admin-container select,
+  .admin-container textarea {
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    border: 2px solid var(--mobile-border) !important;
+    border-radius: 8px !important;
+    background: var(--mobile-bg-secondary) !important;
+    color: var(--mobile-text-primary) !important;
+    box-sizing: border-box !important;
+    touch-action: manipulation !important;
+  }
+  
+  .admin-container input:focus,
+  .admin-container select:focus,
+  .admin-container textarea:focus {
+    border-color: var(--mobile-accent) !important;
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2) !important;
+    outline: none !important;
+    background: var(--mobile-bg-card) !important;
+  }
+  
+  /* Form grid - mobile single column */
+  .admin-container .form-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  /* Button groups - mobile stacked */
+  .admin-container .btn-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+  
+  .admin-container .btn-group .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  /* ==============================================
+     ANIMAL/WORKER CARDS - TOUCH OPTIMIZED
+     ============================================== */
+  
+  /* Animals/Workers grid - single column on mobile */
+  .admin-container .animals-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  .admin-container .animal-card {
+    padding: 16px !important;
+    border-radius: 12px !important;
+    background: var(--mobile-bg-card) !important;
+    color: var(--mobile-text-primary) !important;
+    border: 1px solid var(--mobile-border) !important;
+    box-shadow: 0 4px 12px var(--mobile-shadow) !important;
+    touch-action: manipulation !important;
+  }
+  
+  .admin-container .animal-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .admin-container .animal-name {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: var(--mobile-accent) !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .admin-container .animal-type {
+    font-size: 12px !important;
+    color: var(--mobile-text-secondary) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+  }
+  
+  .admin-container .animal-details {
+    margin-bottom: 16px !important;
+  }
+  
+  .admin-container .animal-detail {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 8px 0 !important;
+    border-bottom: 1px solid var(--mobile-border) !important;
+    font-size: 14px !important;
+  }
+  
+  .admin-container .animal-detail:last-child {
+    border-bottom: none !important;
+  }
+  
+  .admin-container .animal-detail strong {
+    color: var(--mobile-text-primary) !important;
+    font-weight: 600 !important;
+  }
+  
+  .admin-container .animal-actions {
+    display: flex !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+  }
+  
+  .admin-container .animal-actions .btn {
+    flex: 1 !important;
+    min-width: 80px !important;
+    font-size: 14px !important;
+  }
+  
+  /* ==============================================
+     MODAL OPTIMIZATION FOR MOBILE
+     ============================================== */
+  
+  .admin-container .modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: var(--mobile-overlay) !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+  }
+  
+  .admin-container .modal {
+    background: var(--mobile-bg-card) !important;
+    color: var(--mobile-text-primary) !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    box-shadow: 0 8px 24px var(--mobile-shadow) !important;
+    border: 1px solid var(--mobile-border) !important;
+  }
+  
+  .admin-container .modal h3 {
+    color: var(--mobile-accent) !important;
+    margin-bottom: 16px !important;
+    font-size: 18px !important;
+  }
+  
+  .admin-container .modal p {
+    color: var(--mobile-text-secondary) !important;
+    margin-bottom: 20px !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* ==============================================
+     PERFORMANCE OPTIMIZATIONS
+     ============================================== */
+  
+  /* Reduce animations for better performance */
+  .admin-container * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Optimize scrolling performance */
+  .admin-container {
+    transform: translateZ(0) !important; /* Force hardware acceleration */
+    will-change: scroll-position !important;
+  }
+  
+  /* Optimize touch scrolling */
+  .admin-container,
+  .admin-container .modal,
+  .admin-container .card {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+  
+  /* ==============================================
+     ACCESSIBILITY ENHANCEMENTS
+     ============================================== */
+  
+  /* Focus indicators for keyboard navigation */
+  .admin-container *:focus {
+    outline: 2px solid var(--mobile-accent) !important;
+    outline-offset: 2px !important;
+    border-radius: 4px !important;
+  }
+  
+  /* High contrast support */
+  @media (prefers-contrast: high) {
+    .admin-container {
+      --mobile-bg-primary: #000000 !important;
+      --mobile-bg-secondary: #1a1a1a !important;
+      --mobile-bg-card: #2d2d2d !important;
+      --mobile-text-primary: #ffffff !important;
+      --mobile-text-secondary: #cccccc !important;
+      --mobile-accent: #00aaff !important;
+      --mobile-border: #666666 !important;
+    }
+    
+    .admin-container button,
+    .admin-container .btn {
+      border-width: 3px !important;
+      font-weight: 700 !important;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .admin-container *,
+    .admin-container *::before,
+    .admin-container *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* ==============================================
+     LOADING STATES AND FEEDBACK
+     ============================================== */
+  
+  .admin-container .loading {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 40px !important;
+    min-height: 200px !important;
+  }
+  
+  .admin-container .spinner {
+    width: 40px !important;
+    height: 40px !important;
+    border: 4px solid var(--mobile-border) !important;
+    border-top: 4px solid var(--mobile-accent) !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Touch feedback for interactive elements */
+  .admin-container .card:active,
+  .admin-container .stat-card:active,
+  .admin-container .animal-card:active {
+    transform: scale(0.98) !important;
+    box-shadow: 0 2px 8px var(--mobile-shadow) !important;
+  }
+  
+  /* ==============================================
+     RESPONSIVE BREAKPOINTS
+     ============================================== */
+  
+  /* Extra small screens (phones in portrait) */
+  @media screen and (max-width: 480px) {
+    .admin-header-content {
+      padding: 8px !important;
+    }
+    
+    .admin-nav-tabs {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 4px !important;
+    }
+    
+    .admin-nav-tabs .admin-tab {
+      width: 100% !important;
+      min-height: 44px !important;
+      font-size: 10px !important;
+      padding: 8px 4px !important;
+      line-height: 1.1 !important;
+    }
+    
+    .admin-user-section {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 12px !important;
+    }
+    
+    .admin-user-info {
+      text-align: center !important;
+    }
+    
+    .admin-actions {
+      justify-content: center !important;
+      width: 100% !important;
+      flex-direction: row !important;
+      gap: 8px !important;
+    }
+    
+    .btn-view-public,
+    .btn-logout {
+      flex: 1 !important;
+      min-height: 44px !important;
+      font-size: 12px !important;
+      padding: 8px 12px !important;
+    }
+    
+    .stats-grid {
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+    }
+  }
+  
+  /* Medium mobile screens (phones in portrait 375px-480px) */
+  @media screen and (min-width: 375px) and (max-width: 480px) {
+    .admin-nav-tabs {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 6px !important;
+    }
+    
+    .admin-nav-tabs .admin-tab {
+      font-size: 11px !important;
+      padding: 8px 6px !important;
+    }
+  }
+  
+  /* Large mobile screens (phones in portrait 480px-600px) */
+  @media screen and (min-width: 480px) and (max-width: 600px) {
+    .admin-nav-tabs {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 8px !important;
+    }
+    
+    .admin-nav-tabs .admin-tab {
+      font-size: 12px !important;
+      padding: 10px 8px !important;
+    }
+  }
+  
+  /* Small tablets (600px-768px) */
+  @media screen and (min-width: 600px) and (max-width: 768px) {
+    .admin-nav-tabs {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 10px !important;
+    }
+    
+    .admin-nav-tabs .admin-tab {
+      font-size: 13px !important;
+      padding: 12px 16px !important;
+    }
+  }
+}
+
+/* ==============================================
+   LANDSCAPE ORIENTATION OPTIMIZATIONS
+   ============================================== */
+
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .admin-header-content {
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 8px 16px !important;
+  }
+  
+  .admin-logo-section {
+    order: 1 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .admin-nav-tabs {
+    order: 2 !important;
+    flex: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin: 0 16px !important;
+  }
+  
+  .admin-nav-tabs .admin-tab {
+    min-width: 60px !important;
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+  }
+  
+  .admin-user-section {
+    order: 3 !important;
+    flex-shrink: 0 !important;
+    border-top: none !important;
+    padding: 0 !important;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}

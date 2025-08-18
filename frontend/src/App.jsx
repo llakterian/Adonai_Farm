@@ -1,164 +1,265 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
-import Animals from './pages/Animals';
-import Gallery from './pages/Gallery';
-import Reports from './pages/Reports';
-import Account from './pages/Account';
-import Workers from './pages/Workers';
-import Login from './pages/Login';
-import './styles.css';
-import './mobile-fix.css';
+import React, { Suspense, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import ErrorBoundary, { PublicErrorBoundary } from './components/ErrorBoundary';
+import { PublicRoute, AuthenticatedPublicRoute } from './components/RouteProtection';
+import { initializeSecurity } from './utils/security.js';
+
+// Lazy load public pages for better initial load performance
+const Homepage = React.lazy(() => import('./pages/Homepage'));
+const About = React.lazy(() => import('./pages/About'));
+const Services = React.lazy(() => import('./pages/Services'));
+const Contact = React.lazy(() => import('./pages/Contact'));
+const Gallery = React.lazy(() => import('./pages/Gallery'));
+const Animals = React.lazy(() => import('./pages/Animals'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
+
+// Lazy load auth pages
+const Login = React.lazy(() => import('./pages/Login'));
+
+// Lazy load admin components - these will only be loaded when needed
+const AdminLayout = React.lazy(() => import('./components/AdminLayout'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const Breeding = React.lazy(() => import('./pages/Breeding'));
+const Workers = React.lazy(() => import('./pages/Workers'));
+const Reports = React.lazy(() => import('./pages/Reports'));
+const Account = React.lazy(() => import('./pages/Account'));
+const Inventory = React.lazy(() => import('./pages/Inventory'));
+const Users = React.lazy(() => import('./pages/Users'));
+const Infrastructure = React.lazy(() => import('./pages/Infrastructure'));
+const ContactManagement = React.lazy(() => import('./pages/ContactManagement'));
+const PublicContentManagement = React.lazy(() => import('./pages/PublicContentManagement'));
+
+import { isAuthenticated, refreshSession, isSessionExpiringSoon, logSecurityEvent } from './auth.js';
 
 function requireAuth() { 
-  return !!localStorage.getItem('adonai_token'); 
+  return isAuthenticated(); 
 }
 
-function Protected({ children }) { 
-  if (!requireAuth()) return <Navigate to="/login" replace />; 
-  return children; 
-}
+// Loading components for different contexts
+const PublicLoadingSpinner = () => (
+  <div className="loading-container public-loading">
+    <div className="loading-spinner">
+      <div className="spinner-icon">🌾</div>
+      <p>Loading Adonai Farm...</p>
+    </div>
+  </div>
+);
 
-function Header() {
-  const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const AdminLoadingSpinner = () => (
+  <div className="loading-container admin-loading">
+    <div className="loading-spinner">
+      <div className="spinner-icon">⚙️</div>
+      <p>Loading Dashboard...</p>
+    </div>
+  </div>
+);
 
-  const isActive = (path) => location.pathname === path;
-
-  const handleLogout = () => {
-    localStorage.removeItem('adonai_token');
-    window.location.href = '/login';
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
-  return (
-    <header className="header">
-      <div className="header-content">
-        <div className="logo">🌾 Adonai Farm</div>
-        
-        {/* Desktop Navigation */}
-        <nav className="nav">
-          <Link to="/" className={isActive('/') ? 'active' : ''}>
-            🏠 Dashboard
-          </Link>
-          <Link to="/animals" className={isActive('/animals') ? 'active' : ''}>
-            🐄 Animals
-          </Link>
-          <Link to="/gallery" className={isActive('/gallery') ? 'active' : ''}>
-            📸 Gallery
-          </Link>
-          <Link to="/reports" className={isActive('/reports') ? 'active' : ''}>
-            📊 Reports
-          </Link>
-          <Link to="/workers" className={isActive('/workers') ? 'active' : ''}>
-            👷 Workers
-          </Link>
-          <Link to="/account" className={isActive('/account') ? 'active' : ''}>
-            👤 Account
-          </Link>
-          <button className="btn btn-outline" onClick={handleLogout}>
-            🚪 Logout
-          </button>
-        </nav>
-
-        {/* Mobile Menu Toggle */}
-        <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
-          {isMobileMenuOpen ? '✕' : '☰'}
-        </button>
-
-        {/* Mobile Navigation */}
-        <nav className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
-          <Link 
-            to="/" 
-            className={isActive('/') ? 'active' : ''} 
-            onClick={closeMobileMenu}
-          >
-            🏠 Dashboard
-          </Link>
-          <Link 
-            to="/animals" 
-            className={isActive('/animals') ? 'active' : ''} 
-            onClick={closeMobileMenu}
-          >
-            🐄 Animals
-          </Link>
-          <Link 
-            to="/gallery" 
-            className={isActive('/gallery') ? 'active' : ''} 
-            onClick={closeMobileMenu}
-          >
-            📸 Gallery
-          </Link>
-          <Link 
-            to="/reports" 
-            className={isActive('/reports') ? 'active' : ''} 
-            onClick={closeMobileMenu}
-          >
-            📊 Reports
-          </Link>
-          <Link 
-            to="/workers" 
-            className={isActive('/workers') ? 'active' : ''} 
-            onClick={closeMobileMenu}
-          >
-            👷 Workers
-          </Link>
-          <Link 
-            to="/account" 
-            className={isActive('/account') ? 'active' : ''} 
-            onClick={closeMobileMenu}
-          >
-            👤 Account
-          </Link>
-          <button className="btn btn-outline" onClick={handleLogout}>
-            🚪 Logout
-          </button>
-        </nav>
-      </div>
-    </header>
-  );
-}
-
-function HeroSection() {
-  return (
-    <section className="hero">
-      <div className="hero-content">
-        <h1>Welcome to Adonai Farm</h1>
-        <p>Managing our livestock with care, precision, and modern technology for sustainable farming excellence.</p>
-      </div>
-    </section>
-  );
+function PrivateRoute({ children }) {
+  const isAuthenticated = requireAuth();
+  return isAuthenticated ? (
+    <Suspense fallback={<AdminLoadingSpinner />}>
+      <AdminLayout>{children}</AdminLayout>
+    </Suspense>
+  ) : <Navigate to="/login" replace />;
 }
 
 export default function App() {
-  const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
   const isAuthenticated = requireAuth();
 
-  return (
-    <div className="app">
-      {isAuthenticated && !isLoginPage && <Header />}
-      {isAuthenticated && !isLoginPage && location.pathname === '/' && <HeroSection />}
+  // Initialize security system
+  useEffect(() => {
+    initializeSecurity();
+    console.log('🔒 Security system initialized for Adonai Farm');
+  }, []);
+
+  // Session management - check for expiring sessions
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      const checkSession = () => {
+        if (!requireAuth()) {
+          // Session expired, redirect to login
+          logSecurityEvent('session_expired', { reason: 'automatic_logout' });
+          window.location.href = '/login';
+          return;
+        }
+        
+        if (isSessionExpiringSoon()) {
+          // Show warning and refresh session
+          const shouldRefresh = window.confirm(
+            'Your session will expire in 30 minutes. Would you like to extend it?'
+          );
+          if (shouldRefresh) {
+            refreshSession();
+            logSecurityEvent('session_refreshed', { method: 'user_prompt' });
+          }
+        }
+      };
+
+      // Check session every 5 minutes
+      const sessionInterval = setInterval(checkSession, 5 * 60 * 1000);
       
-      <main className={isAuthenticated && !isLoginPage ? "main-content" : ""}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Protected><Dashboard /></Protected>} />
-          <Route path="/animals" element={<Protected><Animals /></Protected>} />
-          <Route path="/gallery" element={<Protected><Gallery /></Protected>} />
-          <Route path="/reports" element={<Protected><Reports /></Protected>} />
-          <Route path="/workers" element={<Protected><Workers /></Protected>} />
-          <Route path="/account" element={<Protected><Account /></Protected>} />
-          <Route path="*" element={<Navigate to={isAuthenticated ? "/" : "/login"} replace />} />
-        </Routes>
-      </main>
-    </div>
+      // Initial check
+      checkSession();
+
+      return () => clearInterval(sessionInterval);
+    }
+  }, [isAuthenticated]);
+
+  return (
+    <ErrorBoundary>
+      <div className="app">
+        <main>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={
+              <PublicErrorBoundary componentName="Homepage">
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  {isAuthenticated ? 
+                    <AuthenticatedPublicRoute><Homepage /></AuthenticatedPublicRoute> : 
+                    <PublicRoute><Homepage /></PublicRoute>
+                  }
+                </Suspense>
+              </PublicErrorBoundary>
+            } />
+            
+            <Route path="/about" element={
+              <PublicErrorBoundary componentName="About">
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  {isAuthenticated ? 
+                    <AuthenticatedPublicRoute><About /></AuthenticatedPublicRoute> : 
+                    <PublicRoute><About /></PublicRoute>
+                  }
+                </Suspense>
+              </PublicErrorBoundary>
+            } />
+            
+            <Route path="/services" element={
+              <PublicErrorBoundary componentName="Services">
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  {isAuthenticated ? 
+                    <AuthenticatedPublicRoute><Services /></AuthenticatedPublicRoute> : 
+                    <PublicRoute><Services /></PublicRoute>
+                  }
+                </Suspense>
+              </PublicErrorBoundary>
+            } />
+            
+            <Route path="/contact" element={
+              <PublicErrorBoundary componentName="Contact">
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  {isAuthenticated ? 
+                    <AuthenticatedPublicRoute><Contact /></AuthenticatedPublicRoute> : 
+                    <PublicRoute><Contact /></PublicRoute>
+                  }
+                </Suspense>
+              </PublicErrorBoundary>
+            } />
+
+            <Route path="/gallery" element={
+              <PublicErrorBoundary componentName="Gallery">
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  {isAuthenticated ? 
+                    <AuthenticatedPublicRoute><Gallery /></AuthenticatedPublicRoute> : 
+                    <PublicRoute><Gallery /></PublicRoute>
+                  }
+                </Suspense>
+              </PublicErrorBoundary>
+            } />
+
+            <Route path="/animals" element={
+              <PublicErrorBoundary componentName="Animals">
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  {isAuthenticated ? 
+                    <AuthenticatedPublicRoute><Animals /></AuthenticatedPublicRoute> : 
+                    <PublicRoute><Animals /></PublicRoute>
+                  }
+                </Suspense>
+              </PublicErrorBoundary>
+            } />
+
+            {/* Auth Routes */}
+            <Route path="/login" element={
+              <ErrorBoundary>
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  <Login />
+                </Suspense>
+              </ErrorBoundary>
+            } />
+            <Route path="/admin" element={<Navigate to="/login" replace />} />
+
+            {/* Admin Dashboard Routes */}
+            <Route path="/dashboard" element={
+              <ErrorBoundary>
+                <PrivateRoute><Dashboard /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/animals" element={
+              <ErrorBoundary>
+                <PrivateRoute><Animals /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/breeding" element={
+              <ErrorBoundary>
+                <PrivateRoute><Breeding /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/workers" element={
+              <ErrorBoundary>
+                <PrivateRoute><Workers /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/reports" element={
+              <ErrorBoundary>
+                <PrivateRoute><Reports /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/account" element={
+              <ErrorBoundary>
+                <PrivateRoute><Account /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/inventory" element={
+              <ErrorBoundary>
+                <PrivateRoute><Inventory /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/users" element={
+              <ErrorBoundary>
+                <PrivateRoute><Users /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/infrastructure" element={
+              <ErrorBoundary>
+                <PrivateRoute><Infrastructure /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/gallery" element={
+              <ErrorBoundary>
+                <PrivateRoute><Gallery /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/contact" element={
+              <ErrorBoundary>
+                <PrivateRoute><ContactManagement /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+            <Route path="/dashboard/public-content" element={
+              <ErrorBoundary>
+                <PrivateRoute><PublicContentManagement /></PrivateRoute>
+              </ErrorBoundary>
+            } />
+
+            {/* 404 Not Found Route */}
+            <Route path="*" element={
+              <PublicErrorBoundary componentName="NotFound">
+                <Suspense fallback={<PublicLoadingSpinner />}>
+                  <NotFound />
+                </Suspense>
+              </PublicErrorBoundary>
+            } />
+          </Routes>
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 }

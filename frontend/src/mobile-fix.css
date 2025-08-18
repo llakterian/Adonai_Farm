@@ -1,7 +1,25 @@
-/* ULTIMATE MOBILE FIX - SIMPLE AND CLEAN */
-/* This will completely override all desktop styles for perfect mobile */
+/* ULTIMATE MOBILE FIX - DARK THEME OPTIMIZED */
+/* This will completely override all desktop styles for perfect mobile with darker theme */
 
 @media screen and (max-width: 768px) {
+  /* MOBILE DARK THEME VARIABLES */
+  :root {
+    --mobile-bg-primary: #1a1a1a !important;
+    --mobile-bg-secondary: #2d2d2d !important;
+    --mobile-bg-card: #333333 !important;
+    --mobile-text-primary: #e0e0e0 !important;
+    --mobile-text-secondary: #b0b0b0 !important;
+    --mobile-text-muted: #888888 !important;
+    --mobile-accent: #4a9eff !important;
+    --mobile-accent-hover: #357abd !important;
+    --mobile-success: #4caf50 !important;
+    --mobile-warning: #ff9800 !important;
+    --mobile-error: #f44336 !important;
+    --mobile-border: #444444 !important;
+    --mobile-shadow: rgba(0, 0, 0, 0.5) !important;
+    --mobile-overlay: rgba(0, 0, 0, 0.8) !important;
+  }
+
   /* RESET EVERYTHING FOR MOBILE */
   * {
     box-sizing: border-box !important;
@@ -14,6 +32,9 @@
     padding: 0 !important;
     overflow-x: hidden !important;
     width: 100% !important;
+    background-color: var(--mobile-bg-primary) !important;
+    color: var(--mobile-text-primary) !important;
+    filter: brightness(0.7) contrast(1.1) !important;
   }
   
   .app {
@@ -47,11 +68,18 @@
   
   .mobile-menu-toggle {
     display: block !important;
+    background: var(--farm-green-primary, #2d5016) !important;
+    color: var(--farm-text-light, #ffffff) !important;
+    border: 3px solid var(--farm-gold-accent, #ffd700) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
     font-size: 1.5rem !important;
-    padding: 0.5rem !important;
-    background: none !important;
-    border: none !important;
-    color: white !important;
+    font-weight: bold !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3) !important;
   }
 
   /* HERO - COMPACT */
@@ -89,14 +117,17 @@
     padding: 0 !important;
   }
 
-  /* CARDS - CLEAN AND ORGANIZED */
+  /* CARDS - DARK THEME OPTIMIZED */
   .card {
     width: 100% !important;
     padding: 1rem !important;
     margin: 0 0 1rem 0 !important;
     border-radius: 10px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 4px 12px var(--mobile-shadow) !important;
     box-sizing: border-box !important;
+    background-color: var(--mobile-bg-card) !important;
+    color: var(--mobile-text-primary) !important;
+    border: 1px solid var(--mobile-border) !important;
   }
 
   /* FORMS - SIMPLE AND CLEAN */
@@ -117,17 +148,18 @@
     font-size: 0.9rem !important;
     font-weight: 600 !important;
     margin-bottom: 0.5rem !important;
-    color: var(--primary-green) !important;
+    color: var(--mobile-accent) !important;
   }
   
   input, select, textarea {
     width: 100% !important;
     padding: 0.75rem !important;
     font-size: 16px !important;
-    border: 2px solid #ddd !important;
+    border: 2px solid var(--mobile-border) !important;
     border-radius: 8px !important;
     box-sizing: border-box !important;
-    background: white !important;
+    background: var(--mobile-bg-secondary) !important;
+    color: var(--mobile-text-primary) !important;
   }
 
   /* BUTTONS - TOUCH FRIENDLY */
@@ -199,9 +231,12 @@
     width: 100% !important;
     padding: 1rem !important;
     border-radius: 10px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-    border-left: 4px solid var(--accent-gold) !important;
+    box-shadow: 0 4px 12px var(--mobile-shadow) !important;
+    border-left: 4px solid var(--mobile-accent) !important;
     box-sizing: border-box !important;
+    background-color: var(--mobile-bg-card) !important;
+    color: var(--mobile-text-primary) !important;
+    border: 1px solid var(--mobile-border) !important;
   }
   
   .animal-header {
@@ -222,7 +257,8 @@
     font-size: 0.75rem !important;
     padding: 0.25rem 0.5rem !important;
     border-radius: 10px !important;
-    background: var(--cream) !important;
+    background: var(--mobile-bg-secondary) !important;
+    color: var(--mobile-text-secondary) !important;
   }
   
   .animal-details {
@@ -261,7 +297,9 @@
     width: 100% !important;
     border-radius: 10px !important;
     overflow: hidden !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 4px 12px var(--mobile-shadow) !important;
+    background-color: var(--mobile-bg-card) !important;
+    border: 1px solid var(--mobile-border) !important;
   }
   
   .gallery-item img {
@@ -270,7 +308,7 @@
     object-fit: cover !important;
   }
 
-  /* MODAL - MOBILE FRIENDLY */
+  /* MODAL - DARK THEME MOBILE FRIENDLY */
   .modal {
     width: 95% !important;
     max-width: 95% !important;
@@ -279,6 +317,10 @@
     border-radius: 10px !important;
     max-height: 80vh !important;
     overflow-y: auto !important;
+    background-color: var(--mobile-bg-card) !important;
+    color: var(--mobile-text-primary) !important;
+    border: 1px solid var(--mobile-border) !important;
+    box-shadow: 0 8px 24px var(--mobile-shadow) !important;
   }
 
   /* MOBILE NAVIGATION */
@@ -312,4 +354,326 @@
   .btn:hover {
     transform: none !important;
   }
+}
+/* EN
+HANCED MOBILE FEATURES - TOUCH GESTURES AND INTERACTIONS */
+
+@media screen and (max-width: 768px) {
+  /* TOUCH-FRIENDLY ENHANCEMENTS */
+  
+  /* Larger touch targets for better accessibility */
+  button, a, input, select, textarea {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+  
+  /* Improved tap feedback */
+  .btn, .animal-card, .stat-card, .gallery-item {
+    -webkit-tap-highlight-color: rgba(74, 158, 255, 0.3) !important;
+    tap-highlight-color: rgba(74, 158, 255, 0.3) !important;
+  }
+  
+  /* Touch-friendly scrolling */
+  .main-content, .modal, .notifications-list {
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+  }
+  
+  /* Swipe indicators for cards */
+  .animal-card, .notification-item {
+    position: relative !important;
+    overflow: hidden !important;
+  }
+  
+  .animal-card::after, .notification-item::after {
+    content: '👆 Tap to interact' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    background: rgba(0,0,0,0.7) !important;
+    color: white !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.7rem !important;
+    border-radius: 8px 0 0 0 !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+  }
+  
+  .animal-card:active::after, .notification-item:active::after {
+    opacity: 1 !important;
+  }
+  
+  /* Pull-to-refresh indicator */
+  .main-content::before {
+    content: '↓ Pull to refresh' !important;
+    display: block !important;
+    text-align: center !important;
+    padding: 1rem !important;
+    color: var(--mobile-text-muted) !important;
+    font-size: 0.8rem !important;
+    background: linear-gradient(to bottom, transparent, rgba(74, 158, 255, 0.1)) !important;
+    margin: -1rem -1rem 1rem -1rem !important;
+    border-radius: 0 0 10px 10px !important;
+  }
+  
+  /* Enhanced form interactions */
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--mobile-accent) !important;
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2) !important;
+    outline: none !important;
+    transform: scale(1.02) !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  /* Improved button feedback */
+  .btn:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s ease !important;
+  }
+  
+  /* Loading states for better UX */
+  .loading {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 2rem !important;
+    min-height: 200px !important;
+  }
+  
+  .spinner {
+    width: 40px !important;
+    height: 40px !important;
+    border: 4px solid rgba(74, 158, 255, 0.3) !important;
+    border-top: 4px solid var(--mobile-accent) !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Notification enhancements for mobile */
+  .notification-center {
+    padding: 0 !important;
+  }
+  
+  .notification-item {
+    margin-bottom: 0.5rem !important;
+    border-radius: 12px !important;
+    padding: 1rem !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  }
+  
+  .notification-actions {
+    margin-top: 1rem !important;
+    margin-left: 0 !important;
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+  
+  .notification-actions .btn {
+    flex: 1 !important;
+    width: auto !important;
+  }
+  
+  /* Enhanced stats grid for mobile */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.75rem !important;
+  }
+  
+  .stat-card {
+    padding: 0.75rem !important;
+    min-height: 70px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, var(--primary-green), var(--light-green)) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+  }
+  
+  /* Improved navigation for mobile */
+  .mobile-nav {
+    position: fixed !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: var(--primary-green) !important;
+    transform: translateY(0) !important;
+    transition: transform 0.3s ease !important;
+    z-index: 1000 !important;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3) !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+  }
+  
+  .mobile-nav.open {
+    transform: translateY(-100%) !important;
+  }
+  
+  .mobile-nav a {
+    color: white !important;
+    text-decoration: none !important;
+    padding: 1rem !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    font-size: 1rem !important;
+    transition: background 0.2s ease !important;
+  }
+  
+  .mobile-nav a:hover, .mobile-nav a.active {
+    background: rgba(255,255,255,0.1) !important;
+  }
+  
+  .mobile-nav a:last-child {
+    border-bottom: none !important;
+  }
+  
+  /* Enhanced form layouts */
+  .form-grid {
+    gap: 1.5rem !important;
+  }
+  
+  .form-group {
+    position: relative !important;
+  }
+  
+  .form-group label {
+    position: absolute !important;
+    top: -0.5rem !important;
+    left: 0.75rem !important;
+    background: white !important;
+    padding: 0 0.5rem !important;
+    font-size: 0.8rem !important;
+    color: var(--primary-green) !important;
+    z-index: 1 !important;
+  }
+  
+  /* Improved modal for mobile */
+  .modal {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 95% !important;
+    max-width: 400px !important;
+    max-height: 85vh !important;
+    background: white !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
+    z-index: 2000 !important;
+    overflow: hidden !important;
+  }
+  
+  .modal-content {
+    padding: 1.5rem !important;
+    overflow-y: auto !important;
+    max-height: calc(85vh - 3rem) !important;
+  }
+  
+  /* Accessibility improvements */
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+  
+  /* Focus indicators for keyboard navigation */
+  *:focus {
+    outline: 2px solid var(--primary-green) !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Dark mode support for mobile */
+  @media (prefers-color-scheme: dark) {
+    .card, .animal-card, .modal {
+      background: #2d3748 !important;
+      color: white !important;
+    }
+    
+    input, select, textarea {
+      background: #4a5568 !important;
+      color: white !important;
+      border-color: #718096 !important;
+    }
+    
+    .form-group label {
+      background: #2d3748 !important;
+      color: #a0aec0 !important;
+    }
+  }
+  
+  /* Reduced motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* OFFLINE SUPPORT INDICATORS */
+.offline-indicator {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: #e74c3c !important;
+  color: white !important;
+  text-align: center !important;
+  padding: 0.5rem !important;
+  font-size: 0.8rem !important;
+  z-index: 9999 !important;
+  transform: translateY(-100%) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.offline-indicator.show {
+  transform: translateY(0) !important;
+}
+
+.online-indicator {
+  background: #27ae60 !important;
+}
+
+/* PWA INSTALL PROMPT */
+.pwa-install-prompt {
+  position: fixed !important;
+  bottom: 1rem !important;
+  left: 1rem !important;
+  right: 1rem !important;
+  background: var(--primary-green) !important;
+  color: white !important;
+  padding: 1rem !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  transform: translateY(100%) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.pwa-install-prompt.show {
+  transform: translateY(0) !important;
+}
+
+.pwa-install-prompt .btn {
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0.5rem 1rem !important;
+  background: white !important;
+  color: var(--primary-green) !important;
 }

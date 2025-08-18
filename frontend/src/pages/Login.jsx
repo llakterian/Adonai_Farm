@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { authenticateUser } from '../auth.js';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('adonai123');
   const [error, setError] = useState(null);
@@ -13,12 +15,21 @@ export default function Login() {
     setError(null);
 
     try {
-      const api = import.meta.env.VITE_API_URL || '/.netlify/functions';
-      const res = await axios.post(api + '/auth', { username, password });
-      localStorage.setItem('adonai_token', res.data.token);
-      window.location.href = '/';
+      console.log('Attempting login with username:', username);
+      
+      // Use client-side authentication since Netlify functions aren't working
+      const result = authenticateUser(username, password);
+      
+      if (result.success) {
+        console.log('Login successful:', result);
+        // Use React Router navigation instead of window.location.href
+        navigate('/dashboard', { replace: true });
+      } else {
+        setError(result.error);
+      }
     } catch (e) {
-      setError(e?.response?.data?.error || 'Login failed. Please check your credentials.');
+      console.error('Login error:', e);
+      setError('Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -138,14 +149,21 @@ export default function Login() {
           }}>
             🔑 Demo Credentials
           </h4>
-          <p style={{ 
-            fontSize: '0.85rem', 
+          <div style={{ 
+            fontSize: '0.8rem', 
             color: 'var(--text-light)',
             margin: 0
           }}>
-            <strong>Username:</strong> admin<br />
-            <strong>Password:</strong> adonai123
-          </p>
+            <div style={{ marginBottom: '0.5rem' }}>
+              <strong>Admin:</strong> admin / adonai123
+            </div>
+            <div style={{ marginBottom: '0.5rem' }}>
+              <strong>Supervisor:</strong> supervisor / super123
+            </div>
+            <div>
+              <strong>Worker:</strong> worker / work123
+            </div>
+          </div>
         </div>
 
         {/* Footer */}

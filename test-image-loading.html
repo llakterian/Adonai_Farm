@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Loading Test - Adonai Farm</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .image-card { border: 1px solid #ddd; padding: 10px; border-radius: 8px; text-align: center; }
+        .image-card img { max-width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #e8f5e8; border: 1px solid #4caf50; color: #2e7d32; }
+        .error { background: #ffebee; border: 1px solid #f44336; color: #c62828; }
+        .loading { background: #e3f2fd; border: 1px solid #2196f3; color: #1565c0; }
+    </style>
+</head>
+<body>
+    <h1>🌾 Adonai Farm - Image Loading Test</h1>
+    
+    <div id="status" class="status loading">
+        🔄 Testing image loading...
+    </div>
+    
+    <div id="results"></div>
+    
+    <h2>📸 Image Gallery Test</h2>
+    <div id="imageGrid" class="image-grid"></div>
+    
+    <script>
+        const expectedImages = [
+            'adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 'adonai5.jpg',
+            'adonai6.jpg', 'adonai7.jpg', 'adonai8.jpg', 'adonai9.jpg', 'adonaix.jpg',
+            'adonaixi.jpg', 'adonaixii.jpg', 'adonaixiii.jpg',
+            'farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg', 
+            'farm-5.jpg', 'farm-6.jpg', 'farm-7.jpg'
+        ];
+        
+        let loadedImages = 0;
+        let failedImages = 0;
+        const results = [];
+        
+        function updateStatus() {
+            const total = expectedImages.length;
+            const tested = loadedImages + failedImages;
+            
+            if (tested === total) {
+                const statusEl = document.getElementById('status');
+                if (failedImages === 0) {
+                    statusEl.className = 'status success';
+                    statusEl.innerHTML = `✅ All ${loadedImages} images loaded successfully!`;
+                } else {
+                    statusEl.className = 'status error';
+                    statusEl.innerHTML = `⚠️ ${loadedImages} images loaded, ${failedImages} failed to load`;
+                }
+                
+                // Show detailed results
+                const resultsEl = document.getElementById('results');
+                resultsEl.innerHTML = `
+                    <h3>📊 Test Results</h3>
+                    <p><strong>Total Images:</strong> ${total}</p>
+                    <p><strong>Successfully Loaded:</strong> ${loadedImages}</p>
+                    <p><strong>Failed to Load:</strong> ${failedImages}</p>
+                    <p><strong>Success Rate:</strong> ${Math.round((loadedImages / total) * 100)}%</p>
+                `;
+            }
+        }
+        
+        function testImageLoading() {
+            const imageGrid = document.getElementById('imageGrid');
+            
+            expectedImages.forEach(filename => {
+                const imageCard = document.createElement('div');
+                imageCard.className = 'image-card';
+                
+                const img = document.createElement('img');
+                const imageUrl = `/uploads/Adonai/${filename}`;
+                
+                img.onload = function() {
+                    loadedImages++;
+                    imageCard.style.borderColor = '#4caf50';
+                    imageCard.innerHTML += '<div style="color: #4caf50; font-size: 12px;">✅ Loaded</div>';
+                    updateStatus();
+                };
+                
+                img.onerror = function() {
+                    failedImages++;
+                    imageCard.style.borderColor = '#f44336';
+                    imageCard.innerHTML += '<div style="color: #f44336; font-size: 12px;">❌ Failed</div>';
+                    
+                    // Try fallback URL
+                    const fallbackUrl = `/images/hero-farm.jpg`;
+                    const fallbackImg = document.createElement('img');
+                    fallbackImg.src = fallbackUrl;
+                    fallbackImg.style.opacity = '0.5';
+                    fallbackImg.style.maxWidth = '100%';
+                    fallbackImg.style.height = '150px';
+                    fallbackImg.style.objectFit = 'cover';
+                    imageCard.appendChild(fallbackImg);
+                    
+                    updateStatus();
+                };
+                
+                img.src = imageUrl;
+                img.alt = filename;
+                
+                imageCard.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 10px;">${filename}</div>
+                `;
+                imageCard.appendChild(img);
+                
+                imageGrid.appendChild(imageCard);
+            });
+        }
+        
+        // Start the test
+        testImageLoading();
+        
+        // Add some debugging info
+        console.log('🔍 Image Loading Test Started');
+        console.log('Expected images:', expectedImages);
+        console.log('Base URL:', window.location.origin);
+        console.log('Test URL example:', window.location.origin + '/uploads/Adonai/adonai1.jpg');
+    </script>
+</body>
+</html>

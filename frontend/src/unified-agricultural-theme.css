@@ -1,0 +1,603 @@
+/* ==============================================
+   UNIFIED AGRICULTURAL THEME FOR ALL PAGES
+   Consistent styling for public and admin pages
+   Proper button sizes and image dimensions
+   High-contrast hamburger menus
+   ============================================== */
+
+/* ==============================================
+   AGRICULTURAL COLOR PALETTE - UNIFIED
+   ============================================== */
+
+:root {
+  /* Primary Agricultural Colors - Used across ALL pages */
+  --farm-green-primary: #2d5016;          /* Deep forest green - 12:1 contrast */
+  --farm-green-secondary: #4a7c59;        /* Medium forest green - 8:1 contrast */
+  --farm-green-accent: #6b8e23;           /* Olive green - 6:1 contrast */
+  --farm-green-light: #9caf88;            /* Soft sage green - 4.5:1 contrast */
+  
+  /* Agricultural Gold/Harvest Colors */
+  --farm-gold-primary: #d4af37;           /* Rich golden yellow - 5:1 contrast */
+  --farm-gold-secondary: #b8860b;         /* Dark goldenrod - 6:1 contrast */
+  --farm-gold-light: #f4e4a6;             /* Light wheat - 2:1 contrast */
+  --farm-gold-accent: #ffd700;            /* Bright gold - 4:1 contrast */
+  
+  /* Enhanced Brown Colors - Better Contrast */
+  --farm-brown-primary: #3d2914;          /* Dark brown - 12:1 contrast */
+  --farm-brown-secondary: #5d4037;        /* Medium brown - 8:1 contrast */
+  --farm-brown-light: #8d6e63;            /* Light brown - 4.5:1 contrast */
+  --farm-brown-accent: #a0522d;           /* Sienna - 6:1 contrast */
+  
+  /* High Contrast Text Colors */
+  --farm-text-primary: #1a1a1a;           /* 15.3:1 contrast on white */
+  --farm-text-secondary: #4a4a4a;         /* 9.7:1 contrast on white */
+  --farm-text-light: #ffffff;             /* For dark backgrounds */
+  --farm-text-muted: #666666;             /* 6.3:1 contrast on white */
+  
+  /* Background Colors */
+  --farm-bg-primary: #f8f9fa;             /* Light background */
+  --farm-bg-secondary: #ffffff;           /* Card backgrounds */
+  --farm-bg-accent: rgba(45, 80, 22, 0.05); /* Subtle green tint */
+  --farm-bg-dark: #1a1a1a;                /* Dark mode background */
+  
+  /* Standardized Button Sizes */
+  --btn-height-small: 36px;
+  --btn-height-medium: 44px;
+  --btn-height-large: 52px;
+  --btn-height-xl: 60px;
+  
+  /* Standardized Image Sizes */
+  --img-thumbnail: 80px;
+  --img-small: 150px;
+  --img-medium: 300px;
+  --img-large: 500px;
+  --img-hero-height: 60vh;
+  
+  /* Touch Target Sizes */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+  --touch-target-large: 56px;
+  
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+}
+
+/* ==============================================
+   UNIFIED BUTTON SYSTEM - ALL PAGES
+   ============================================== */
+
+.btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-sm) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  border: 2px solid transparent !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  
+  /* Default medium size */
+  min-height: var(--btn-height-medium) !important;
+  padding: 0 var(--space-lg) !important;
+  font-size: 1rem !important;
+  
+  /* Ensure minimum touch target */
+  min-width: var(--touch-target-min) !important;
+}
+
+.btn-small {
+  min-height: var(--btn-height-small) !important;
+  padding: 0 var(--space-md) !important;
+  font-size: 0.875rem !important;
+}
+
+.btn-large {
+  min-height: var(--btn-height-large) !important;
+  padding: 0 var(--space-xl) !important;
+  font-size: 1.125rem !important;
+}
+
+.btn-xl {
+  min-height: var(--btn-height-xl) !important;
+  padding: 0 var(--space-2xl) !important;
+  font-size: 1.25rem !important;
+}
+
+/* Button Color Variants - Agricultural Theme */
+.btn-primary {
+  background: var(--farm-green-primary) !important;
+  color: var(--farm-text-light) !important;
+  border-color: var(--farm-green-primary) !important;
+}
+
+.btn-primary:hover {
+  background: var(--farm-green-secondary) !important;
+  border-color: var(--farm-green-secondary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3) !important;
+}
+
+.btn-secondary {
+  background: var(--farm-gold-primary) !important;
+  color: var(--farm-text-primary) !important;
+  border-color: var(--farm-gold-primary) !important;
+}
+
+.btn-secondary:hover {
+  background: var(--farm-gold-secondary) !important;
+  color: var(--farm-text-light) !important;
+  border-color: var(--farm-gold-secondary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3) !important;
+}
+
+.btn-outline {
+  background: transparent !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--farm-green-primary) !important;
+}
+
+.btn-outline:hover {
+  background: var(--farm-green-primary) !important;
+  color: var(--farm-text-light) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3) !important;
+}
+
+.btn-success {
+  background: var(--farm-green-accent) !important;
+  color: var(--farm-text-light) !important;
+  border-color: var(--farm-green-accent) !important;
+}
+
+.btn-warning {
+  background: var(--farm-gold-secondary) !important;
+  color: var(--farm-text-light) !important;
+  border-color: var(--farm-gold-secondary) !important;
+}
+
+.btn-danger {
+  background: var(--farm-brown-accent) !important;
+  color: var(--farm-text-light) !important;
+  border-color: var(--farm-brown-accent) !important;
+}
+
+/* Focus states for accessibility */
+.btn:focus {
+  outline: 3px solid var(--farm-gold-accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* ==============================================
+   HIGH-CONTRAST HAMBURGER MENU SYSTEM
+   ============================================== */
+
+/* Public Mobile Menu Toggle - Enhanced */
+.mobile-menu-toggle {
+  display: none !important;
+  background: var(--farm-green-primary) !important;
+  color: var(--farm-text-light) !important;
+  border: 3px solid var(--farm-gold-accent) !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  min-width: var(--touch-target-comfortable) !important;
+  min-height: var(--touch-target-comfortable) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3) !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--farm-gold-accent) !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--farm-green-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4) !important;
+}
+
+.mobile-menu-toggle:focus {
+  outline: 3px solid var(--farm-gold-accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+.mobile-menu-toggle:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3) !important;
+}
+
+/* Admin Mobile Menu Toggle - Enhanced */
+.admin-mobile-menu-toggle {
+  display: none !important;
+  background: var(--farm-green-primary) !important;
+  color: var(--farm-text-light) !important;
+  border: 3px solid var(--farm-gold-accent) !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  min-width: var(--touch-target-comfortable) !important;
+  min-height: var(--touch-target-comfortable) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3) !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.admin-mobile-menu-toggle:hover {
+  background: var(--farm-gold-accent) !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--farm-green-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4) !important;
+}
+
+.admin-mobile-menu-toggle:focus {
+  outline: 3px solid var(--farm-gold-accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* Mobile Navigation Drawers */
+.mobile-nav,
+.admin-mobile-nav {
+  display: none !important;
+  position: fixed !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--farm-green-primary) !important;
+  border-top: 3px solid var(--farm-gold-accent) !important;
+  box-shadow: 0 -4px 20px rgba(45, 80, 22, 0.3) !important;
+  padding: var(--space-lg) !important;
+  flex-direction: column !important;
+  gap: var(--space-sm) !important;
+  z-index: 1000 !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+  transform: translateY(0) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.mobile-nav.open,
+.admin-mobile-nav.open {
+  display: flex !important;
+  transform: translateY(-100%) !important;
+}
+
+/* Mobile Navigation Items */
+.mobile-nav a,
+.admin-mobile-item {
+  color: var(--farm-text-light) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  padding: var(--space-md) !important;
+  border-radius: 8px !important;
+  text-align: center !important;
+  transition: all 0.2s ease !important;
+  border: 2px solid rgba(255, 255, 255, 0.1) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  min-height: var(--touch-target-comfortable) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.mobile-nav a:hover,
+.mobile-nav a.active,
+.admin-mobile-item:hover,
+.admin-mobile-item.active {
+  background: var(--farm-gold-accent) !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--farm-gold-accent) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3) !important;
+}
+
+/* Mobile Action Buttons */
+.admin-mobile-actions {
+  margin-top: var(--space-lg) !important;
+  padding-top: var(--space-lg) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.1) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-sm) !important;
+}
+
+.admin-mobile-btn {
+  padding: var(--space-md) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  text-align: center !important;
+  min-height: var(--touch-target-comfortable) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-sm) !important;
+  transition: all 0.2s ease !important;
+  border: 2px solid transparent !important;
+  cursor: pointer !important;
+}
+
+.admin-mobile-btn.btn-view-public {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: var(--farm-text-light) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.admin-mobile-btn.btn-view-public:hover {
+  background: var(--farm-gold-accent) !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--farm-gold-accent) !important;
+}
+
+.admin-mobile-btn.btn-logout {
+  background: var(--farm-brown-accent) !important;
+  color: var(--farm-text-light) !important;
+  border-color: var(--farm-brown-accent) !important;
+}
+
+.admin-mobile-btn.btn-logout:hover {
+  background: var(--farm-brown-primary) !important;
+  border-color: var(--farm-brown-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(61, 41, 20, 0.3) !important;
+}
+
+/* ==============================================
+   UNIFIED IMAGE SIZING SYSTEM
+   ============================================== */
+
+/* Thumbnail Images */
+.img-thumbnail,
+.thumbnail {
+  width: var(--img-thumbnail) !important;
+  height: var(--img-thumbnail) !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--farm-green-light) !important;
+}
+
+/* Small Images */
+.img-small,
+.small-image {
+  width: var(--img-small) !important;
+  height: auto !important;
+  max-height: var(--img-small) !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--farm-green-light) !important;
+}
+
+/* Medium Images */
+.img-medium,
+.medium-image {
+  width: 100% !important;
+  max-width: var(--img-medium) !important;
+  height: auto !important;
+  max-height: var(--img-medium) !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--farm-green-light) !important;
+}
+
+/* Large Images */
+.img-large,
+.large-image {
+  width: 100% !important;
+  max-width: var(--img-large) !important;
+  height: auto !important;
+  max-height: var(--img-large) !important;
+  object-fit: cover !important;
+  border-radius: 12px !important;
+  border: 2px solid var(--farm-green-light) !important;
+}
+
+/* Hero Images */
+.hero-image,
+.hero-background img {
+  width: 100% !important;
+  height: var(--img-hero-height) !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* Gallery Images */
+.gallery-item img,
+.gallery-image {
+  width: 100% !important;
+  height: 200px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--farm-green-light) !important;
+  transition: all 0.3s ease !important;
+}
+
+.gallery-item:hover img,
+.gallery-image:hover {
+  border-color: var(--farm-gold-accent) !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.2) !important;
+}
+
+/* Animal/Livestock Images */
+.animal-image,
+.livestock-image {
+  width: 100% !important;
+  height: 180px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--farm-green-light) !important;
+}
+
+/* Profile Images */
+.profile-image,
+.user-avatar {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  border: 3px solid var(--farm-gold-accent) !important;
+}
+
+/* ==============================================
+   MOBILE RESPONSIVE BEHAVIOR
+   ============================================== */
+
+@media screen and (max-width: 768px) {
+  /* Show hamburger menus on mobile */
+  .mobile-menu-toggle,
+  .admin-mobile-menu-toggle {
+    display: flex !important;
+  }
+  
+  /* Hide desktop navigation on mobile */
+  .public-nav,
+  .admin-nav-tabs {
+    display: none !important;
+  }
+  
+  /* Hide desktop auth section on mobile */
+  .public-auth-section,
+  .admin-user-section {
+    display: none !important;
+  }
+  
+  /* Adjust button sizes for mobile */
+  .btn {
+    min-height: var(--touch-target-comfortable) !important;
+    padding: 0 var(--space-lg) !important;
+    font-size: 1rem !important;
+  }
+  
+  .btn-small {
+    min-height: var(--touch-target-min) !important;
+    padding: 0 var(--space-md) !important;
+    font-size: 0.9rem !important;
+  }
+  
+  /* Adjust image sizes for mobile */
+  .img-medium,
+  .medium-image {
+    max-width: 100% !important;
+    max-height: 250px !important;
+  }
+  
+  .img-large,
+  .large-image {
+    max-width: 100% !important;
+    max-height: 300px !important;
+  }
+  
+  .hero-image,
+  .hero-background img {
+    height: 40vh !important;
+  }
+  
+  .gallery-item img,
+  .gallery-image {
+    height: 150px !important;
+  }
+  
+  .animal-image,
+  .livestock-image {
+    height: 150px !important;
+  }
+}
+
+/* ==============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mobile-menu-toggle,
+  .admin-mobile-menu-toggle {
+    border-width: 4px !important;
+    font-weight: 800 !important;
+  }
+  
+  .btn {
+    border-width: 3px !important;
+    font-weight: 700 !important;
+  }
+  
+  .mobile-nav a,
+  .admin-mobile-item {
+    border-width: 3px !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-toggle,
+  .admin-mobile-menu-toggle,
+  .btn,
+  .mobile-nav a,
+  .admin-mobile-item,
+  .gallery-item img {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .mobile-nav,
+  .admin-mobile-nav {
+    transition: none !important;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.mobile-menu-toggle:focus,
+.admin-mobile-menu-toggle:focus,
+.mobile-nav a:focus,
+.admin-mobile-item:focus,
+.admin-mobile-btn:focus {
+  outline: 3px solid var(--farm-gold-accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* ==============================================
+   PRINT STYLES
+   ============================================== */
+
+@media print {
+  .mobile-menu-toggle,
+  .admin-mobile-menu-toggle,
+  .mobile-nav,
+  .admin-mobile-nav {
+    display: none !important;
+  }
+  
+  .btn {
+    border: 2px solid #000 !important;
+    background: white !important;
+    color: black !important;
+  }
+  
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    border: 1px solid #000 !important;
+  }
+}

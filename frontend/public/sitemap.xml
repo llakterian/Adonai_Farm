@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://adonaifarm.co.ke/</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://adonaifarm.co.ke/images/hero-farm.jpg</image:loc>
+      <image:caption>Adonai Farm - Modern livestock farm in Kericho, Kenya</image:caption>
+      <image:title>Adonai Farm Hero Image</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://adonaifarm.co.ke/about</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://adonaifarm.co.ke/images/farm-2.jpg</image:loc>
+      <image:caption>About Adonai Farm - Our story and mission</image:caption>
+      <image:title>Adonai Farm Landscape</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://adonaifarm.co.ke/animals</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://adonaifarm.co.ke/images/adonai1.jpg</image:loc>
+      <image:caption>Meet our animals at Adonai Farm</image:caption>
+      <image:title>Adonai Farm Animals</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://adonaifarm.co.ke/gallery</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://adonaifarm.co.ke/images/farm-3.jpg</image:loc>
+      <image:caption>Adonai Farm photo gallery</image:caption>
+      <image:title>Farm Operations Gallery</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://adonaifarm.co.ke/services</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://adonaifarm.co.ke/images/farm-4.jpg</image:loc>
+      <image:caption>Adonai Farm services - breeding, tours, consulting</image:caption>
+      <image:title>Farm Services</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://adonaifarm.co.ke/contact</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

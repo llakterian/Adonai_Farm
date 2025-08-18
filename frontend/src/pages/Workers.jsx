@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { mockWorkers } from '../auth.js';
+import { usePermissions, PermissionGate } from '../utils/permissions.jsx';
+import SearchComponent from '../components/SearchComponent.jsx';
 
 const roleEmojis = {
   'Farm Worker': '👷',
@@ -12,6 +14,7 @@ const roleEmojis = {
 
 export default function Workers() {
   const [workers, setWorkers] = useState([]);
+  const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [timeEntries, setTimeEntries] = useState([]);
   const [form, setForm] = useState({ name: '', employee_id: '', role: 'Farm Worker', hourly_rate: 500, phone: '' });
   const [editingId, setEditingId] = useState(null);
@@ -21,61 +24,73 @@ export default function Workers() {
   const [clockingWorker, setClockingWorker] = useState(null);
   const [clockNotes, setClockNotes] = useState('');
   const [activeTab, setActiveTab] = useState('workers');
+  const { canEdit, canDelete, isWorker, user } = usePermissions();
 
   useEffect(() => {
     loadWorkers();
     loadTimeEntries();
   }, []);
 
-  async function loadWorkers() {
-    try {
-      setLoading(true);
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      const res = await axios.get(api + '/api/workers', { 
-        headers: { Authorization: 'Bearer ' + token } 
-      });
-      setWorkers(res.data);
-    } catch (error) {
-      console.error('Error loading workers:', error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    // Update filtered workers when workers change
+    setFilteredWorkers(workers);
+  }, [workers]);
+
+  const handleSearchResults = (results, query, filters) => {
+    if (results === null) {
+      // Clear search - show all workers
+      setFilteredWorkers(workers);
+    } else {
+      // Show search results
+      setFilteredWorkers(results);
     }
+  };
+
+  function loadWorkers() {
+    setLoading(true);
+    // Load from localStorage or use mock data
+    const savedWorkers = localStorage.getItem('adonai_workers');
+    if (savedWorkers) {
+      setWorkers(JSON.parse(savedWorkers));
+    } else {
+      setWorkers([...mockWorkers]);
+      localStorage.setItem('adonai_workers', JSON.stringify(mockWorkers));
+    }
+    setLoading(false);
   }
 
-  async function loadTimeEntries() {
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
+  function loadTimeEntries() {
+    // Load time entries from localStorage
+    const savedTimeEntries = localStorage.getItem('adonai_time_entries');
+    if (savedTimeEntries) {
+      const entries = JSON.parse(savedTimeEntries);
+      // Filter for today's entries
       const today = new Date().toISOString().split('T')[0];
-      const res = await axios.get(api + '/api/time-entries?date_from=' + today, { 
-        headers: { Authorization: 'Bearer ' + token } 
-      });
-      setTimeEntries(res.data);
-    } catch (error) {
-      console.error('Error loading time entries:', error);
+      const todayEntries = entries.filter(entry => 
+        entry.clock_in && entry.clock_in.startsWith(today)
+      );
+      setTimeEntries(todayEntries);
+    } else {
+      setTimeEntries([]);
     }
   }
 
-  async function addWorker(e) {
+  function addWorker(e) {
     e.preventDefault();
     if (!form.name.trim() || !form.employee_id.trim()) return;
     
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.post(api + '/api/workers', form, { 
-        headers: { Authorization: 'Bearer ' + token } 
-      });
-      setForm({ name: '', employee_id: '', role: 'Farm Worker', hourly_rate: 500, phone: '' });
-      loadWorkers();
-    } catch (error) {
-      console.error('Error adding worker:', error);
-      alert(error.response?.data?.error || 'Failed to add worker');
-    }
+    const newWorker = {
+      id: Math.max(...workers.map(w => w.id), 0) + 1,
+      ...form
+    };
+    
+    const updatedWorkers = [...workers, newWorker];
+    setWorkers(updatedWorkers);
+    localStorage.setItem('adonai_workers', JSON.stringify(updatedWorkers));
+    setForm({ name: '', employee_id: '', role: 'Farm Worker', hourly_rate: 500, phone: '' });
   }
 
-  async function startEdit(worker) {
+  function startEdit(worker) {
     setEditingId(worker.id);
     setEditForm({
       name: worker.name,
@@ -86,23 +101,20 @@ export default function Workers() {
     });
   }
 
-  async function saveEdit(e) {
+  function saveEdit(e) {
     e.preventDefault();
     if (!editForm.name.trim() || !editForm.employee_id.trim()) return;
     
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.put(api + '/api/workers/' + editingId, editForm, {
-        headers: { Authorization: 'Bearer ' + token }
-      });
-      setEditingId(null);
-      setEditForm({ name: '', employee_id: '', role: '', hourly_rate: 0, phone: '' });
-      loadWorkers();
-    } catch (error) {
-      console.error('Error updating worker:', error);
-      alert(error.response?.data?.error || 'Failed to update worker');
-    }
+    const updatedWorkers = workers.map(worker => 
+      worker.id === editingId 
+        ? { id: editingId, ...editForm }
+        : worker
+    );
+    
+    setWorkers(updatedWorkers);
+    localStorage.setItem('adonai_workers', JSON.stringify(updatedWorkers));
+    setEditingId(null);
+    setEditForm({ name: '', employee_id: '', role: '', hourly_rate: 0, phone: '' });
   }
 
   function cancelEdit() {
@@ -110,56 +122,59 @@ export default function Workers() {
     setEditForm({ name: '', employee_id: '', role: '', hourly_rate: 0, phone: '' });
   }
 
-  async function deleteWorker(id) {
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.delete(api + '/api/workers/' + id, {
-        headers: { Authorization: 'Bearer ' + token }
-      });
-      setDeleteConfirm(null);
-      loadWorkers();
-    } catch (error) {
-      console.error('Error deleting worker:', error);
-    }
+  function deleteWorker(id) {
+    const updatedWorkers = workers.filter(worker => worker.id !== id);
+    setWorkers(updatedWorkers);
+    localStorage.setItem('adonai_workers', JSON.stringify(updatedWorkers));
+    setDeleteConfirm(null);
   }
 
-  async function clockIn(workerId) {
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.post(api + '/api/time-entries/clock-in', {
-        worker_id: workerId,
-        notes: clockNotes
-      }, {
-        headers: { Authorization: 'Bearer ' + token }
-      });
-      setClockingWorker(null);
-      setClockNotes('');
-      loadTimeEntries();
-    } catch (error) {
-      console.error('Error clocking in:', error);
-      alert(error.response?.data?.error || 'Failed to clock in');
-    }
+  function clockIn(workerId) {
+    const now = new Date().toISOString();
+    const newEntry = {
+      id: Date.now(),
+      worker_id: workerId,
+      clock_in: now,
+      clock_out: null,
+      notes: clockNotes,
+      hours_worked: 0
+    };
+    
+    const savedTimeEntries = localStorage.getItem('adonai_time_entries');
+    const allEntries = savedTimeEntries ? JSON.parse(savedTimeEntries) : [];
+    const updatedEntries = [...allEntries, newEntry];
+    
+    localStorage.setItem('adonai_time_entries', JSON.stringify(updatedEntries));
+    setClockingWorker(null);
+    setClockNotes('');
+    loadTimeEntries();
   }
 
-  async function clockOut(workerId) {
-    try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-      const token = localStorage.getItem('adonai_token');
-      await axios.post(api + '/api/time-entries/clock-out', {
-        worker_id: workerId,
-        notes: clockNotes
-      }, {
-        headers: { Authorization: 'Bearer ' + token }
-      });
-      setClockingWorker(null);
-      setClockNotes('');
-      loadTimeEntries();
-    } catch (error) {
-      console.error('Error clocking out:', error);
-      alert(error.response?.data?.error || 'Failed to clock out');
-    }
+  function clockOut(workerId) {
+    const now = new Date().toISOString();
+    const savedTimeEntries = localStorage.getItem('adonai_time_entries');
+    const allEntries = savedTimeEntries ? JSON.parse(savedTimeEntries) : [];
+    
+    const updatedEntries = allEntries.map(entry => {
+      if (entry.worker_id === workerId && !entry.clock_out) {
+        const clockInTime = new Date(entry.clock_in);
+        const clockOutTime = new Date(now);
+        const hoursWorked = (clockOutTime - clockInTime) / (1000 * 60 * 60);
+        
+        return {
+          ...entry,
+          clock_out: now,
+          hours_worked: hoursWorked,
+          notes: entry.notes + (clockNotes ? ` | ${clockNotes}` : '')
+        };
+      }
+      return entry;
+    });
+    
+    localStorage.setItem('adonai_time_entries', JSON.stringify(updatedEntries));
+    setClockingWorker(null);
+    setClockNotes('');
+    loadTimeEntries();
   }
 
   const isWorkerClockedIn = (workerId) => {
@@ -202,6 +217,16 @@ export default function Workers() {
 
       {activeTab === 'workers' && (
         <>
+          {/* Advanced Search and Filtering */}
+          <SearchComponent
+            dataType="workers"
+            onResults={handleSearchResults}
+            placeholder="Search workers by name, role, employee ID, phone..."
+            showFilters={true}
+            showPresets={true}
+            className="workers-search"
+          />
+
           {/* Stats Overview */}
           <div className="stats-grid">
             <div className="stat-card">
@@ -222,71 +247,85 @@ export default function Workers() {
             </div>
           </div>
 
-          {/* Add New Worker Form */}
-          <div className="card">
-            <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>➕ Add New Worker</h2>
-            <form onSubmit={addWorker}>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label>Full Name</label>
-                  <input 
-                    placeholder="Enter worker's full name" 
-                    value={form.name} 
-                    onChange={e => setForm({ ...form, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Employee ID</label>
-                  <input 
-                    placeholder="e.g., EMP009" 
-                    value={form.employee_id} 
-                    onChange={e => setForm({ ...form, employee_id: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Role</label>
-                  <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}>
-                    <option>Farm Worker</option>
-                    <option>Milkman</option>
-                    <option>Driver</option>
-                    <option>Supervisor</option>
-                    <option>Manager</option>
-                    <option>Veterinarian</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Hourly Rate (KSh)</label>
-                  <input 
-                    type="number" 
-                    min="0" 
-                    step="50"
-                    value={form.hourly_rate} 
-                    onChange={e => setForm({ ...form, hourly_rate: parseFloat(e.target.value) || 0 })} 
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Phone Number</label>
-                  <input 
-                    type="tel"
-                    placeholder="+254712345678" 
-                    value={form.phone} 
-                    onChange={e => setForm({ ...form, phone: e.target.value })} 
-                  />
-                </div>
+          {/* Add New Worker Form - Only for Admin and Supervisor */}
+          <PermissionGate 
+            feature="workers" 
+            fallback={
+              <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+                <h3 style={{ color: 'var(--text-light)' }}>👁️ View Only Access</h3>
+                <p style={{ color: 'var(--text-light)' }}>
+                  You have read-only access to worker records. Contact an administrator to add or modify workers.
+                </p>
               </div>
-              <div className="btn-group">
-                <button type="submit" className="btn btn-primary">
-                  ➕ Add Worker
-                </button>
+            }
+          >
+            {canEdit('workers') && (
+              <div className="card">
+                <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>➕ Add New Worker</h2>
+                <form onSubmit={addWorker}>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Full Name</label>
+                      <input 
+                        placeholder="Enter worker's full name" 
+                        value={form.name} 
+                        onChange={e => setForm({ ...form, name: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Employee ID</label>
+                      <input 
+                        placeholder="e.g., EMP009" 
+                        value={form.employee_id} 
+                        onChange={e => setForm({ ...form, employee_id: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Role</label>
+                      <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })}>
+                        <option>Farm Worker</option>
+                        <option>Milkman</option>
+                        <option>Driver</option>
+                        <option>Supervisor</option>
+                        <option>Manager</option>
+                        <option>Veterinarian</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>Hourly Rate (KSh)</label>
+                      <input 
+                        type="number" 
+                        min="0" 
+                        step="50"
+                        value={form.hourly_rate} 
+                        onChange={e => setForm({ ...form, hourly_rate: parseFloat(e.target.value) || 0 })} 
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Phone Number</label>
+                      <input 
+                        type="tel"
+                        placeholder="+254712345678" 
+                        value={form.phone} 
+                        onChange={e => setForm({ ...form, phone: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+                  <div className="btn-group">
+                    <button type="submit" className="btn btn-primary">
+                      ➕ Add Worker
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
-          </div>
+            )}
+          </PermissionGate>
 
           {/* Workers Grid */}
           <div className="animals-grid">
-            {workers.map(worker => (
+            {filteredWorkers.map(worker => (
               <div key={worker.id} className="animal-card">
                 {editingId === worker.id ? (
                   <form onSubmit={saveEdit} className="edit-form">
@@ -388,18 +427,27 @@ export default function Workers() {
                     </div>
 
                     <div className="animal-actions">
-                      <button 
-                        className="btn btn-outline btn-small" 
-                        onClick={() => startEdit(worker)}
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button 
-                        className="btn btn-danger btn-small"
-                        onClick={() => setDeleteConfirm(worker.id)}
-                      >
-                        🗑️ Delete
-                      </button>
+                      {canEdit('workers') && (
+                        <button 
+                          className="btn btn-outline btn-small" 
+                          onClick={() => startEdit(worker)}
+                        >
+                          ✏️ Edit
+                        </button>
+                      )}
+                      {canDelete('workers') && (
+                        <button 
+                          className="btn btn-danger btn-small"
+                          onClick={() => setDeleteConfirm(worker.id)}
+                        >
+                          🗑️ Delete
+                        </button>
+                      )}
+                      {!canEdit('workers') && !canDelete('workers') && (
+                        <div style={{ color: 'var(--text-light)', fontSize: '0.9rem', fontStyle: 'italic' }}>
+                          👁️ View only
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

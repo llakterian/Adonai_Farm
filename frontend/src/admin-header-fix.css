@@ -1,0 +1,527 @@
+/* ==============================================
+   ADMIN HEADER AND MOBILE INTERFACE FIXES
+   Agricultural theme with proper accessibility
+   Consistent button sizes and mobile navigation
+   ============================================== */
+
+/* ==============================================
+   ADMIN HEADER - AGRICULTURAL THEME
+   ============================================== */
+
+.admin-header-fixed {
+  background: linear-gradient(135deg, var(--farm-green-primary, #2d5016) 0%, var(--moss-green, #4a7c59) 100%) !important;
+  border-bottom: 3px solid var(--honey-gold, #ffd700) !important;
+  box-shadow: 0 4px 20px rgba(45, 80, 22, 0.3) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.admin-header-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 1rem 2rem !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  gap: 2rem !important;
+  min-height: 70px !important;
+}
+
+/* ==============================================
+   ADMIN LOGO - AGRICULTURAL BRANDING
+   ============================================== */
+
+.admin-logo-section {
+  flex-shrink: 0 !important;
+}
+
+.admin-logo-link {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  color: var(--wheat-gold, #f4e4a6) !important;
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  transition: all 0.3s ease !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.admin-logo-link:hover {
+  color: var(--honey-gold, #ffd700) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-1px) !important;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.admin-logo-link:focus {
+  outline: 3px solid var(--honey-gold, #ffd700) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* ==============================================
+   ADMIN NAVIGATION TABS - AGRICULTURAL THEME
+   ============================================== */
+
+.admin-nav-tabs {
+  display: flex !important;
+  gap: 0.5rem !important;
+  flex: 1 !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.admin-tab {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: var(--wheat-gold, #f4e4a6) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(5px) !important;
+  transition: all 0.3s ease !important;
+  padding: 0.75rem 1.5rem !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  min-height: var(--btn-height-medium, 44px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.admin-tab:hover {
+  background: var(--honey-gold, #ffd700) !important;
+  color: var(--forest-green, #2d5016) !important;
+  border-color: var(--honey-gold, #ffd700) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4) !important;
+  text-shadow: none !important;
+}
+
+.admin-tab.active {
+  background: var(--honey-gold, #ffd700) !important;
+  color: var(--forest-green, #2d5016) !important;
+  border-color: var(--honey-gold, #ffd700) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5) !important;
+  text-shadow: none !important;
+}
+
+.admin-tab:focus {
+  outline: 3px solid var(--honey-gold, #ffd700) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* ==============================================
+   ADMIN USER SECTION - AGRICULTURAL THEME
+   ============================================== */
+
+.admin-user-section {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  flex-shrink: 0 !important;
+}
+
+.admin-user-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 0.25rem !important;
+  color: var(--wheat-gold, #f4e4a6) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.admin-user-name {
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.admin-user-role {
+  font-size: 0.75rem !important;
+  color: rgba(244, 228, 166, 0.8) !important;
+  font-weight: 500 !important;
+}
+
+/* ==============================================
+   ADMIN ACTION BUTTONS - AGRICULTURAL THEME
+   ============================================== */
+
+.admin-actions {
+  display: flex !important;
+  gap: 0.75rem !important;
+  align-items: center !important;
+}
+
+.btn-view-public {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: var(--wheat-gold, #f4e4a6) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  backdrop-filter: blur(5px) !important;
+  transition: all 0.3s ease !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  min-height: var(--btn-height-medium, 44px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+}
+
+.btn-view-public:hover {
+  background: var(--sage-green, #9caf88) !important;
+  color: var(--forest-green, #2d5016) !important;
+  border-color: var(--sage-green, #9caf88) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(156, 175, 136, 0.4) !important;
+}
+
+.btn-view-public:focus {
+  outline: 3px solid var(--honey-gold, #ffd700) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+.btn-logout {
+  background: linear-gradient(135deg, var(--brown-primary-fixed, #3d2914), var(--brown-secondary-fixed, #5d4037)) !important;
+  color: var(--wheat-gold, #f4e4a6) !important;
+  border: 2px solid var(--brown-primary-fixed, #3d2914) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  box-shadow: 0 4px 12px rgba(61, 41, 20, 0.3) !important;
+  transition: all 0.3s ease !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  min-height: var(--btn-height-medium, 44px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+}
+
+.btn-logout:hover {
+  background: var(--brown-secondary-fixed, #5d4037) !important;
+  border-color: var(--brown-secondary-fixed, #5d4037) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 16px rgba(61, 41, 20, 0.4) !important;
+}
+
+.btn-logout:focus {
+  outline: 3px solid var(--honey-gold, #ffd700) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+.btn-logout:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 4px 12px rgba(61, 41, 20, 0.3) !important;
+}
+
+.btn-logout::before {
+  content: '🚪' !important;
+  font-size: 0.9rem !important;
+}
+
+/* ==============================================
+   MOBILE ADMIN INTERFACE - AGRICULTURAL THEME
+   ============================================== */
+
+@media screen and (max-width: 768px) {
+  /* Mobile Header Layout */
+  .admin-header-content {
+    flex-direction: column !important;
+    padding: 1rem !important;
+    gap: 1rem !important;
+    min-height: auto !important;
+  }
+  
+  /* Mobile Logo */
+  .admin-logo-section {
+    order: 1 !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+  
+  .admin-logo-link {
+    font-size: 1.3rem !important;
+    justify-content: center !important;
+  }
+  
+  /* Hide Desktop Navigation on Mobile */
+  .admin-nav-tabs {
+    display: none !important;
+  }
+  
+  /* Hide Desktop User Section on Mobile */
+  .admin-user-section {
+    display: none !important;
+  }
+  
+  /* Show Mobile Menu Toggle */
+  .admin-mobile-menu-toggle {
+    display: flex !important;
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    background: var(--forest-green, #2d5016) !important;
+    color: var(--wheat-gold, #f4e4a6) !important;
+    border: 3px solid var(--honey-gold, #ffd700) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+    min-width: var(--touch-target-comfortable, 48px) !important;
+    min-height: var(--touch-target-comfortable, 48px) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 101 !important;
+  }
+  
+  .admin-mobile-menu-toggle:hover {
+    background: var(--honey-gold, #ffd700) !important;
+    color: var(--forest-green, #2d5016) !important;
+    border-color: var(--forest-green, #2d5016) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4) !important;
+  }
+  
+  .admin-mobile-menu-toggle:focus {
+    outline: 3px solid var(--honey-gold, #ffd700) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+  }
+  
+  /* Mobile Navigation Drawer */
+  .admin-mobile-nav {
+    display: none !important;
+    position: fixed !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: var(--forest-green, #2d5016) !important;
+    border-top: 3px solid var(--honey-gold, #ffd700) !important;
+    box-shadow: 0 -4px 20px rgba(45, 80, 22, 0.3) !important;
+    padding: var(--space-lg, 1.5rem) !important;
+    flex-direction: column !important;
+    gap: var(--space-sm, 0.5rem) !important;
+    z-index: 1000 !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    transform: translateY(0) !important;
+    transition: transform 0.3s ease !important;
+  }
+  
+  .admin-mobile-nav.open {
+    display: flex !important;
+    transform: translateY(-100%) !important;
+  }
+  
+  /* Mobile Navigation Items */
+  .admin-mobile-item {
+    color: var(--wheat-gold, #f4e4a6) !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding: var(--space-md, 1rem) !important;
+    border-radius: 8px !important;
+    text-align: center !important;
+    transition: all 0.2s ease !important;
+    border: 2px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    min-height: var(--touch-target-comfortable, 48px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  }
+  
+  .admin-mobile-item:hover,
+  .admin-mobile-item.active {
+    background: var(--honey-gold, #ffd700) !important;
+    color: var(--forest-green, #2d5016) !important;
+    border-color: var(--honey-gold, #ffd700) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3) !important;
+  }
+  
+  .admin-mobile-item:focus {
+    outline: 3px solid var(--honey-gold, #ffd700) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+  }
+  
+  /* Mobile Action Buttons */
+  .admin-mobile-actions {
+    margin-top: var(--space-lg, 1.5rem) !important;
+    padding-top: var(--space-lg, 1.5rem) !important;
+    border-top: 2px solid rgba(255, 255, 255, 0.1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--space-sm, 0.5rem) !important;
+  }
+  
+  .admin-mobile-btn {
+    padding: var(--space-md, 1rem) !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    min-height: var(--touch-target-comfortable, 48px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--space-sm, 0.5rem) !important;
+    transition: all 0.2s ease !important;
+    border: 2px solid transparent !important;
+    cursor: pointer !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  }
+  
+  .admin-mobile-btn.btn-view-public {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--wheat-gold, #f4e4a6) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  .admin-mobile-btn.btn-view-public:hover {
+    background: var(--sage-green, #9caf88) !important;
+    color: var(--forest-green, #2d5016) !important;
+    border-color: var(--sage-green, #9caf88) !important;
+  }
+  
+  .admin-mobile-btn.btn-logout {
+    background: var(--brown-primary-fixed, #3d2914) !important;
+    color: var(--wheat-gold, #f4e4a6) !important;
+    border-color: var(--brown-primary-fixed, #3d2914) !important;
+  }
+  
+  .admin-mobile-btn.btn-logout:hover {
+    background: var(--brown-secondary-fixed, #5d4037) !important;
+    border-color: var(--brown-secondary-fixed, #5d4037) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(61, 41, 20, 0.3) !important;
+  }
+  
+  .admin-mobile-btn:focus {
+    outline: 3px solid var(--honey-gold, #ffd700) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+  }
+}
+
+/* ==============================================
+   VERY SMALL MOBILE SCREENS
+   ============================================== */
+
+@media screen and (max-width: 480px) {
+  .admin-header-content {
+    padding: 0.75rem !important;
+  }
+  
+  .admin-logo-link {
+    font-size: 1.1rem !important;
+    padding: 0.5rem !important;
+  }
+  
+  .admin-mobile-menu-toggle {
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+    padding: 10px !important;
+    font-size: 1.3rem !important;
+  }
+  
+  .admin-mobile-nav {
+    padding: var(--space-md, 1rem) !important;
+  }
+  
+  .admin-mobile-item {
+    padding: 0.75rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .admin-mobile-btn {
+    padding: 0.75rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ==============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .admin-header-fixed {
+    border-bottom-width: 4px !important;
+  }
+  
+  .admin-tab,
+  .admin-mobile-menu-toggle,
+  .admin-mobile-item,
+  .btn-view-public,
+  .btn-logout {
+    border-width: 3px !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .admin-tab,
+  .admin-mobile-menu-toggle,
+  .admin-mobile-item,
+  .btn-view-public,
+  .btn-logout,
+  .admin-mobile-nav {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .admin-tab:hover,
+  .admin-mobile-item:hover,
+  .btn-view-public:hover,
+  .btn-logout:hover {
+    transform: none !important;
+  }
+}
+
+/* Focus management for keyboard navigation */
+.admin-mobile-nav.open .admin-mobile-item:first-child {
+  /* Auto-focus first item when menu opens */
+}
+
+/* Screen reader announcements */
+.admin-mobile-nav[aria-hidden="false"] {
+  /* Announce when mobile menu is opened */
+}
+
+/* ==============================================
+   PRINT STYLES
+   ============================================== */
+
+@media print {
+  .admin-header-fixed,
+  .admin-mobile-menu-toggle,
+  .admin-mobile-nav {
+    display: none !important;
+  }
+}

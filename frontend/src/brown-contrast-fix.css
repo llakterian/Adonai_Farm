@@ -1,0 +1,455 @@
+/* ==============================================
+   BROWN COLOR CONTRAST FIXES
+   Addressing text readability issues on brown backgrounds
+   WCAG 2.1 AA Compliance (4.5:1 minimum contrast ratio)
+   ============================================== */
+
+:root {
+  /* Enhanced Brown Colors with Better Contrast */
+  --brown-primary-fixed: #3d2914;         /* Dark brown - 12:1 contrast on white */
+  --brown-secondary-fixed: #5d4037;       /* Medium brown - 8:1 contrast on white */
+  --brown-light-fixed: #8d6e63;           /* Light brown - 4.5:1 contrast on white */
+  --brown-accent-fixed: #a0522d;          /* Sienna - 6:1 contrast on white */
+  
+  /* Text colors for brown backgrounds */
+  --text-on-brown-primary: #ffffff;       /* White text on dark brown - 12:1 contrast */
+  --text-on-brown-secondary: #ffffff;     /* White text on medium brown - 8:1 contrast */
+  --text-on-brown-light: #ffffff;         /* White text on light brown - 4.5:1 contrast */
+  --text-on-brown-accent: #ffffff;        /* White text on sienna - 6:1 contrast */
+  
+  /* Alternative high-contrast text colors */
+  --text-alt-on-brown: #f5f5dc;          /* Beige text - alternative for variety */
+  --text-emphasis-on-brown: #ffd700;     /* Gold text for emphasis on brown */
+}
+
+/* ==============================================
+   FOOTER BROWN COLOR FIXES
+   ============================================== */
+
+.public-footer {
+  background: var(--brown-primary-fixed) !important;
+  color: var(--text-on-brown-primary) !important;
+}
+
+.public-footer-content {
+  color: var(--text-on-brown-primary) !important;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  color: var(--text-emphasis-on-brown) !important;
+  font-weight: 700 !important;
+}
+
+.footer-section p,
+.footer-section li {
+  color: var(--text-on-brown-primary) !important;
+  font-weight: 400 !important;
+}
+
+.footer-section a {
+  color: var(--text-alt-on-brown) !important;
+  text-decoration: underline !important;
+}
+
+.footer-section a:hover {
+  color: var(--text-emphasis-on-brown) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.footer-section a:focus {
+  outline: 2px solid var(--text-emphasis-on-brown) !important;
+  outline-offset: 2px !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: var(--text-on-brown-primary) !important;
+}
+
+.footer-bottom a {
+  color: var(--text-emphasis-on-brown) !important;
+  font-weight: 600 !important;
+}
+
+.footer-bottom a:hover {
+  color: var(--text-alt-on-brown) !important;
+}
+
+/* ==============================================
+   BROWN THEMED CARDS AND COMPONENTS
+   ============================================== */
+
+/* Brown themed cards with proper contrast */
+.card.brown-theme,
+.brown-card {
+  background: var(--brown-light-fixed) !important;
+  color: var(--text-on-brown-light) !important;
+  border: 2px solid var(--brown-accent-fixed) !important;
+}
+
+.card.brown-theme h1,
+.card.brown-theme h2,
+.card.brown-theme h3,
+.card.brown-theme h4,
+.card.brown-theme h5,
+.card.brown-theme h6,
+.brown-card h1,
+.brown-card h2,
+.brown-card h3,
+.brown-card h4,
+.brown-card h5,
+.brown-card h6 {
+  color: var(--text-emphasis-on-brown) !important;
+}
+
+.card.brown-theme p,
+.card.brown-theme span,
+.card.brown-theme div,
+.brown-card p,
+.brown-card span,
+.brown-card div {
+  color: var(--text-on-brown-light) !important;
+}
+
+.card.brown-theme a,
+.brown-card a {
+  color: var(--text-emphasis-on-brown) !important;
+  text-decoration: underline !important;
+}
+
+.card.brown-theme a:hover,
+.brown-card a:hover {
+  color: var(--text-alt-on-brown) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ==============================================
+   BROWN THEMED BUTTONS
+   ============================================== */
+
+.btn-brown,
+.btn.brown-theme {
+  background: var(--brown-primary-fixed) !important;
+  color: var(--text-on-brown-primary) !important;
+  border: 2px solid var(--brown-primary-fixed) !important;
+}
+
+.btn-brown:hover,
+.btn.brown-theme:hover {
+  background: var(--brown-secondary-fixed) !important;
+  border-color: var(--brown-secondary-fixed) !important;
+  color: var(--text-on-brown-secondary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(61, 41, 20, 0.3) !important;
+}
+
+.btn-brown:focus,
+.btn.brown-theme:focus {
+  outline: 3px solid var(--text-emphasis-on-brown) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(255, 215, 0, 0.2) !important;
+}
+
+.btn-brown-outline,
+.btn-outline.brown-theme {
+  background: transparent !important;
+  color: var(--brown-primary-fixed) !important;
+  border: 2px solid var(--brown-primary-fixed) !important;
+}
+
+.btn-brown-outline:hover,
+.btn-outline.brown-theme:hover {
+  background: var(--brown-primary-fixed) !important;
+  color: var(--text-on-brown-primary) !important;
+}
+
+/* ==============================================
+   BROWN THEMED NAVIGATION
+   ============================================== */
+
+.nav.brown-theme,
+.brown-nav {
+  background: var(--brown-secondary-fixed) !important;
+}
+
+.nav.brown-theme a,
+.brown-nav a {
+  color: var(--text-on-brown-secondary) !important;
+}
+
+.nav.brown-theme a:hover,
+.nav.brown-theme a.active,
+.brown-nav a:hover,
+.brown-nav a.active {
+  background: var(--brown-accent-fixed) !important;
+  color: var(--text-on-brown-accent) !important;
+}
+
+/* ==============================================
+   BROWN THEMED FORMS
+   ============================================== */
+
+.form-group.brown-theme label,
+.brown-form label {
+  color: var(--brown-primary-fixed) !important;
+  font-weight: 600 !important;
+}
+
+.form-group.brown-theme input,
+.form-group.brown-theme select,
+.form-group.brown-theme textarea,
+.brown-form input,
+.brown-form select,
+.brown-form textarea {
+  border: 2px solid var(--brown-light-fixed) !important;
+  background: var(--text-on-brown-primary) !important;
+  color: var(--brown-primary-fixed) !important;
+}
+
+.form-group.brown-theme input:focus,
+.form-group.brown-theme select:focus,
+.form-group.brown-theme textarea:focus,
+.brown-form input:focus,
+.brown-form select:focus,
+.brown-form textarea:focus {
+  border-color: var(--brown-accent-fixed) !important;
+  box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.2) !important;
+}
+
+/* ==============================================
+   BROWN THEMED ALERTS AND MESSAGES
+   ============================================== */
+
+.alert.brown-theme,
+.brown-alert {
+  background: var(--brown-light-fixed) !important;
+  color: var(--text-on-brown-light) !important;
+  border: 2px solid var(--brown-accent-fixed) !important;
+  border-radius: 8px !important;
+  padding: 1rem !important;
+}
+
+.alert.brown-theme strong,
+.brown-alert strong {
+  color: var(--text-emphasis-on-brown) !important;
+}
+
+/* ==============================================
+   BROWN THEMED TABLES
+   ============================================== */
+
+.table.brown-theme,
+.brown-table {
+  background: var(--text-on-brown-primary) !important;
+  border: 2px solid var(--brown-light-fixed) !important;
+}
+
+.table.brown-theme th,
+.brown-table th {
+  background: var(--brown-secondary-fixed) !important;
+  color: var(--text-on-brown-secondary) !important;
+  font-weight: 600 !important;
+}
+
+.table.brown-theme td,
+.brown-table td {
+  color: var(--brown-primary-fixed) !important;
+  border-bottom: 1px solid var(--brown-light-fixed) !important;
+}
+
+.table.brown-theme tr:hover,
+.brown-table tr:hover {
+  background: rgba(141, 110, 99, 0.1) !important;
+}
+
+/* ==============================================
+   ACCESSIBILITY ENHANCEMENTS FOR BROWN THEME
+   ============================================== */
+
+/* High contrast mode support for brown elements */
+@media (prefers-contrast: high) {
+  .public-footer,
+  .card.brown-theme,
+  .brown-card,
+  .btn-brown,
+  .btn.brown-theme {
+    border-width: 4px !important;
+    font-weight: 700 !important;
+  }
+  
+  .footer-section a,
+  .card.brown-theme a,
+  .brown-card a {
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+  }
+}
+
+/* Focus indicators for brown themed elements */
+.public-footer a:focus,
+.card.brown-theme a:focus,
+.brown-card a:focus,
+.nav.brown-theme a:focus,
+.brown-nav a:focus {
+  outline: 3px solid var(--text-emphasis-on-brown) !important;
+  outline-offset: 2px !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ==============================================
+   MOBILE RESPONSIVE BROWN THEME
+   ============================================== */
+
+@media screen and (max-width: 768px) {
+  .public-footer {
+    padding: var(--space-lg) var(--space-md) !important;
+  }
+  
+  .footer-section h3,
+  .footer-section h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: var(--space-sm) !important;
+  }
+  
+  .footer-section p,
+  .footer-section li {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  .card.brown-theme,
+  .brown-card {
+    padding: var(--space-md) !important;
+    margin-bottom: var(--space-md) !important;
+  }
+  
+  .btn-brown,
+  .btn.brown-theme {
+    min-height: var(--touch-target-comfortable) !important;
+    padding: 0 var(--space-lg) !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* ==============================================
+   PRINT STYLES FOR BROWN THEME
+   ============================================== */
+
+@media print {
+  .public-footer,
+  .card.brown-theme,
+  .brown-card {
+    background: white !important;
+    color: black !important;
+    border: 2px solid black !important;
+  }
+  
+  .footer-section h3,
+  .footer-section h4,
+  .card.brown-theme h1,
+  .card.brown-theme h2,
+  .card.brown-theme h3,
+  .brown-card h1,
+  .brown-card h2,
+  .brown-card h3 {
+    color: black !important;
+  }
+  
+  .footer-section a,
+  .card.brown-theme a,
+  .brown-card a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+}
+
+/* ==============================================
+   UTILITY CLASSES FOR BROWN THEME
+   ============================================== */
+
+.text-brown-primary {
+  color: var(--brown-primary-fixed) !important;
+}
+
+.text-brown-secondary {
+  color: var(--brown-secondary-fixed) !important;
+}
+
+.text-on-brown {
+  color: var(--text-on-brown-primary) !important;
+}
+
+.text-emphasis-brown {
+  color: var(--text-emphasis-on-brown) !important;
+}
+
+.bg-brown-primary {
+  background-color: var(--brown-primary-fixed) !important;
+  color: var(--text-on-brown-primary) !important;
+}
+
+.bg-brown-secondary {
+  background-color: var(--brown-secondary-fixed) !important;
+  color: var(--text-on-brown-secondary) !important;
+}
+
+.bg-brown-light {
+  background-color: var(--brown-light-fixed) !important;
+  color: var(--text-on-brown-light) !important;
+}
+
+.border-brown {
+  border-color: var(--brown-accent-fixed) !important;
+}
+
+/* ==============================================
+   VALIDATION AND TESTING HELPERS
+   ============================================== */
+
+/* Visual indicator for low contrast text (development only) */
+.low-contrast-brown {
+  background: yellow !important;
+  color: red !important;
+  font-weight: bold !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+}
+
+/* Contrast ratio testing helper */
+.contrast-test-brown {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+  padding: 1rem !important;
+  margin: 1rem 0 !important;
+}
+
+.contrast-test-brown .sample {
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  min-width: 200px !important;
+  text-align: center !important;
+  font-weight: 600 !important;
+}
+
+.contrast-test-brown .sample-1 {
+  background: var(--brown-primary-fixed) !important;
+  color: var(--text-on-brown-primary) !important;
+}
+
+.contrast-test-brown .sample-2 {
+  background: var(--brown-secondary-fixed) !important;
+  color: var(--text-on-brown-secondary) !important;
+}
+
+.contrast-test-brown .sample-3 {
+  background: var(--brown-light-fixed) !important;
+  color: var(--text-on-brown-light) !important;
+}
+
+.contrast-test-brown .sample-4 {
+  background: var(--brown-accent-fixed) !important;
+  color: var(--text-on-brown-accent) !important;
+}

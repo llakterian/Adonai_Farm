@@ -1,0 +1,603 @@
+/* ==============================================
+   AGRICULTURAL FARM THEME - FARMER-ORIENTED DESIGN
+   Creative backgrounds, visible fonts, and appealing design
+   ============================================== */
+
+/* Import Google Fonts for better typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ==============================================
+   ENHANCED AGRICULTURAL COLOR PALETTE
+   ============================================== */
+
+:root {
+  /* Primary Agricultural Colors */
+  --farm-green-primary: #2d5016;          /* Deep forest green */
+  --farm-green-light: #4a7c59;            /* Medium forest green */
+  --farm-green-accent: #6b8e23;           /* Olive green */
+  --farm-green-soft: #9caf88;             /* Soft sage green */
+  
+  /* Earth & Harvest Colors */
+  --harvest-gold: #d4af37;                /* Rich golden yellow */
+  --wheat-gold: #f4e4a6;                  /* Light wheat color */
+  --earth-brown: #8b4513;                 /* Rich earth brown */
+  --soil-brown: #a0522d;                  /* Soil brown */
+  
+  /* Sky & Natural Colors */
+  --sky-blue: #87ceeb;                     /* Sky blue */
+  --cloud-white: #f8f8ff;                 /* Cloud white */
+  --sunrise-orange: #ff8c42;              /* Sunrise orange */
+  --sunset-pink: #ff6b9d;                 /* Sunset pink */
+  
+  /* Agricultural Gradients */
+  --gradient-farm: linear-gradient(135deg, var(--farm-green-primary) 0%, var(--farm-green-light) 50%, var(--farm-green-accent) 100%);
+  --gradient-harvest: linear-gradient(135deg, var(--harvest-gold) 0%, var(--wheat-gold) 100%);
+  --gradient-earth: linear-gradient(135deg, var(--earth-brown) 0%, var(--soil-brown) 100%);
+  --gradient-sky: linear-gradient(135deg, var(--sky-blue) 0%, var(--cloud-white) 100%);
+  --gradient-sunrise: linear-gradient(45deg, var(--sunrise-orange) 0%, var(--harvest-gold) 50%, var(--wheat-gold) 100%);
+  
+  /* Enhanced Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+}
+
+/* ==============================================
+   ENHANCED TYPOGRAPHY SYSTEM
+   ============================================== */
+
+body {
+  font-family: var(--font-primary) !important;
+  font-weight: var(--font-weight-normal) !important;
+  line-height: 1.6 !important;
+  color: var(--farm-green-primary) !important;
+  background: var(--gradient-sky) !important;
+  background-attachment: fixed !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* Enhanced Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--farm-green-primary) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  margin-bottom: 1rem !important;
+}
+
+h1 {
+  font-size: 2.5rem !important;
+  font-weight: var(--font-weight-extrabold) !important;
+  background: var(--gradient-farm) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+h2 {
+  font-size: 2rem !important;
+  color: var(--farm-green-light) !important;
+}
+
+h3 {
+  font-size: 1.5rem !important;
+  color: var(--farm-green-accent) !important;
+}
+
+/* ==============================================
+   AGRICULTURAL ADMIN CONTAINER THEME
+   ============================================== */
+
+.admin-container {
+  background: var(--gradient-sky) !important;
+  background-attachment: fixed !important;
+  min-height: 100vh !important;
+  position: relative !important;
+}
+
+/* Add subtle farm pattern overlay */
+.admin-container::before {
+  content: '' !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(45, 80, 22, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.05) 0%, transparent 50%) !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+
+/* ==============================================
+   ENHANCED ADMIN HEADER WITH FARM THEME
+   ============================================== */
+
+.admin-header-fixed {
+  background: var(--gradient-farm) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 3px solid var(--harvest-gold) !important;
+  box-shadow: 0 4px 20px rgba(45, 80, 22, 0.3) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+
+.admin-logo-link {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-extrabold) !important;
+  font-size: 1.5rem !important;
+  color: var(--wheat-gold) !important;
+  text-decoration: none !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.admin-logo-link:hover {
+  color: var(--harvest-gold) !important;
+  transform: translateY(-1px) !important;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ==============================================
+   ENHANCED NAVIGATION TABS WITH FARM THEME
+   ============================================== */
+
+.admin-nav-tabs .admin-tab {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: var(--cloud-white) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(5px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.admin-nav-tabs .admin-tab:hover {
+  background: var(--harvest-gold) !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--harvest-gold) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4) !important;
+  text-shadow: none !important;
+}
+
+.admin-nav-tabs .admin-tab.active {
+  background: var(--harvest-gold) !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--harvest-gold) !important;
+  font-weight: var(--font-weight-bold) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.5) !important;
+  text-shadow: none !important;
+}
+
+/* ==============================================
+   ENHANCED USER SECTION WITH FARM THEME
+   ============================================== */
+
+.admin-user-info {
+  color: var(--cloud-white) !important;
+  font-family: var(--font-display) !important;
+}
+
+.admin-user-name {
+  font-weight: var(--font-weight-semibold) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.admin-user-role {
+  color: var(--wheat-gold) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+/* Enhanced Action Buttons */
+.btn-view-public {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: var(--cloud-white) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  backdrop-filter: blur(5px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-view-public:hover {
+  background: var(--sky-blue) !important;
+  color: var(--farm-green-primary) !important;
+  border-color: var(--sky-blue) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(135, 206, 235, 0.4) !important;
+}
+
+.btn-logout {
+  background: var(--gradient-earth) !important;
+  color: var(--cloud-white) !important;
+  border: 2px solid var(--earth-brown) !important;
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-logout:hover {
+  background: var(--soil-brown) !important;
+  border-color: var(--soil-brown) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 16px rgba(139, 69, 19, 0.4) !important;
+}
+
+/* ==============================================
+   ENHANCED CARDS WITH AGRICULTURAL THEME
+   ============================================== */
+
+.admin-container .card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 2px solid rgba(45, 80, 22, 0.1) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(45, 80, 22, 0.15) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.admin-container .card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: var(--gradient-harvest) !important;
+}
+
+.admin-container .card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(45, 80, 22, 0.2) !important;
+  border-color: var(--farm-green-accent) !important;
+}
+
+/* ==============================================
+   ENHANCED STATS CARDS WITH FARM THEME
+   ============================================== */
+
+.admin-container .stat-card {
+  background: var(--gradient-farm) !important;
+  color: var(--cloud-white) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgba(45, 80, 22, 0.3) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.admin-container .stat-card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -50% !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 200% !important;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%) !important;
+  animation: shimmer 3s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: translateX(-100%) translateY(-100%); }
+  50% { transform: translateX(0%) translateY(0%); }
+}
+
+.admin-container .stat-card:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 32px rgba(45, 80, 22, 0.4) !important;
+}
+
+.admin-container .stat-number {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-extrabold) !important;
+  font-size: 2.5rem !important;
+  color: var(--harvest-gold) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+.admin-container .stat-label {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--wheat-gold) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* ==============================================
+   ENHANCED ANIMAL/WORKER CARDS
+   ============================================== */
+
+.admin-container .animal-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 2px solid rgba(74, 124, 89, 0.2) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgba(45, 80, 22, 0.15) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.admin-container .animal-card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 4px !important;
+  height: 100% !important;
+  background: var(--gradient-farm) !important;
+}
+
+.admin-container .animal-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 32px rgba(45, 80, 22, 0.2) !important;
+  border-color: var(--farm-green-accent) !important;
+}
+
+.admin-container .animal-name {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--farm-green-primary) !important;
+  font-size: 1.25rem !important;
+}
+
+.admin-container .animal-type {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-medium) !important;
+  color: var(--farm-green-accent) !important;
+  background: rgba(107, 142, 35, 0.1) !important;
+  padding: 4px 8px !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+}
+
+/* ==============================================
+   ENHANCED BUTTONS WITH FARM THEME
+   ============================================== */
+
+.admin-container .btn {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+  text-transform: none !important;
+  letter-spacing: 0.5px !important;
+}
+
+.admin-container .btn-primary {
+  background: var(--gradient-farm) !important;
+  border: 2px solid var(--farm-green-primary) !important;
+  color: var(--cloud-white) !important;
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3) !important;
+}
+
+.admin-container .btn-primary:hover {
+  background: var(--farm-green-light) !important;
+  border-color: var(--farm-green-light) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(45, 80, 22, 0.4) !important;
+}
+
+.admin-container .btn-secondary {
+  background: var(--gradient-harvest) !important;
+  border: 2px solid var(--harvest-gold) !important;
+  color: var(--farm-green-primary) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3) !important;
+}
+
+.admin-container .btn-secondary:hover {
+  background: var(--wheat-gold) !important;
+  border-color: var(--wheat-gold) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4) !important;
+}
+
+.admin-container .btn-outline {
+  background: transparent !important;
+  border: 2px solid var(--farm-green-accent) !important;
+  color: var(--farm-green-accent) !important;
+}
+
+.admin-container .btn-outline:hover {
+  background: var(--farm-green-accent) !important;
+  color: var(--cloud-white) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(107, 142, 35, 0.3) !important;
+}
+
+/* ==============================================
+   ENHANCED FORM ELEMENTS
+   ============================================== */
+
+.admin-container input,
+.admin-container select,
+.admin-container textarea {
+  font-family: var(--font-primary) !important;
+  font-weight: var(--font-weight-normal) !important;
+  border: 2px solid rgba(45, 80, 22, 0.2) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(5px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.admin-container input:focus,
+.admin-container select:focus,
+.admin-container textarea:focus {
+  border-color: var(--farm-green-accent) !important;
+  box-shadow: 0 0 0 4px rgba(107, 142, 35, 0.1) !important;
+  background: rgba(255, 255, 255, 1) !important;
+}
+
+.admin-container label {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--farm-green-primary) !important;
+}
+
+/* ==============================================
+   PAGE TITLES WITH FARM THEME
+   ============================================== */
+
+.page-title {
+  font-family: var(--font-display) !important;
+  font-weight: var(--font-weight-extrabold) !important;
+  font-size: 3rem !important;
+  text-align: center !important;
+  margin-bottom: 2rem !important;
+  background: var(--gradient-farm) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  text-shadow: 0 4px 8px rgba(45, 80, 22, 0.2) !important;
+  position: relative !important;
+}
+
+.page-title::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100px !important;
+  height: 4px !important;
+  background: var(--gradient-harvest) !important;
+  border-radius: 2px !important;
+}
+
+/* ==============================================
+   ENHANCED MODAL WITH FARM THEME
+   ============================================== */
+
+.admin-container .modal-overlay {
+  background: rgba(45, 80, 22, 0.8) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.admin-container .modal {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(15px) !important;
+  border: 2px solid rgba(45, 80, 22, 0.2) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 60px rgba(45, 80, 22, 0.3) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.admin-container .modal::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 6px !important;
+  background: var(--gradient-harvest) !important;
+}
+
+/* ==============================================
+   LOADING STATES WITH FARM THEME
+   ============================================== */
+
+.admin-container .loading {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px) !important;
+  border-radius: 16px !important;
+}
+
+.admin-container .spinner {
+  border: 4px solid rgba(45, 80, 22, 0.2) !important;
+  border-top: 4px solid var(--farm-green-accent) !important;
+  border-radius: 50% !important;
+  animation: farmSpin 1s linear infinite !important;
+}
+
+@keyframes farmSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==============================================
+   RESPONSIVE ENHANCEMENTS
+   ============================================== */
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem !important;
+  }
+  
+  .admin-container .stat-number {
+    font-size: 2rem !important;
+  }
+  
+  h1 {
+    font-size: 2rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ==============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .admin-container .card {
+    border-width: 3px !important;
+  }
+  
+  .admin-container .btn {
+    border-width: 3px !important;
+    font-weight: var(--font-weight-bold) !important;
+  }
+}
+
+/* ==============================================
+   PRINT STYLES
+   ============================================== */
+
+@media print {
+  .admin-header-fixed,
+  .admin-nav-tabs,
+  .btn,
+  .modal-overlay {
+    display: none !important;
+  }
+  
+  .admin-container {
+    background: white !important;
+  }
+  
+  .admin-container .card {
+    border: 2px solid #333 !important;
+    box-shadow: none !important;
+  }
+}
