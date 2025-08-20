@@ -1,129 +1,125 @@
 import React, { useState, useEffect } from 'react';
-import ImageService from '../services/ImageService.js';
-import PublicContentService from '../services/PublicContentService.js';
-import { featuredAnimals, mockAnimals } from '../mockData.js';
+import { mockAnimals } from '../mockData.js';
 
-/**
- * AnimalShowcase - Public display of farm animals
- * Filters and displays only public-safe animal information
- * Integrates with uploaded animal images (adonai1.jpg to adonaixiii.jpg)
- */
 export default function AnimalShowcase() {
   const [animals, setAnimals] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Animal categories for filtering
   const animalCategories = [
-    { id: 'all', name: 'All Animals', icon: '🐾' },
-    { id: 'cattle', name: 'Cattle', icon: '🐄' },
-    { id: 'goats', name: 'Goats', icon: '🐐' },
-    { id: 'sheep', name: 'Sheep', icon: '🐑' },
-    { id: 'poultry', name: 'Poultry', icon: '🐔' }
+    { id: 'all', name: 'All Animals', icon: '🐾', color: '#4a7c59' },
+    { id: 'cattle', name: 'Cattle', icon: '🐄', color: '#8B4513' },
+    { id: 'goats', name: 'Goats', icon: '🐐', color: '#D2691E' },
+    { id: 'sheep', name: 'Sheep', icon: '🐑', color: '#F5DEB3' },
+    { id: 'poultry', name: 'Poultry', icon: '🐔', color: '#FFD700' }
   ];
 
   useEffect(() => {
-    loadPublicAnimals();
+    loadAnimals();
   }, []);
 
-  const loadPublicAnimals = () => {
+  const loadAnimals = () => {
     setLoading(true);
-    
-    try {
-      // Use PublicContentService to get properly filtered and sanitized animals
-      const publicAnimals = PublicContentService.getPublicAnimals();
-      
-      // Add category information for filtering
-      const animalsWithCategories = publicAnimals.map(animal => ({
-        ...animal,
-        category: categorizeAnimal(animal.type)
-      }));
 
-      // Sort animals to show featured ones first
-      const sortedAnimals = animalsWithCategories.sort((a, b) => {
-        if (a.isFeatured && !b.isFeatured) return -1;
-        if (!a.isFeatured && b.isFeatured) return 1;
-        return 0;
-      });
+    // Enhanced animal data with more creative content
+    const enhancedAnimals = mockAnimals.map((animal, index) => ({
+      ...animal,
+      category: categorizeAnimal(animal.type),
+      description: generateDescription(animal),
+      funFact: generateFunFact(animal),
+      personality: generatePersonality(animal),
+      achievements: generateAchievements(animal),
+      favoriteActivity: generateFavoriteActivity(animal),
+      age: calculateAge(animal.dob)
+    }));
 
-      setAnimals(sortedAnimals);
-    } catch (error) {
-      console.error('Error loading public animals:', error);
-      // Fallback to empty array
-      setAnimals([]);
-    }
-    
+    setAnimals(enhancedAnimals);
     setLoading(false);
   };
 
-  // Categorize animals for filtering
   const categorizeAnimal = (type) => {
     const lowerType = type.toLowerCase();
-    if (lowerType.includes('cattle') || lowerType.includes('cow') || lowerType.includes('bull')) {
-      return 'cattle';
-    } else if (lowerType.includes('goat')) {
-      return 'goats';
-    } else if (lowerType.includes('sheep') || lowerType.includes('ram')) {
-      return 'sheep';
-    } else if (lowerType.includes('chicken') || lowerType.includes('poultry')) {
-      return 'poultry';
-    }
+    if (lowerType.includes('cattle')) return 'cattle';
+    if (lowerType.includes('goat')) return 'goats';
+    if (lowerType.includes('sheep')) return 'sheep';
+    if (lowerType.includes('chicken') || lowerType.includes('poultry')) return 'poultry';
     return 'other';
   };
 
-  // Generate public-friendly description for animals
-  const generatePublicDescription = (animal) => {
+  const generateDescription = (animal) => {
     const descriptions = {
-      'Dairy Cattle': 'One of our productive dairy cows, contributing to our daily fresh milk production',
-      'Beef Cattle': 'A healthy member of our beef cattle herd, raised on natural pastures',
-      'Dairy Goat': 'A friendly goat known for producing rich, creamy milk',
-      'Beef Goat': 'A sturdy goat raised for quality meat production',
-      'Sheep': 'A gentle sheep contributing to our wool and meat production',
-      'Pedigree Sheep': 'A prize-winning sheep with excellent genetics and wool quality',
-      'Chicken': 'A happy free-range chicken providing fresh eggs daily',
-      'Poultry': 'Part of our poultry flock, enjoying free-range life on the farm'
+      'Dairy Cattle': `Meet ${animal.name}, one of our star dairy producers! This gentle giant provides fresh, creamy milk daily and loves spending time in our lush pastures.`,
+      'Beef Cattle': `${animal.name} is a magnificent member of our beef herd, known for their strong build and calm temperament. They enjoy grazing under the Kericho sun.`,
+      'Dairy Goat': `${animal.name} is a playful and intelligent goat who produces rich, nutritious milk. Known for their curious nature and friendly personality.`,
+      'Beef Goat': `Strong and spirited, ${animal.name} is an excellent example of our quality breeding program. They love exploring and climbing around the farm.`,
+      'Pedigree Sheep': `${animal.name} is a prize-winning sheep with exceptional wool quality. Their gentle nature makes them a favorite among visitors.`,
+      'Sheep': `${animal.name} is a sweet and docile member of our flock, contributing to both our wool and meat production with their excellent genetics.`,
+      'Chicken': `${animal.name} is a productive and happy hen who lays beautiful eggs daily. She enjoys free-ranging and foraging around the farm.`,
+      'Poultry': `${animal.name} is part of our thriving poultry family, living a free-range lifestyle and contributing to our sustainable farming practices.`
     };
-    
-    return descriptions[animal.type] || `A wonderful ${animal.type.toLowerCase()} that calls Adonai Farm home`;
+    return descriptions[animal.type] || `${animal.name} is a wonderful ${animal.type.toLowerCase()} who brings joy to our farm every day.`;
   };
 
-  // Generate fun facts for animals
   const generateFunFact = (animal) => {
     const facts = {
-      'Dairy Cattle': 'Can produce up to 30 liters of milk per day',
-      'Beef Cattle': 'Spends most of the day grazing on our natural pastures',
-      'Dairy Goat': 'Goat milk is easier to digest than cow milk',
-      'Beef Goat': 'Goats are excellent climbers and love exploring',
-      'Sheep': 'Sheep have excellent memories and can recognize faces',
-      'Pedigree Sheep': 'Produces some of the finest wool in the region',
-      'Chicken': 'Lays approximately 250 eggs per year',
-      'Poultry': 'Can live up to 8-10 years with proper care'
+      'Dairy Cattle': 'Can produce up to 30 liters of milk per day and has four stomach compartments!',
+      'Beef Cattle': 'Can weigh up to 800kg and has an excellent memory for faces and places.',
+      'Dairy Goat': 'Goat milk is naturally easier to digest than cow milk and is rich in calcium.',
+      'Beef Goat': 'Goats are excellent climbers and can jump up to 5 feet high!',
+      'Pedigree Sheep': 'Can produce up to 7kg of premium wool per year.',
+      'Sheep': 'Sheep have excellent memories and can recognize up to 50 different faces.',
+      'Chicken': 'Can lay up to 300 eggs per year and has over 30 different vocalizations.',
+      'Poultry': 'Chickens are descendants of wild jungle fowl and can live up to 10 years.'
     };
-    
-    return facts[animal.type] || 'Each animal has its own unique personality';
+    return facts[animal.type] || 'Every animal has unique characteristics that make them special!';
   };
 
-  // Get appropriate image for animal
-  const getAnimalImage = (animal, index) => {
-    // Map to available adonai images
-    const animalImages = [
-      'adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 
-      'adonai5.jpg', 'adonai6.jpg', 'adonai7.jpg', 'adonai8.jpg',
-      'adonai9.jpg', 'adonaix.jpg', 'adonaixi.jpg', 'adonaixii.jpg', 'adonaixiii.jpg'
+  const generatePersonality = (animal) => {
+    const personalities = [
+      'Gentle and calm', 'Playful and curious', 'Friendly and social', 'Independent and strong',
+      'Intelligent and alert', 'Peaceful and content', 'Energetic and active', 'Wise and observant',
+      'Affectionate and loyal', 'Adventurous and bold', 'Patient and nurturing', 'Spirited and lively'
     ];
-    
-    return animalImages[index % animalImages.length];
+    return personalities[animal.id % personalities.length];
   };
 
-  // Calculate age from date of birth
+  const generateAchievements = (animal) => {
+    const achievements = {
+      'Dairy Cattle': ['Top milk producer 2023', 'Excellent health record', 'Mother of 3 healthy calves'],
+      'Beef Cattle': ['Prize winner at local show', 'Excellent weight gain', 'Perfect breeding record'],
+      'Dairy Goat': ['Highest milk fat content', 'Champion climber', 'Friendliest goat award'],
+      'Beef Goat': ['Fastest growing kid', 'Best forager', 'Most adventurous explorer'],
+      'Pedigree Sheep': ['Best wool quality 2023', 'Show champion', 'Perfect fleece score'],
+      'Sheep': ['Excellent mother', 'Consistent wool producer', 'Flock leader'],
+      'Chicken': ['Top egg layer', 'Pest control expert', 'Best broody hen'],
+      'Poultry': ['Free-range champion', 'Insect hunter', 'Flock protector']
+    };
+    const typeAchievements = achievements[animal.type] || ['Healthy and happy', 'Farm favorite', 'Great personality'];
+    return typeAchievements.slice(0, 2); // Return 2 achievements
+  };
+
+  const generateFavoriteActivity = (animal) => {
+    const activities = {
+      'Dairy Cattle': 'Grazing in the morning dew',
+      'Beef Cattle': 'Sunbathing in the afternoon',
+      'Dairy Goat': 'Climbing on rocks and logs',
+      'Beef Goat': 'Exploring new areas of the farm',
+      'Pedigree Sheep': 'Peaceful grazing with the flock',
+      'Sheep': 'Following the shepherd around',
+      'Chicken': 'Dust bathing and foraging',
+      'Poultry': 'Scratching for insects and seeds'
+    };
+    return activities[animal.type] || 'Enjoying farm life';
+  };
+
   const calculateAge = (dob) => {
     if (!dob) return 'Age unknown';
-    
     const birthDate = new Date(dob);
     const today = new Date();
-    const ageInMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 + 
-                       (today.getMonth() - birthDate.getMonth());
-    
+    const ageInMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 + (today.getMonth() - birthDate.getMonth());
+
     if (ageInMonths < 12) {
       return `${ageInMonths} month${ageInMonths !== 1 ? 's' : ''} old`;
     } else {
@@ -133,55 +129,28 @@ export default function AnimalShowcase() {
     }
   };
 
-  // Filter out sensitive information from notes
-  const filterSensitiveInfo = (notes) => {
-    if (!notes) return '';
-    
-    // Remove sensitive keywords and information
-    const sensitiveKeywords = [
-      'breeding', 'mating', 'pregnancy', 'birth', 'medical', 'treatment',
-      'medication', 'vaccine', 'cost', 'price', 'profit', 'loss', 'financial',
-      'artificial insemination', 'AI', 'semen', 'embryo'
-    ];
-    
-    let filteredNotes = notes.toLowerCase();
-    sensitiveKeywords.forEach(keyword => {
-      const regex = new RegExp(`\\b${keyword}\\b.*?(?=\\.|$)`, 'gi');
-      filteredNotes = filteredNotes.replace(regex, '');
-    });
-    
-    // Clean up and return only if there's meaningful content left
-    filteredNotes = filteredNotes.trim();
-    return filteredNotes.length > 10 ? filteredNotes : '';
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    e.target.nextSibling.style.display = 'flex';
   };
 
-  // Filter animals by category
-  const filteredAnimals = selectedCategory === 'all' 
-    ? animals 
+  const filteredAnimals = selectedCategory === 'all'
+    ? animals
     : animals.filter(animal => animal.category === selectedCategory);
 
-  const handleImageError = (e) => {
-    const img = e.target;
-    const originalSrc = img.src;
-    
-    // If we haven't tried the fallback yet
-    if (!img.dataset.fallbackAttempted) {
-      img.dataset.fallbackAttempted = 'true';
-      const fallbackUrl = ImageService.getFallbackUrl(img.dataset.originalFilename || 'adonai1.jpg');
-      img.src = fallbackUrl;
-      return;
-    }
-    
-    // If fallback also failed, use placeholder
-    img.src = ImageService.getPlaceholderUrl();
-    img.alt = 'Farm animal image not available';
+  const openAnimalModal = (animal) => {
+    setSelectedAnimal(animal);
+  };
+
+  const closeAnimalModal = () => {
+    setSelectedAnimal(null);
   };
 
   if (loading) {
     return (
-      <div className="loading-container">
+      <div className="animal-showcase-loading">
         <div className="loading-spinner"></div>
-        <p>Loading our amazing animals...</p>
+        <p>Loading our amazing animal family...</p>
       </div>
     );
   }
@@ -189,42 +158,60 @@ export default function AnimalShowcase() {
   return (
     <div className="animal-showcase">
       {/* Hero Section */}
-      <section className="showcase-hero">
-        <div className="container">
-          <h1>Meet Our Animal Family</h1>
-          <p className="hero-description">
-            Get to know the wonderful animals that call Adonai Farm home. Each one is cared for with love, 
-            attention, and the highest standards of animal welfare.
-          </p>
-          <div className="hero-stats">
-            <div className="stat">
-              <span className="stat-number">{animals.length}</span>
-              <span className="stat-label">Featured Animals</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">{animalCategories.length - 1}</span>
-              <span className="stat-label">Animal Types</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">100%</span>
-              <span className="stat-label">Pasture Raised</span>
+      <section className="animal-showcase-hero">
+        <div className="hero-background"></div>
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <div className="container">
+            <div className="hero-text">
+              <span className="hero-badge">🐾 Meet Our Family</span>
+              <h1 className="hero-title">
+                Our Amazing <span className="highlight">Animal Family</span>
+              </h1>
+              <p className="hero-subtitle">
+                Get to know the wonderful animals that call Adonai Farm home. Each one has their own
+                unique personality and plays an important role in our sustainable farming ecosystem.
+              </p>
+              <div className="hero-stats">
+                <div className="stat">
+                  <span className="stat-number">{animals.length}</span>
+                  <span className="stat-label">Happy Animals</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-number">{animalCategories.length - 1}</span>
+                  <span className="stat-label">Animal Types</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-number">100%</span>
+                  <span className="stat-label">Pasture Raised</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-number">24/7</span>
+                  <span className="stat-label">Care & Love</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Category Filter */}
-      <section className="category-filter">
+      <section className="animal-category-filter">
         <div className="container">
+          <h2 className="filter-title">🔍 Explore by Animal Type</h2>
           <div className="filter-buttons">
             {animalCategories.map(category => (
               <button
                 key={category.id}
                 className={`filter-btn ${selectedCategory === category.id ? 'active' : ''}`}
                 onClick={() => setSelectedCategory(category.id)}
+                style={{ '--category-color': category.color }}
               >
                 <span className="filter-icon">{category.icon}</span>
                 <span className="filter-name">{category.name}</span>
+                <span className="filter-count">
+                  ({category.id === 'all' ? animals.length : animals.filter(a => a.category === category.id).length})
+                </span>
               </button>
             ))}
           </div>
@@ -232,51 +219,83 @@ export default function AnimalShowcase() {
       </section>
 
       {/* Animals Grid */}
-      <section className="animals-grid-section">
+      <section className="animals-showcase-grid">
         <div className="container">
+          <div className="section-header">
+            <h2>
+              {selectedCategory === 'all' ? '🌟 All Our Animals' :
+                `${animalCategories.find(c => c.id === selectedCategory)?.icon} Our ${animalCategories.find(c => c.id === selectedCategory)?.name}`}
+            </h2>
+            <p>Click on any animal to learn more about their story and personality!</p>
+          </div>
+
           {filteredAnimals.length === 0 ? (
             <div className="no-animals">
+              <div className="no-animals-icon">🐾</div>
               <h3>No animals found in this category</h3>
-              <p>Try selecting a different category to see our animals.</p>
+              <p>Try selecting a different category to meet our animals.</p>
             </div>
           ) : (
             <div className="animals-grid">
-              {filteredAnimals.map(animal => (
-                <div key={animal.id} className="animal-showcase-card">
+              {filteredAnimals.map((animal, index) => (
+                <div
+                  key={animal.id}
+                  className="animal-card"
+                  onClick={() => openAnimalModal(animal)}
+                >
                   <div className="animal-image-container">
-                    <img 
-                      src={ImageService.getImageUrl(animal.image)}
+                    <img
+                      src={`/images/${animal.image}`}
                       alt={`${animal.name} - ${animal.type}`}
                       className="animal-image"
                       onError={handleImageError}
                     />
+                    <div className="image-placeholder" style={{ display: 'none' }}>
+                      <span className="placeholder-icon">
+                        {animalCategories.find(c => c.id === animal.category)?.icon || '🐾'}
+                      </span>
+                      <span className="placeholder-text">{animal.name}</span>
+                    </div>
                     <div className="animal-overlay">
                       <span className="animal-age">{animal.age}</span>
-                      <span className="animal-sex">{animal.sex === 'M' ? '♂️' : animal.sex === 'F' ? '♀️' : ''}</span>
+                      <span className="animal-sex">{animal.sex === 'M' ? '♂️ Male' : '♀️ Female'}</span>
                     </div>
+                    {animal.isFeatured && (
+                      <div className="featured-badge">⭐ Featured</div>
+                    )}
                   </div>
-                  
+
                   <div className="animal-content">
                     <div className="animal-header">
                       <h3 className="animal-name">{animal.name}</h3>
                       <p className="animal-type">{animal.type}</p>
                     </div>
-                    
-                    <p className="animal-description">{animal.description}</p>
-                    
-                    {animal.funFact && (
-                      <div className="fun-fact">
-                        <span className="fun-fact-icon">💡</span>
-                        <span className="fun-fact-text">{animal.funFact}</span>
+
+                    <div className="animal-personality">
+                      <span className="personality-icon">😊</span>
+                      <span className="personality-text">{animal.personality}</span>
+                    </div>
+
+                    <p className="animal-description">{animal.description.substring(0, 120)}...</p>
+
+                    <div className="animal-highlights">
+                      <div className="highlight">
+                        <span className="highlight-icon">🎯</span>
+                        <span className="highlight-text">{animal.favoriteActivity}</span>
                       </div>
-                    )}
-                    
-                    {animal.publicNotes && (
-                      <div className="animal-notes">
-                        <span className="notes-icon">📝</span>
-                        <span className="notes-text">{animal.publicNotes}</span>
-                      </div>
-                    )}
+                    </div>
+
+                    <div className="animal-achievements">
+                      {animal.achievements.slice(0, 1).map((achievement, idx) => (
+                        <span key={idx} className="achievement-badge">
+                          🏆 {achievement}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="learn-more">
+                      <span>Click to learn more about {animal.name} →</span>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -285,55 +304,171 @@ export default function AnimalShowcase() {
         </div>
       </section>
 
-      {/* Farm Practices Section */}
-      <section className="farm-practices">
+      {/* Animal Care Philosophy */}
+      <section className="animal-care-philosophy">
         <div className="container">
           <div className="section-header">
-            <h2>Our Animal Care Philosophy</h2>
-            <p>Learn about how we ensure the health, happiness, and well-being of all our animals</p>
+            <h2>🌱 Our Animal Care Philosophy</h2>
+            <p>Every animal at Adonai Farm receives the highest standard of care, love, and attention</p>
           </div>
-          
-          <div className="practices-grid">
-            <div className="practice-card">
-              <div className="practice-icon">🌱</div>
-              <h3>Natural Feeding</h3>
-              <p>Our animals graze on natural pastures and receive supplemental feed made from locally-sourced, high-quality ingredients.</p>
+
+          <div className="care-principles">
+            <div className="principle-card">
+              <div className="principle-icon">❤️</div>
+              <h3>Love & Compassion</h3>
+              <p>Every animal is treated with love, respect, and individual attention. We believe happy animals are healthy animals.</p>
             </div>
-            
-            <div className="practice-card">
-              <div className="practice-icon">❤️</div>
-              <h3>Health Monitoring</h3>
-              <p>Regular health check-ups and preventive care ensure our animals stay healthy and comfortable throughout their lives.</p>
+
+            <div className="principle-card">
+              <div className="principle-icon">🌿</div>
+              <h3>Natural Living</h3>
+              <p>Our animals enjoy spacious pastures, fresh air, and the freedom to express their natural behaviors.</p>
             </div>
-            
-            <div className="practice-card">
-              <div className="practice-icon">🏡</div>
-              <h3>Comfortable Housing</h3>
-              <p>Spacious, clean, and well-ventilated housing provides our animals with comfortable shelter and room to move freely.</p>
+
+            <div className="principle-card">
+              <div className="principle-icon">🏥</div>
+              <h3>Health First</h3>
+              <p>Regular health check-ups, preventive care, and immediate attention to any health concerns ensure optimal well-being.</p>
             </div>
-            
-            <div className="practice-card">
-              <div className="practice-icon">🌿</div>
+
+            <div className="principle-card">
+              <div className="principle-icon">🌾</div>
+              <h3>Quality Nutrition</h3>
+              <p>Fresh, nutritious feed and access to clean water ensure our animals receive the best possible nutrition.</p>
+            </div>
+
+            <div className="principle-card">
+              <div className="principle-icon">🏡</div>
+              <h3>Comfortable Shelter</h3>
+              <p>Clean, spacious, and well-ventilated housing provides comfort and protection from the elements.</p>
+            </div>
+
+            <div className="principle-card">
+              <div className="principle-icon">🌍</div>
               <h3>Sustainable Practices</h3>
-              <p>We use rotational grazing and sustainable farming methods that benefit both our animals and the environment.</p>
+              <p>We use environmentally friendly farming methods that benefit both our animals and the planet.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="showcase-cta">
+      {/* Visit CTA */}
+      <section className="visit-cta">
         <div className="container">
           <div className="cta-content">
-            <h2>Want to Meet Our Animals in Person?</h2>
-            <p>Schedule a farm tour to see our animals up close and learn more about our farming practices.</p>
+            <div className="cta-text">
+              <h2>🚜 Want to Meet Our Animals in Person?</h2>
+              <p>
+                Schedule a farm tour to meet our amazing animals up close, learn about their personalities,
+                and see how we care for them every day. It's an experience the whole family will love!
+              </p>
+              <div className="cta-features">
+                <div className="cta-feature">
+                  <span className="feature-icon">👨‍👩‍👧‍👦</span>
+                  <span>Family-friendly tours</span>
+                </div>
+                <div className="cta-feature">
+                  <span className="feature-icon">📚</span>
+                  <span>Educational experiences</span>
+                </div>
+                <div className="cta-feature">
+                  <span className="feature-icon">📸</span>
+                  <span>Photo opportunities</span>
+                </div>
+                <div className="cta-feature">
+                  <span className="feature-icon">🥛</span>
+                  <span>Fresh farm products</span>
+                </div>
+              </div>
+            </div>
             <div className="cta-actions">
-              <a href="/contact" className="btn btn-primary">Schedule a Tour</a>
-              <a href="/services" className="btn btn-outline">View Our Products</a>
+              <a href="/contact" className="btn btn-primary btn-large">
+                📞 Schedule a Tour
+              </a>
+              <a href="/services" className="btn btn-outline btn-large">
+                🌾 Our Services
+              </a>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Animal Detail Modal */}
+      {selectedAnimal && (
+        <div className="animal-modal-overlay" onClick={closeAnimalModal}>
+          <div className="animal-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeAnimalModal}>✕</button>
+
+            <div className="modal-content">
+              <div className="modal-image">
+                <img
+                  src={`/images/${selectedAnimal.image}`}
+                  alt={`${selectedAnimal.name} - ${selectedAnimal.type}`}
+                  onError={handleImageError}
+                />
+                <div className="image-placeholder" style={{ display: 'none' }}>
+                  <span className="placeholder-icon">
+                    {animalCategories.find(c => c.id === selectedAnimal.category)?.icon || '🐾'}
+                  </span>
+                  <span className="placeholder-text">{selectedAnimal.name}</span>
+                </div>
+              </div>
+
+              <div className="modal-info">
+                <div className="modal-header">
+                  <h2>{selectedAnimal.name}</h2>
+                  <p className="modal-type">{selectedAnimal.type}</p>
+                  <div className="modal-badges">
+                    <span className="age-badge">{selectedAnimal.age}</span>
+                    <span className="sex-badge">{selectedAnimal.sex === 'M' ? '♂️ Male' : '♀️ Female'}</span>
+                    {selectedAnimal.isFeatured && <span className="featured-badge">⭐ Featured</span>}
+                  </div>
+                </div>
+
+                <div className="modal-description">
+                  <h3>About {selectedAnimal.name}</h3>
+                  <p>{selectedAnimal.description}</p>
+                </div>
+
+                <div className="modal-details">
+                  <div className="detail-item">
+                    <h4>😊 Personality</h4>
+                    <p>{selectedAnimal.personality}</p>
+                  </div>
+
+                  <div className="detail-item">
+                    <h4>🎯 Favorite Activity</h4>
+                    <p>{selectedAnimal.favoriteActivity}</p>
+                  </div>
+
+                  <div className="detail-item">
+                    <h4>💡 Fun Fact</h4>
+                    <p>{selectedAnimal.funFact}</p>
+                  </div>
+
+                  <div className="detail-item">
+                    <h4>🏆 Achievements</h4>
+                    <div className="achievements-list">
+                      {selectedAnimal.achievements.map((achievement, idx) => (
+                        <span key={idx} className="achievement-item">
+                          ✨ {achievement}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {selectedAnimal.notes && (
+                    <div className="detail-item">
+                      <h4>📝 Special Notes</h4>
+                      <p>{selectedAnimal.notes}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

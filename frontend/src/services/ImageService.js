@@ -1,17 +1,67 @@
-import { mockGalleryImages } from '../mockData.js';
 import { generateResponsiveImages, handleImageError, defaultLazyLoader } from '../utils/imageOptimization.js';
 import apiService from './ApiService.js';
 
+// Centralized list of all images available in frontend/public/images
+// Updated to match actual files in the /images directory
+const allPublicImages = [
+  // Animals Category
+  { id: 1, filename: 'Dairycows.jpg', category: 'animals', caption: 'Our healthy dairy cows in the pasture.' },
+  { id: 2, filename: 'Beefcattle.jpg', category: 'animals', caption: 'Our strong and well-cared-for beef cattle.' },
+  { id: 3, filename: 'Cattlefeed.jpg', category: 'animals', caption: 'Cattle enjoying their nutritious feed.' },
+  { id: 4, filename: 'Cowfeeds.jpg', category: 'animals', caption: 'Providing quality feed for our cattle.' },
+  { id: 5, filename: 'Heifer1.jpg', category: 'animals', caption: 'A young heifer, the future of our herd.' },
+  { id: 6, filename: 'GoAtS.jpg', category: 'animals', caption: 'A playful group of goats.' },
+  { id: 7, filename: 'Goatsale.jpg', category: 'animals', caption: 'Our quality goats available for sale.' },
+  { id: 8, filename: 'Goatpen.jpg', category: 'animals', caption: 'Goats resting in their clean and spacious pen.' },
+  { id: 9, filename: 'Bighegoat.jpg', category: 'animals', caption: 'Our impressive breeding he-goat.' },
+  { id: 10, filename: 'Ewes.jpg', category: 'animals', caption: 'Ewes with their young lambs.' },
+  { id: 11, filename: 'Dairycow.jpg', category: 'animals', caption: 'A beautiful dairy cow in the field.' },
+  { id: 12, filename: 'Dairycows1.jpg', category: 'animals', caption: 'More of our prized dairy cattle.' },
+  { id: 13, filename: 'Cattlefeeding.jpg', category: 'animals', caption: 'Feeding time for our cattle.' },
+  { id: 14, filename: 'Dewormingcows.jpg', category: 'animals', caption: 'Regular health care for our cattle.' },
+  { id: 15, filename: 'Dorpersheep.jpg', category: 'animals', caption: 'Our Dorper sheep breed.' },
+  { id: 16, filename: 'Chicken.jpg', category: 'animals', caption: 'Free-range chickens on the farm.' },
+  { id: 17, filename: 'Goats(1).jpg', category: 'animals', caption: 'Another view of our goat herd.' },
+  { id: 18, filename: 'Hegoat.jpg', category: 'animals', caption: 'A strong breeding male goat.' },
+  { id: 19, filename: 'Ram.jpg', category: 'animals', caption: 'Our breeding ram.' },
+  { id: 20, filename: 'Sheep2.jpg', category: 'animals', caption: 'Healthy sheep grazing.' },
+  { id: 21, filename: 'adonai1.jpg', category: 'animals', caption: 'Adonai Farm livestock showcase.' },
+
+  // Farm Category
+  { id: 22, filename: 'Maizefarm.jpg', category: 'farm', caption: 'A lush and thriving maize farm.' },
+  { id: 23, filename: 'Potatoes.jpg', category: 'farm', caption: 'Fresh potatoes from our fields.' },
+  { id: 24, filename: 'Potatoes1.jpg', category: 'farm', caption: 'Harvesting fresh potatoes from our fields.' },
+  { id: 25, filename: 'Strawberry.jpg', category: 'farm', caption: 'Juicy strawberries grown on our farm.' },
+  { id: 26, filename: 'Teafarm-3.jpg', category: 'farm', caption: 'Expansive tea fields under the morning sun.' },
+  { id: 27, filename: 'Teafarm-4.jpg', category: 'farm', caption: 'Tea plantation in full bloom.' },
+  { id: 28, filename: 'Teafarm-6.jpg', category: 'farm', caption: 'Rolling tea hills at Adonai Farm.' },
+  { id: 29, filename: 'Teafarm-7.jpg', category: 'farm', caption: 'Tea farming excellence.' },
+  { id: 30, filename: 'Teafarm.jpg', category: 'farm', caption: 'Our main tea plantation.' },
+  { id: 31, filename: 'Tractor.jpg', category: 'farm', caption: 'Our modern tractor at work in the fields.' },
+  { id: 32, filename: 'Tractor1.jpg', category: 'farm', caption: 'Farm equipment for efficient operations.' },
+  { id: 33, filename: 'Visitors.jpg', category: 'farm', caption: 'Welcoming visitors for a tour of the farm.' },
+  { id: 34, filename: 'Visitorsday.jpg', category: 'farm', caption: 'A special day for farm visitors.' },
+  { id: 35, filename: 'Frenchbeans.jpg', category: 'farm', caption: 'Fresh French beans from our garden.' },
+  { id: 36, filename: 'Tosh1.jpg', category: 'farm', caption: 'Farm operations and management.' },
+  { id: 37, filename: 'Tosh2.jpg', category: 'farm', caption: 'Daily farm activities.' },
+  { id: 38, filename: 'adonai7.jpg', category: 'farm', caption: 'Adonai Farm operations.' },
+  { id: 39, filename: 'adonaix.jpg', category: 'farm', caption: 'Adonai Farm landscape.' },
+  { id: 40, filename: 'adonaixii.jpg', category: 'farm', caption: 'Adonai Farm infrastructure.' },
+  { id: 41, filename: 'adonaixiii.jpg', category: 'farm', caption: 'Adonai Farm overview.' },
+  { id: 42, filename: 'farm-2.jpg', category: 'farm', caption: 'Agricultural activities at Adonai Farm.' },
+  { id: 43, filename: 'farm-5.jpg', category: 'farm', caption: 'Modern farming at Adonai.' }
+];
+
 /**
  * ImageService - Handles farm image management and categorization with optimization
- * Manages images from backend/uploads/Adonai folder with rich metadata and responsive sizing
- * Optimized for both backend API and static Netlify deployments
+ * Manages images from frontend/public/images folder with rich metadata and responsive sizing
+ * Optimized for both development and production environments
  */
 class ImageService {
-  static BASE_URL = '/uploads'; // Serves from backend/uploads (real production images)
+  static BASE_URL = '/images'; // Always serves from public/images folder
   static API_BASE_URL = '/api/public/images'; // API endpoint for image metadata
   static FALLBACK_BASE_URL = '/images'; // Fallback to public images directory
-  
+
   // Image categorization based on filename patterns
   static IMAGE_CATEGORIES = {
     ANIMALS: 'animals',
@@ -37,23 +87,23 @@ class ImageService {
     }
 
     // Check for static deployment indicators
-    const isNetlify = window.location.hostname.includes('netlify') || 
-                     window.location.hostname.includes('.app') ||
-                     document.querySelector('meta[name="generator"][content*="Netlify"]');
-    
+    const isNetlify = window.location.hostname.includes('netlify') ||
+      window.location.hostname.includes('.app') ||
+      document.querySelector('meta[name="generator"][content*="Netlify"]');
+
     const isVercel = window.location.hostname.includes('vercel') ||
-                    window.location.hostname.includes('.app');
-    
+      window.location.hostname.includes('.app');
+
     const isGitHubPages = window.location.hostname.includes('github.io');
-    
+
     const isFileProtocol = window.location.protocol === 'file:';
-    
+
     // Check if backend API is not available (indicates static deployment)
     const noBackendAPI = localStorage.getItem('use-local-storage') === 'true' ||
-                        !window.location.hostname.includes('localhost');
+      !window.location.hostname.includes('localhost');
 
     this._isStaticDeployment = isNetlify || isVercel || isGitHubPages || isFileProtocol || noBackendAPI;
-    
+
     if (import.meta.env.DEV) {
       console.log('🔍 Deployment detection:', {
         isNetlify,
@@ -74,8 +124,8 @@ class ImageService {
   static async getAvailableImages() {
     try {
       // Check cache first
-      if (this._imageCache && this._cacheTimestamp && 
-          (Date.now() - this._cacheTimestamp) < this.CACHE_DURATION) {
+      if (this._imageCache && this._cacheTimestamp &&
+        (Date.now() - this._cacheTimestamp) < this.CACHE_DURATION) {
         return this._imageCache;
       }
 
@@ -84,16 +134,16 @@ class ImageService {
       this._cacheTimestamp = Date.now();
       return data;
     } catch (error) {
-      console.warn('Failed to fetch images from API, using mock data:', error);
-      // Fallback to mock data
+      console.warn('Failed to fetch images from API, using real local data:', error);
+      // Fallback to the centralized public images list
       return {
-        images: mockGalleryImages,
+        images: allPublicImages,
         categories: {
-          animals: mockGalleryImages.filter(img => img.category === 'animals'),
-          farm: mockGalleryImages.filter(img => img.category === 'farm'),
-          facilities: mockGalleryImages.filter(img => img.category === 'facilities')
+          animals: allPublicImages.filter(img => img.category === 'animals'),
+          farm: allPublicImages.filter(img => img.category === 'farm'),
+          facilities: allPublicImages.filter(img => img.category === 'facilities')
         },
-        total: mockGalleryImages.length
+        total: allPublicImages.length
       };
     }
   }
@@ -110,37 +160,14 @@ class ImageService {
    * @returns {Array} Array of image objects
    */
   static getPublicImages(category = 'all') {
-    // Use cached data if available
-    if (this._imageCache && this._imageCache.images) {
-      const images = this._imageCache.images.map(img => ({
-        filename: img.filename,
-        url: this.getImageUrl(img.filename),
-        category: img.category || this.categorizeImage(img.filename),
-        alt: img.alt || this.generateAltText(img.filename),
-        caption: img.caption || this.generateCaption(img.filename),
-        uploadedAt: img.lastModified || img.uploaded_at,
-        id: img.id || img.filename,
-        isPublic: img.isPublic !== false,
-        fallbackUrl: this.getFallbackUrl(img.filename)
-      }));
-
-      return category === 'all' ? images : images.filter(img => img.category === category);
-    }
-
-    // Fallback to localStorage or mock data
-    const savedImages = localStorage.getItem('adonai_gallery');
-    const allImages = savedImages ? JSON.parse(savedImages) : mockGalleryImages;
-    
-    // Filter images based on public visibility settings
-    const publicImages = allImages.filter(img => img.isPublic !== false);
-    
-    const images = publicImages.map(img => ({
+    // This function will now exclusively use the centralized `allPublicImages` list.
+    const images = allPublicImages.map(img => ({
       filename: img.filename,
       url: this.getImageUrl(img.filename),
       category: img.category || this.categorizeImage(img.filename),
-      alt: this.generateAltText(img.filename),
+      alt: img.alt || this.generateAltText(img.filename),
       caption: img.caption || this.generateCaption(img.filename),
-      uploadedAt: img.uploaded_at,
+      uploadedAt: img.lastModified || img.uploaded_at,
       id: img.id || img.filename,
       isPublic: img.isPublic !== false,
       fallbackUrl: this.getFallbackUrl(img.filename)
@@ -156,23 +183,16 @@ class ImageService {
    */
   static async getPublicImagesAsync(category = 'all') {
     try {
-      // Initialize gallery in localStorage if not exists
-      this.initializeGallery();
-      
+      // This async function will also use the centralized `allPublicImages` list as a fallback.
       const data = await this.getAvailableImages();
-      
-      // Use API data if available, otherwise fallback to localStorage/mock data
       let allImages = data.images;
-      
+
       if (!allImages || allImages.length === 0) {
-        // Fallback to localStorage or mock data
-        const savedImages = localStorage.getItem('adonai_gallery');
-        allImages = savedImages ? JSON.parse(savedImages) : mockGalleryImages;
+        allImages = allPublicImages;
       }
-      
-      // Filter images based on public visibility settings
+
       const publicImages = allImages.filter(img => img.isPublic !== false);
-      
+
       const images = publicImages.map(img => ({
         filename: img.filename,
         url: this.getImageUrl(img.filename),
@@ -193,65 +213,36 @@ class ImageService {
       return images.filter(image => image.category === category);
     } catch (error) {
       console.error('Error fetching public images:', error);
-      // Fallback to synchronous method
-      return this.getPublicImages(category);
+      return this.getPublicImages(category); // Fallback to sync method
     }
   }
 
   /**
-   * Initialize gallery with real production images from backend/uploads
+   * Initialize gallery with real images from frontend/public/images
    */
   static initializeGallery() {
-    // Create real production gallery data based on actual files in backend/uploads
-    const realProductionImages = [
-      // Farm images
-      { id: 1, filename: 'farm-1.jpg', category: 'farm', caption: 'Beautiful farm landscape with rolling hills', isPublic: true, uploaded_at: '2025-01-15' },
-      { id: 2, filename: 'farm-2.jpg', category: 'farm', caption: 'Pastoral views with cattle grazing', isPublic: true, uploaded_at: '2025-01-16' },
-      { id: 3, filename: 'farm-3.jpg', category: 'farm', caption: 'Modern farming operations and equipment', isPublic: true, uploaded_at: '2025-01-17' },
-      { id: 4, filename: 'farm-4.jpg', category: 'farm', caption: 'Farm facilities and infrastructure', isPublic: true, uploaded_at: '2025-01-18' },
-      { id: 5, filename: 'farm-5.jpg', category: 'farm', caption: 'Sustainable farming practices in action', isPublic: true, uploaded_at: '2025-01-19' },
-      { id: 6, filename: 'farm-6.jpg', category: 'farm', caption: 'Farm operations during golden hour', isPublic: true, uploaded_at: '2025-01-20' },
-      { id: 7, filename: 'farm-7.jpg', category: 'farm', caption: 'Agricultural landscape and farming activities', isPublic: true, uploaded_at: '2025-01-21' },
-      
-      // Animal images
-      { id: 8, filename: 'adonai1.jpg', category: 'animals', caption: 'Dairy cattle in the pasture', isPublic: true, uploaded_at: '2025-01-22' },
-      { id: 9, filename: 'adonai2.jpg', category: 'animals', caption: 'Livestock grazing in open fields', isPublic: true, uploaded_at: '2025-01-23' },
-      { id: 10, filename: 'adonai3.jpg', category: 'animals', caption: 'Farm animals enjoying sunny weather', isPublic: true, uploaded_at: '2025-01-24' },
-      { id: 11, filename: 'adonai4.jpg', category: 'animals', caption: 'Sheep and goats in the barnyard', isPublic: true, uploaded_at: '2025-01-25' },
-      { id: 12, filename: 'adonai5.jpg', category: 'animals', caption: 'Poultry and chickens roaming freely', isPublic: true, uploaded_at: '2025-01-26' },
-      { id: 13, filename: 'adonai6.jpg', category: 'animals', caption: 'Mixed livestock on the farm', isPublic: true, uploaded_at: '2025-01-27' },
-      { id: 14, filename: 'adonai7.jpg', category: 'animals', caption: 'Cattle during feeding time', isPublic: true, uploaded_at: '2025-01-28' },
-      { id: 15, filename: 'adonai8.jpg', category: 'animals', caption: 'Goat kids playing in the barnyard', isPublic: true, uploaded_at: '2025-01-29' },
-      { id: 16, filename: 'adonai9.jpg', category: 'animals', caption: 'Sheep flock during evening feeding', isPublic: true, uploaded_at: '2025-01-30' },
-      { id: 17, filename: 'adonaix.jpg', category: 'animals', caption: 'Dairy cows in the milking area', isPublic: true, uploaded_at: '2025-01-31' },
-      { id: 18, filename: 'adonaixi.jpg', category: 'animals', caption: 'Rooster and chickens in the yard', isPublic: true, uploaded_at: '2025-02-01' },
-      { id: 19, filename: 'adonaixii.jpg', category: 'animals', caption: 'Young calves in the nursery area', isPublic: true, uploaded_at: '2025-02-02' },
-      { id: 20, filename: 'adonaixiii.jpg', category: 'animals', caption: 'Farm animals in their natural habitat', isPublic: true, uploaded_at: '2025-02-03' }
-    ];
+    // Use the centralized list of images from public/images folder
+    const realProductionImages = allPublicImages.map((img, index) => ({
+      id: index + 1,
+      filename: img.filename,
+      category: img.category,
+      caption: img.caption,
+      isPublic: true,
+      uploaded_at: new Date().toISOString().split('T')[0] // Current date
+    }));
 
-    if (!localStorage.getItem('adonai_gallery')) {
-      console.log('🖼️ Initializing gallery with real production images...');
-      localStorage.setItem('adonai_gallery', JSON.stringify(realProductionImages));
-    }
+    // Always update localStorage to ensure we have the latest images
+    localStorage.setItem('adonai_gallery', JSON.stringify(realProductionImages));
   }
 
   /**
-   * Generate proper URL for uploaded images with deployment-aware fallback priority
+   * Generate proper URL for images from public/images folder
    * @param {string} filename - Image filename
-   * @returns {string} Full image URL optimized for current deployment type
+   * @returns {string} Full image URL
    */
   static getImageUrl(filename) {
-    // For static deployments (Netlify, Vercel, etc.), images are copied to /uploads/Adonai/
-    // For development with backend, images are served from backend/uploads/Adonai/
-    
-    if (this.isStaticDeployment()) {
-      // Static deployment: images are copied to the build directory
-      // The build script copies backend/uploads/Adonai/* to netlify-build/uploads/Adonai/
-      return `${this.BASE_URL}/${filename}`;
-    } else {
-      // Development with backend: serve from backend uploads
-      return `${this.BASE_URL}/${filename}`;
-    }
+    // Always use the public/images folder
+    return `${this.BASE_URL}/${filename}`;
   }
 
   /**
@@ -260,12 +251,9 @@ class ImageService {
    * @returns {string} Image URL with fallback handling
    */
   static getImageUrlWithFallback(filename) {
-    // For static builds (Netlify), images are in /uploads/Adonai/
-    // For development, images are served from backend
-    // For mobile/offline, fallback to /images/
-    
+    // Always use the public/images folder
     const primaryUrl = this.getImageUrl(filename);
-    
+
     // Add fallback handling in the component level
     return primaryUrl;
   }
@@ -281,60 +269,53 @@ class ImageService {
   }
 
   /**
-   * Get fallback URL for images that fail to load (deployment-aware)
+   * Get fallback URL for images that fail to load
    * @param {string} filename - Original filename
    * @returns {string} Fallback image URL
    */
   static getFallbackUrl(filename) {
-    // For static deployments, prioritize images that are most likely to be available
-    if (this.isStaticDeployment()) {
-      // In static deployments, all images should be in /uploads/Adonai/
-      if (filename.startsWith('adonai')) {
-        // Try other animal images from uploads directory
-        const animalImages = ['adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 'adonai5.jpg', 'adonai6.jpg'];
-        const fallbackAnimal = animalImages.find(img => img !== filename);
-        if (fallbackAnimal) {
-          return `${this.BASE_URL}/${fallbackAnimal}`;
-        }
-        // Fallback to farm images
-        return `${this.BASE_URL}/farm-1.jpg`;
+    // Use the actual images from public/images folder
+    if (filename.startsWith('adonai')) {
+      // Try other adonai images
+      const animalImages = ['adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 'adonai5.jpg', 'adonai6.jpg'];
+      const fallbackAnimal = animalImages.find(img => img !== filename);
+      if (fallbackAnimal) {
+        return `${this.BASE_URL}/${fallbackAnimal}`;
       }
-      
-      if (filename.startsWith('farm-')) {
-        // Try other farm images from uploads directory
-        const farmImages = ['farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg', 'farm-5.jpg', 'farm-6.jpg', 'farm-7.jpg'];
-        const fallbackFarm = farmImages.find(img => img !== filename);
-        if (fallbackFarm) {
-          return `${this.BASE_URL}/${fallbackFarm}`;
-        }
-      }
-      
-      // Final fallback to public images directory (copied during build)
-      return `${this.FALLBACK_BASE_URL}/hero-farm.jpg`;
-    } else {
-      // Development with backend: use original logic
-      if (filename.startsWith('adonai')) {
-        const animalImages = ['adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 'adonai5.jpg', 'adonai6.jpg'];
-        const fallbackAnimal = animalImages.find(img => img !== filename);
-        if (fallbackAnimal) {
-          return `${this.BASE_URL}/${fallbackAnimal}`;
-        }
-        return `${this.BASE_URL}/farm-1.jpg`;
-      }
-      
-      if (filename.startsWith('farm-')) {
-        const farmImages = ['farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg', 'farm-5.jpg', 'farm-6.jpg', 'farm-7.jpg'];
-        const fallbackFarm = farmImages.find(img => img !== filename);
-        if (fallbackFarm) {
-          return `${this.BASE_URL}/${fallbackFarm}`;
-        }
-      }
-      
-      // Fallback to public images
-      const publicImages = ['hero-farm.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg'];
-      const randomImage = publicImages[Math.floor(Math.random() * publicImages.length)];
-      return `${this.FALLBACK_BASE_URL}/${randomImage}`;
+      return `${this.BASE_URL}/farm-1.jpg`;
     }
+
+    if (filename.startsWith('farm-')) {
+      // Try other farm images
+      const farmImages = ['farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg', 'farm-5.jpg', 'farm-6.jpg', 'farm-7.jpg'];
+      const fallbackFarm = farmImages.find(img => img !== filename);
+      if (fallbackFarm) {
+        return `${this.BASE_URL}/${fallbackFarm}`;
+      }
+    }
+
+    if (['Dairycows.jpg', 'Beefcattle.jpg', 'Cattlefeed.jpg', 'Cowfeeds.jpg', 'Heifer1.jpg', 'GoAtS.jpg'].includes(filename)) {
+      // Try other animal images
+      const animalImages = ['Dairycows.jpg', 'Beefcattle.jpg', 'GoAtS.jpg', 'Ewes.jpg', 'Bighegoat.jpg'];
+      const fallbackAnimal = animalImages.find(img => img !== filename);
+      if (fallbackAnimal) {
+        return `${this.BASE_URL}/${fallbackAnimal}`;
+      }
+    }
+
+    if (['Tractor.jpg', 'Maizefarm.jpg', 'Teafarm-3.jpg', 'Visitors.jpg', 'Potatoes1.jpg', 'Strawberry.jpg'].includes(filename)) {
+      // Try other farm images
+      const farmImages = ['Tractor.jpg', 'Maizefarm.jpg', 'Teafarm-3.jpg', 'Visitors.jpg', 'Tractor1.jpg'];
+      const fallbackFarm = farmImages.find(img => img !== filename);
+      if (fallbackFarm) {
+        return `${this.BASE_URL}/${fallbackFarm}`;
+      }
+    }
+
+    // Default fallbacks
+    const defaultImages = ['adonai1.jpg', 'farm-1.jpg', 'Dairycows.jpg', 'Tractor.jpg'];
+    const randomImage = defaultImages[Math.floor(Math.random() * defaultImages.length)];
+    return `${this.BASE_URL}/${randomImage}`;
   }
 
   /**
@@ -344,10 +325,10 @@ class ImageService {
    */
   static getFallbackUrls(filename) {
     const fallbacks = [];
-    
+
     if (filename.startsWith('adonai')) {
-      // Try other animal images first
-      const animalImages = ['adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 'adonai5.jpg'];
+      // Try other adonai images first
+      const animalImages = ['adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 'adonai5.jpg', 'adonai6.jpg'];
       animalImages.filter(img => img !== filename).forEach(img => {
         fallbacks.push(`${this.BASE_URL}/${img}`);
       });
@@ -356,21 +337,35 @@ class ImageService {
       fallbacks.push(`${this.BASE_URL}/farm-2.jpg`);
     } else if (filename.startsWith('farm-')) {
       // Try other farm images first
-      const farmImages = ['farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg', 'farm-5.jpg'];
+      const farmImages = ['farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg', 'farm-5.jpg', 'farm-6.jpg', 'farm-7.jpg'];
+      farmImages.filter(img => img !== filename).forEach(img => {
+        fallbacks.push(`${this.BASE_URL}/${img}`);
+      });
+    } else if (['Dairycows.jpg', 'Beefcattle.jpg', 'Cattlefeed.jpg', 'Cowfeeds.jpg', 'Heifer1.jpg', 'GoAtS.jpg'].includes(filename)) {
+      // Try other animal images first
+      const animalImages = ['Dairycows.jpg', 'Beefcattle.jpg', 'GoAtS.jpg', 'Ewes.jpg', 'Bighegoat.jpg'];
+      animalImages.filter(img => img !== filename).forEach(img => {
+        fallbacks.push(`${this.BASE_URL}/${img}`);
+      });
+    } else if (['Tractor.jpg', 'Maizefarm.jpg', 'Teafarm-3.jpg', 'Visitors.jpg', 'Potatoes1.jpg', 'Strawberry.jpg'].includes(filename)) {
+      // Try other farm images first
+      const farmImages = ['Tractor.jpg', 'Maizefarm.jpg', 'Teafarm-3.jpg', 'Visitors.jpg', 'Tractor1.jpg'];
       farmImages.filter(img => img !== filename).forEach(img => {
         fallbacks.push(`${this.BASE_URL}/${img}`);
       });
     }
-    
-    // Add public images as final fallbacks
-    const publicImages = ['hero-farm.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg'];
-    publicImages.forEach(img => {
-      fallbacks.push(`/images/${img}`);
+
+    // Add default images as final fallbacks
+    const defaultImages = ['adonai1.jpg', 'farm-1.jpg', 'Dairycows.jpg', 'Tractor.jpg'];
+    defaultImages.forEach(img => {
+      if (!fallbacks.includes(`${this.BASE_URL}/${img}`)) {
+        fallbacks.push(`${this.BASE_URL}/${img}`);
+      }
     });
-    
+
     // Add placeholder as last resort
     fallbacks.push(this.getPlaceholderUrl());
-    
+
     return fallbacks;
   }
 
@@ -395,7 +390,7 @@ class ImageService {
    */
   static getImagesByCategory() {
     const images = this.getPublicImages();
-    
+
     return {
       [this.IMAGE_CATEGORIES.ANIMALS]: images.filter(img => img.category === this.IMAGE_CATEGORIES.ANIMALS),
       [this.IMAGE_CATEGORIES.FARM]: images.filter(img => img.category === this.IMAGE_CATEGORIES.FARM),
@@ -441,14 +436,14 @@ class ImageService {
   static getFeaturedImages(count = 6) {
     // Initialize gallery first
     this.initializeGallery();
-    
+
     const allImages = this.getPublicImages();
     // Mix of farm and animal images for variety
     const featured = [
       ...allImages.filter(img => img.category === this.IMAGE_CATEGORIES.FARM).slice(0, Math.ceil(count / 2)),
       ...allImages.filter(img => img.category === this.IMAGE_CATEGORIES.ANIMALS).slice(0, Math.floor(count / 2))
     ];
-    
+
     return featured.slice(0, count);
   }
 
@@ -464,7 +459,7 @@ class ImageService {
       ...allImages.filter(img => img.category === this.IMAGE_CATEGORIES.FARM).slice(0, Math.ceil(count / 2)),
       ...allImages.filter(img => img.category === this.IMAGE_CATEGORIES.ANIMALS).slice(0, Math.floor(count / 2))
     ];
-    
+
     return featured.slice(0, count);
   }
 
@@ -505,7 +500,7 @@ class ImageService {
 
     const baseUrl = this.getImageUrl(filename);
     const metadata = this.getImageMetadata(filename);
-    
+
     let optimizedUrl = baseUrl;
     let dimensions = {};
 
@@ -554,7 +549,7 @@ class ImageService {
    */
   static getImagesForContext(context, category = 'all') {
     const images = this.getPublicImages(category);
-    
+
     const contextOptions = {
       hero: { size: 'large', lazy: false, responsive: true },
       gallery: { size: 'medium', lazy: true, responsive: true },
@@ -594,5 +589,8 @@ class ImageService {
     });
   }
 }
+
+// Initialize gallery on module load
+ImageService.initializeGallery();
 
 export default ImageService;

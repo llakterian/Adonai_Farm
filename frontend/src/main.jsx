@@ -12,6 +12,7 @@ import './unified-agricultural-theme.css';
 import './brown-contrast-fix.css';
 import './admin-header-fix.css';
 import './admin-tab-spacing-fix.css';
+import './admin-layout.css';
 import './utils/mobileTouch.js';
 import './utils/progressiveEnhancement.js';
 import './utils/performanceTesting.js';
@@ -22,7 +23,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
       .then((registration) => {
         console.log('SW registered: ', registration);
-        
+
         // Check for updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
@@ -54,7 +55,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   // Stash the event so it can be triggered later
   deferredPrompt = e;
-  
+
   // Show custom install prompt
   showInstallPrompt();
 });
@@ -70,14 +71,14 @@ function showInstallPrompt() {
     <button class="btn install-btn">Install</button>
     <button class="btn dismiss-btn" style="background: transparent; color: white;">Later</button>
   `;
-  
+
   document.body.appendChild(installPrompt);
-  
+
   // Show the prompt
   setTimeout(() => {
     installPrompt.classList.add('show');
   }, 1000);
-  
+
   // Handle install button click
   installPrompt.querySelector('.install-btn').addEventListener('click', async () => {
     if (deferredPrompt) {
@@ -88,14 +89,14 @@ function showInstallPrompt() {
     }
     installPrompt.remove();
   });
-  
+
   // Handle dismiss button click
   installPrompt.querySelector('.dismiss-btn').addEventListener('click', () => {
     installPrompt.remove();
     // Don't show again for 24 hours
     localStorage.setItem('pwa-install-dismissed', Date.now().toString());
   });
-  
+
   // Auto-dismiss after 10 seconds
   setTimeout(() => {
     if (document.body.contains(installPrompt)) {
@@ -111,7 +112,7 @@ window.addEventListener('load', () => {
     const dismissedTime = parseInt(dismissed);
     const now = Date.now();
     const hoursSinceDismissed = (now - dismissedTime) / (1000 * 60 * 60);
-    
+
     if (hoursSinceDismissed < 24) {
       // Don't show install prompt if dismissed within last 24 hours
       return;

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import SEOHead from '../components/SEOHead.jsx';
-import { InputSanitizer, contactRateLimiter, securityMonitor, sanitizeInput, rateLimit, reportSecurityEvent } from '../utils/security.js';
-import { ContactFormErrorBoundary } from '../components/ErrorBoundary.jsx';
-import { ContentFallbackHandler, NetworkFallbackHandler } from '../utils/fallbackHandlers.js';
 
-function ContactForm() {
+export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,55 +10,17 @@ function ContactForm() {
     subject: '',
     message: ''
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-  const [errors, setErrors] = useState({});
-  const [isOffline, setIsOffline] = useState(!NetworkFallbackHandler.isOnline);
-  const [submitProgress, setSubmitProgress] = useState(0);
-
-  // Monitor network connection
-  React.useEffect(() => {
-    const handleConnectionChange = (event) => {
-      setIsOffline(!event.detail.isOnline);
-      
-      // Clear offline errors when connection is restored
-      if (event.detail.isOnline && errors.general && errors.general.includes('offline')) {
-        setErrors(prev => ({ ...prev, general: '' }));
-      }
-    };
-
-    window.addEventListener('connectionchange', handleConnectionChange);
-    return () => window.removeEventListener('connectionchange', handleConnectionChange);
-  }, [errors.general]);
 
   const inquiryTypes = [
-    { value: 'visit', label: 'Farm Visit/Tour' },
-    { value: 'purchase', label: 'Product Purchase' },
-    { value: 'breeding', label: 'Breeding Services' },
-    { value: 'general', label: 'General Questions' }
+    { value: 'visit', label: '🌾 Farm Visit/Tour', icon: '🚜' },
+    { value: 'purchase', label: '🥛 Product Purchase', icon: '🛒' },
+    { value: 'breeding', label: '🐄 Breeding Services', icon: '💝' },
+    { value: 'consulting', label: '📚 Agricultural Consulting', icon: '🎓' },
+    { value: 'general', label: '💬 General Questions', icon: '❓' }
   ];
-
-  const validateForm = () => {
-    // Use enhanced security validation
-    const validation = InputSanitizer.validateContactForm(formData);
-    
-    if (!validation.isValid) {
-      setErrors(validation.errors);
-      
-      // Log validation failures for security monitoring
-      securityMonitor.logEvent('validation_failed', {
-        form: 'contact',
-        errors: Object.keys(validation.errors),
-        reason: 'client_validation'
-      });
-      
-      return false;
-    }
-    
-    setErrors({});
-    return true;
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -69,106 +28,16 @@ function ContactForm() {
       ...prev,
       [name]: value
     }));
-    
-    // Clear error for this field when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Check if offline
-    if (isOffline) {
-      const offlineFallback = NetworkFallbackHandler.getOfflineFallback('contact');
-      setErrors({ 
-        general: `${offlineFallback.message}. ${offlineFallback.suggestion}` 
-      });
-      return;
-    }
-    
-    if (!validateForm() || isSubmitting) {
-      return;
-    }
-    
-    // Check rate limiting
-    const clientId = `contact_${formData.email.trim().toLowerCase()}`;
-    const rateLimitCheck = contactRateLimiter.isAllowed(clientId);
-    
-    if (!rateLimitCheck.allowed) {
-      setErrors({ general: rateLimitCheck.error });
-      securityMonitor.logEvent('rate_limit_exceeded', {
-        form: 'contact',
-        email: formData.email.trim().toLowerCase(),
-        reason: 'client_rate_limit'
-      });
-      return;
-    }
-    
     setIsSubmitting(true);
-    setSubmitStatus(null);
-    setSubmitProgress(0);
-    
-    try {
-      // Simulate progress for better UX
-      setSubmitProgress(25);
-      
-      // Use enhanced validation and get sanitized data
-      const validation = InputSanitizer.validateContactForm(formData);
-      if (!validation.isValid) {
-        setErrors(validation.errors);
-        return;
-      }
-      
-      setSubmitProgress(50);
-      
-      // Log form submission attempt
-      securityMonitor.logEvent('form_submission', {
-        form: 'contact',
-        inquiryType: validation.sanitized.inquiryType,
-        hasPhone: !!validation.sanitized.phone
-      });
-      
-      // Get the backend URL from environment or use default
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
-      
-      setSubmitProgress(75);
-      
-      const response = await fetch(`${backendUrl}/api/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(validation.sanitized)
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        // Log server-side errors
-        securityMonitor.logEvent('form_submission_failed', {
-          form: 'contact',
-          status: response.status,
-          error: data.error,
-          reason: 'server_error'
-        });
-        
-        throw new Error(data.error || 'Failed to submit inquiry');
-      }
-      
-      setSubmitProgress(100);
-      
-      // Log successful submission
-      securityMonitor.logEvent('form_submission_success', {
-        form: 'contact',
-        inquiryId: data.id
-      });
-      
+
+    // Simulate form submission
+    setTimeout(() => {
       setSubmitStatus('success');
+      setIsSubmitting(false);
       setFormData({
         name: '',
         email: '',
@@ -177,184 +46,227 @@ function ContactForm() {
         subject: '',
         message: ''
       });
-      
-      // Clear any existing errors
-      setErrors({});
-      
-    } catch (error) {
-      console.error('Error submitting contact form:', error);
-      
-      // Log client-side errors
-      securityMonitor.logEvent('form_submission_error', {
-        form: 'contact',
-        error: error.message,
-        reason: 'client_error'
-      });
-      
-      setSubmitStatus('error');
-      
-      // Enhanced error handling with fallback messages
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        const apiFallback = ContentFallbackHandler.getAPIFallbackMessage('contact', error);
-        setErrors({ 
-          general: `${apiFallback.message} ${apiFallback.action}` 
-        });
-      } else if (error.message.includes('rate limit') || error.message.includes('too many')) {
-        setErrors({ general: 'Too many requests. Please wait before submitting again.' });
-      } else if (error.message.includes('invalid') || error.message.includes('malicious')) {
-        setErrors({ general: 'Please check your input and try again.' });
-      } else {
-        const apiFallback = ContentFallbackHandler.getAPIFallbackMessage('contact', error);
-        setErrors({ 
-          general: `${apiFallback.message} ${apiFallback.action}` 
-        });
-      }
-      
-    } finally {
-      setIsSubmitting(false);
-      setSubmitProgress(0);
-    }
+    }, 2000);
   };
 
   return (
     <>
-      <SEOHead 
+      <SEOHead
         pageType="contact"
         title="Contact Adonai Farm - Visit, Inquire & Connect"
-        description="Contact Adonai Farm in Chepsir, Kericho for farm visits, product inquiries, and breeding services. Call +254 722 759 217 or email info@adonaifarm.co.ke. Open Mon-Sat 8AM-5PM."
+        description="Contact Adonai Farm in Chepsir, Kericho for farm visits, product inquiries, and breeding services. Call +254 722 759 217 or email info@adonaifarm.co.ke."
         keywords={[
           "contact Adonai Farm",
           "farm visits Kericho",
           "Chepsir Kericho farm contact",
           "livestock farm Kenya contact",
-          "farm tours booking Kericho",
-          "agricultural consulting Kenya",
-          "Adonai Farm phone number",
-          "farm visit hours Kericho County"
+          "farm tours booking Kericho"
         ]}
-        image="/images/farm-4.jpg"
+        image="/images/adonai1.jpg"
         url="/contact"
         breadcrumbs={[
           { name: "Home", url: "/" },
           { name: "Contact", url: "/contact" }
         ]}
       />
-      <div className="contact-page">
-        <div className="contact-hero">
-          <div className="container">
-            <h1>Contact Adonai Farm</h1>
-            <p>Get in touch with us for farm visits, product inquiries, or any questions about our operations.</p>
-          </div>
-        </div>
 
-        <div className="contact-content">
+      <div className="contact-page">
+        {/* Hero Section with Farm Background */}
+        <section className="contact-hero">
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
+            <div className="container">
+              <div className="hero-text">
+                <h1 className="hero-title">
+                  <span className="title-icon">🌾</span>
+                  Get In Touch With Adonai Farm
+                </h1>
+                <p className="hero-subtitle">
+                  Ready to visit our farm, purchase our products, or learn about our services?
+                  We're here to help you connect with sustainable agriculture in Kericho.
+                </p>
+                <div className="hero-stats">
+                  <div className="stat-item">
+                    <span className="stat-icon">📞</span>
+                    <span className="stat-text">Quick Response</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-icon">🕒</span>
+                    <span className="stat-text">Open 6 Days/Week</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-icon">🌍</span>
+                    <span className="stat-text">Kericho, Kenya</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Main Contact Content */}
+        <section className="contact-main">
           <div className="container">
             <div className="contact-grid">
-              {/* Contact Information */}
-              <div className="contact-info">
-                <h2>Get In Touch</h2>
-                <p>We'd love to hear from you! Whether you're interested in visiting our farm, purchasing our products, or learning more about our breeding services, don't hesitate to reach out.</p>
-                
-                <div className="contact-details">
-                  <div className="contact-item">
-                    <div className="contact-icon">📍</div>
-                    <div>
-                      <h3>Location</h3>
-                      <p>Chepsir, Kericho, Kenya</p>
+
+              {/* Contact Information Cards */}
+              <div className="contact-info-section">
+                <div className="section-header">
+                  <h2>🏡 Visit Our Farm</h2>
+                  <p>Experience modern farming firsthand at our beautiful location in Kericho County</p>
+                </div>
+
+                {/* Contact Methods */}
+                <div className="contact-methods">
+                  <div className="contact-card primary-card">
+                    <div className="card-icon">📞</div>
+                    <div className="card-content">
+                      <h3>Call Us Direct</h3>
+                      <p className="contact-value">+254 722 759 217</p>
+                      <p className="contact-note">Available Mon-Sat, 8AM-5PM</p>
+                      <div className="card-action">
+                        <a href="tel:+254722759217" className="btn btn-outline btn-sm">
+                          📞 Call Now
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="contact-item">
-                    <div className="contact-icon">📞</div>
-                    <div>
-                      <h3>Phone</h3>
-                      <p>+254 722 759 217</p>
+
+                  <div className="contact-card">
+                    <div className="card-icon">📧</div>
+                    <div className="card-content">
+                      <h3>Email Inquiries</h3>
+                      <p className="contact-value">info@adonaifarm.co.ke</p>
+                      <p className="contact-note">We respond within 24 hours</p>
+                      <div className="card-action">
+                        <a href="mailto:info@adonaifarm.co.ke" className="btn btn-outline btn-sm">
+                          ✉️ Send Email
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="contact-item">
-                    <div className="contact-icon">📧</div>
-                    <div>
-                      <h3>Email</h3>
-                      <p>info@adonaifarm.co.ke</p>
-                    </div>
-                  </div>
-                  
-                  <div className="contact-item">
-                    <div className="contact-icon">🕒</div>
-                    <div>
-                      <h3>Farm Visit Hours</h3>
-                      <p>Monday - Saturday: 8:00 AM - 5:00 PM</p>
-                      <p>Sunday: By appointment only</p>
+
+                  <div className="contact-card">
+                    <div className="card-icon">📍</div>
+                    <div className="card-content">
+                      <h3>Farm Location</h3>
+                      <p className="contact-value">Chepsir, Kericho</p>
+                      <p className="contact-note">Kericho County, Kenya</p>
+                      <div className="card-action">
+                        <a href="#" className="btn btn-outline btn-sm">
+                          🗺️ Get Directions
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="contact-services">
-                  <h3>What We Offer</h3>
-                  <ul>
-                    <li>🐄 Livestock breeding services</li>
-                    <li>🚜 Farm tours and educational visits</li>
-                    <li>🥛 Fresh dairy and meat products</li>
-                    <li>📚 Agricultural consulting</li>
-                  </ul>
+                {/* Farm Hours */}
+                <div className="farm-hours-card">
+                  <h3>🕒 Farm Visit Hours</h3>
+                  <div className="hours-grid">
+                    <div className="hours-item">
+                      <span className="day">Monday - Friday</span>
+                      <span className="time">8:00 AM - 5:00 PM</span>
+                    </div>
+                    <div className="hours-item">
+                      <span className="day">Saturday</span>
+                      <span className="time">8:00 AM - 4:00 PM</span>
+                    </div>
+                    <div className="hours-item special">
+                      <span className="day">Sunday</span>
+                      <span className="time">By Appointment Only</span>
+                    </div>
+                  </div>
+                  <div className="hours-note">
+                    <span className="note-icon">💡</span>
+                    <span>We recommend calling ahead to schedule your visit for the best experience!</span>
+                  </div>
+                </div>
+
+                {/* What We Offer */}
+                <div className="services-preview">
+                  <h3>🌟 What We Offer</h3>
+                  <div className="services-grid">
+                    <div className="service-item">
+                      <span className="service-icon">🚜</span>
+                      <div className="service-info">
+                        <h4>Farm Tours</h4>
+                        <p>Guided educational visits</p>
+                      </div>
+                    </div>
+                    <div className="service-item">
+                      <span className="service-icon">🥛</span>
+                      <div className="service-info">
+                        <h4>Fresh Products</h4>
+                        <p>Dairy, eggs, and meat</p>
+                      </div>
+                    </div>
+                    <div className="service-item">
+                      <span className="service-icon">🐄</span>
+                      <div className="service-info">
+                        <h4>Breeding Services</h4>
+                        <p>Quality livestock genetics</p>
+                      </div>
+                    </div>
+                    <div className="service-item">
+                      <span className="service-icon">📚</span>
+                      <div className="service-info">
+                        <h4>Consulting</h4>
+                        <p>Agricultural expertise</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* Contact Form */}
               <div className="contact-form-section">
-                <h2>Send Us a Message</h2>
-                
+                <div className="form-header">
+                  <h2>💬 Send Us a Message</h2>
+                  <p>Have questions or want to schedule a visit? Fill out the form below and we'll get back to you promptly.</p>
+                </div>
+
                 {submitStatus === 'success' && (
                   <div className="alert alert-success">
-                    <strong>Thank you!</strong> Your message has been sent successfully. We'll get back to you within 24 hours.
-                  </div>
-                )}
-                
-                {submitStatus === 'error' && (
-                  <div className="alert alert-error">
-                    <strong>Error:</strong> There was a problem sending your message. Please try again or contact us directly.
-                  </div>
-                )}
-                
-                {errors.general && (
-                  <div className="alert alert-warning">
-                    <strong>Notice:</strong> {errors.general}
+                    <div className="alert-icon">✅</div>
+                    <div className="alert-content">
+                      <strong>Message Sent Successfully!</strong>
+                      <p>Thank you for contacting us. We'll respond within 24 hours.</p>
+                    </div>
                   </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="contact-form">
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label htmlFor="name">Full Name *</label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className={errors.name ? 'error' : ''}
-                        placeholder="Enter your full name"
-                      />
-                      {errors.name && <span className="error-message">{errors.name}</span>}
+                  {/* Personal Information */}
+                  <div className="form-section">
+                    <h4 className="form-section-title">👤 Your Information</h4>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label htmlFor="name">Full Name *</label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder="Enter your full name"
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="email">Email Address *</label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="your.email@example.com"
+                          required
+                        />
+                      </div>
                     </div>
-                    
-                    <div className="form-group">
-                      <label htmlFor="email">Email Address *</label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={errors.email ? 'error' : ''}
-                        placeholder="Enter your email address"
-                      />
-                      {errors.email && <span className="error-message">{errors.email}</span>}
-                    </div>
-                  </div>
-
-                  <div className="form-row">
                     <div className="form-group">
                       <label htmlFor="phone">Phone Number</label>
                       <input
@@ -363,116 +275,110 @@ function ContactForm() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className={errors.phone ? 'error' : ''}
-                        placeholder="Enter your phone number"
+                        placeholder="+254 XXX XXX XXX"
                       />
-                      {errors.phone && <span className="error-message">{errors.phone}</span>}
                     </div>
-                    
+                  </div>
+
+                  {/* Inquiry Type */}
+                  <div className="form-section">
+                    <h4 className="form-section-title">🎯 What Can We Help You With?</h4>
+                    <div className="inquiry-types">
+                      {inquiryTypes.map(type => (
+                        <label key={type.value} className="inquiry-option">
+                          <input
+                            type="radio"
+                            name="inquiryType"
+                            value={type.value}
+                            checked={formData.inquiryType === type.value}
+                            onChange={handleInputChange}
+                          />
+                          <div className="option-content">
+                            <span className="option-icon">{type.icon}</span>
+                            <span className="option-label">{type.label}</span>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div className="form-section">
+                    <h4 className="form-section-title">💭 Your Message</h4>
                     <div className="form-group">
-                      <label htmlFor="inquiryType">Inquiry Type</label>
-                      <select
-                        id="inquiryType"
-                        name="inquiryType"
-                        value={formData.inquiryType}
+                      <label htmlFor="subject">Subject</label>
+                      <input
+                        type="text"
+                        id="subject"
+                        name="subject"
+                        value={formData.subject}
                         onChange={handleInputChange}
-                      >
-                        {inquiryTypes.map(type => (
-                          <option key={type.value} value={type.value}>
-                            {type.label}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="Brief subject of your inquiry"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="message">Message *</label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        placeholder="Tell us more about your inquiry, preferred visit dates, or any specific questions you have..."
+                        rows="6"
+                        required
+                      />
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label htmlFor="subject">Subject *</label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className={errors.subject ? 'error' : ''}
-                      placeholder="What is your inquiry about?"
-                    />
-                    {errors.subject && <span className="error-message">{errors.subject}</span>}
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="message">Message *</label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      className={errors.message ? 'error' : ''}
-                      placeholder="Please provide details about your inquiry..."
-                      rows="5"
-                    ></textarea>
-                    {errors.message && <span className="error-message">{errors.message}</span>}
-                  </div>
-
-                  <div className="form-submit-section">
-                    {/* Progress bar for form submission */}
-                    {isSubmitting && (
-                      <div className="submit-progress">
-                        <div className="progress-bar">
-                          <div 
-                            className="progress-fill" 
-                            style={{ width: `${submitProgress}%` }}
-                          ></div>
-                        </div>
-                        <p className="progress-text">
-                          {submitProgress < 50 && 'Validating your message...'}
-                          {submitProgress >= 50 && submitProgress < 75 && 'Preparing to send...'}
-                          {submitProgress >= 75 && submitProgress < 100 && 'Sending your message...'}
-                          {submitProgress === 100 && 'Message sent successfully!'}
-                        </p>
-                      </div>
-                    )}
-
-                    <button 
-                      type="submit" 
-                      className={`btn btn-primary btn-large ${isSubmitting ? 'loading' : ''}`}
-                      disabled={isSubmitting || isOffline}
+                  {/* Submit Button */}
+                  <div className="form-submit">
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-large"
+                      disabled={isSubmitting}
                     >
                       {isSubmitting ? (
                         <>
-                          <span className="loading-spinner"></span>
-                          Sending...
-                        </>
-                      ) : isOffline ? (
-                        <>
-                          📡 Offline - Cannot Send
+                          <span className="spinner"></span>
+                          Sending Message...
                         </>
                       ) : (
-                        'Send Message'
+                        <>
+                          <span className="btn-icon">📤</span>
+                          Send Message
+                        </>
                       )}
                     </button>
-
-                    {isOffline && (
-                      <p className="offline-notice">
-                        You're currently offline. Please check your internet connection to send your message.
-                      </p>
-                    )}
+                    <p className="submit-note">
+                      By submitting this form, you agree to be contacted by Adonai Farm regarding your inquiry.
+                    </p>
                   </div>
                 </form>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Quick Contact Banner */}
+        <section className="quick-contact-banner">
+          <div className="container">
+            <div className="banner-content">
+              <div className="banner-text">
+                <h3>🚀 Need Immediate Assistance?</h3>
+                <p>For urgent inquiries or same-day visits, give us a call directly!</p>
+              </div>
+              <div className="banner-actions">
+                <a href="tel:+254722759217" className="btn btn-primary">
+                  📞 Call +254 722 759 217
+                </a>
+                <a href="mailto:info@adonaifarm.co.ke" className="btn btn-outline">
+                  ✉️ Quick Email
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </>
-  );
-}
-
-// Wrap the contact form with error boundary
-export default function Contact() {
-  return (
-    <ContactFormErrorBoundary>
-      <ContactForm />
-    </ContactFormErrorBoundary>
   );
 }

@@ -14,7 +14,7 @@ class PublicContentService {
       gallery: 'adonai_gallery',
       inquiries: 'adonai_inquiries'
     };
-    
+
     this.initializeDefaults();
   }
 
@@ -24,7 +24,7 @@ class PublicContentService {
       // General website settings
       websiteEnabled: true,
       maintenanceMode: false,
-      
+
       // Content visibility settings
       showFarmInfo: true,
       showContactInfo: true,
@@ -32,29 +32,29 @@ class PublicContentService {
       showAnimals: true,
       showGallery: true,
       allowInquiries: true,
-      
+
       // Animal visibility settings
       visibleAnimalTypes: ['Dairy Cattle', 'Beef Cattle', 'Sheep', 'Dairy Goat', 'Chicken'],
       featuredAnimals: [],
       hideBreedingInfo: true,
       hideMedicalInfo: true,
       hideFinancialInfo: true,
-      
+
       // Gallery settings
       publicImageCategories: ['farm', 'animals', 'facilities'],
       maxImagesPerCategory: 20,
-      
+
       // Contact settings
       enableContactForm: true,
       enablePhoneContact: true,
       enableEmailContact: true,
       enableLocationInfo: true,
-      
+
       // SEO settings
       siteTitle: 'Adonai Farm - Sustainable Livestock Management',
       siteDescription: 'Premium livestock farming in Kericho, Kenya. Quality dairy, beef, and agricultural products with modern sustainable practices.',
       siteKeywords: ['Adonai Farm', 'livestock', 'dairy', 'beef', 'Kericho', 'Kenya', 'sustainable farming'],
-      
+
       // Social media settings
       showSocialMedia: true,
       socialMediaLinks: {
@@ -76,7 +76,7 @@ class PublicContentService {
     if (!localStorage.getItem(this.storageKeys.publicSettings)) {
       this.savePublicSettings(defaultSettings);
     }
-    
+
     if (!localStorage.getItem(this.storageKeys.farmContent)) {
       this.saveFarmContent(defaultFarmContent);
     }
@@ -110,7 +110,7 @@ class PublicContentService {
   getPublicAnimals() {
     const settings = this.getPublicSettings();
     const animals = this.getAllAnimals();
-    
+
     if (!settings.showAnimals) {
       return [];
     }
@@ -120,12 +120,12 @@ class PublicContentService {
       if (!settings.visibleAnimalTypes.includes(animal.type)) {
         return false;
       }
-      
+
       // Check individual animal visibility
       if (animal.isPublicVisible === false) {
         return false;
       }
-      
+
       return true;
     }).map(animal => this.sanitizeAnimalForPublic(animal, settings));
   }
@@ -134,8 +134,8 @@ class PublicContentService {
   getFeaturedAnimals() {
     const settings = this.getPublicSettings();
     const publicAnimals = this.getPublicAnimals();
-    
-    return publicAnimals.filter(animal => 
+
+    return publicAnimals.filter(animal =>
       settings.featuredAnimals.includes(animal.id)
     );
   }
@@ -222,19 +222,19 @@ class PublicContentService {
       'Chicken': `${animal.name} is a happy free-range chicken providing fresh eggs daily and enjoying the freedom of our natural environment.`,
       'Poultry': `${animal.name} is part of our poultry flock, enjoying free-range life on the farm and contributing to our sustainable egg production.`
     };
-    
+
     return descriptions[animal.type] || `${animal.name} is a wonderful ${animal.type.toLowerCase()} that calls Adonai Farm home.`;
   }
 
   // Calculate age from date of birth
   calculateAge(dob) {
     if (!dob) return 'Age unknown';
-    
+
     const birthDate = new Date(dob);
     const today = new Date();
-    const ageInMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 + 
-                       (today.getMonth() - birthDate.getMonth());
-    
+    const ageInMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 +
+      (today.getMonth() - birthDate.getMonth());
+
     if (ageInMonths < 1) {
       return 'Less than 1 month old';
     } else if (ageInMonths < 12) {
@@ -248,13 +248,18 @@ class PublicContentService {
 
   // Get animal image
   getAnimalImage(animal) {
-    // Map to available adonai images based on animal type and ID
+    // If animal already has an image property, use it
+    if (animal.image) {
+      return animal.image;
+    }
+
+    // Otherwise map to available images based on animal type and ID
     const animalImages = [
-      'adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg', 
-      'adonai5.jpg', 'adonai6.jpg', 'adonai7.jpg', 'adonai8.jpg',
-      'adonai9.jpg', 'adonaix.jpg', 'adonaixi.jpg', 'adonaixii.jpg', 'adonaixiii.jpg'
+      'adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg',
+      'adonai5.jpg', 'adonai6.jpg', 'Dairycows.jpg', 'Beefcattle.jpg',
+      'GoAtS.jpg', 'Bighegoat.jpg', 'Ewes.jpg', 'Goatpen.jpg', 'Goatsale.jpg'
     ];
-    
+
     return animalImages[animal.id % animalImages.length];
   }
 
@@ -267,12 +272,12 @@ class PublicContentService {
   // Update animal visibility
   updateAnimalVisibility(animalId, isVisible) {
     const animals = this.getAllAnimals();
-    const updatedAnimals = animals.map(animal => 
-      animal.id === animalId 
+    const updatedAnimals = animals.map(animal =>
+      animal.id === animalId
         ? { ...animal, isPublicVisible: isVisible }
         : animal
     );
-    
+
     localStorage.setItem(this.storageKeys.animals, JSON.stringify(updatedAnimals));
     return true;
   }
@@ -281,16 +286,16 @@ class PublicContentService {
   toggleFeaturedAnimal(animalId) {
     const settings = this.getPublicSettings();
     const isFeatured = settings.featuredAnimals.includes(animalId);
-    
+
     const updatedFeatured = isFeatured
       ? settings.featuredAnimals.filter(id => id !== animalId)
       : [...settings.featuredAnimals, animalId];
-    
+
     const updatedSettings = {
       ...settings,
       featuredAnimals: updatedFeatured
     };
-    
+
     this.savePublicSettings(updatedSettings);
     return !isFeatured;
   }
@@ -299,7 +304,7 @@ class PublicContentService {
   getPublicGalleryImages() {
     const settings = this.getPublicSettings();
     const images = this.getAllGalleryImages();
-    
+
     if (!settings.showGallery) {
       return [];
     }
@@ -309,12 +314,12 @@ class PublicContentService {
       if (image.isPublic === false) {
         return false;
       }
-      
+
       // Check if image category is allowed
       if (!settings.publicImageCategories.includes(image.category)) {
         return false;
       }
-      
+
       return true;
     });
   }
@@ -328,12 +333,12 @@ class PublicContentService {
   // Update image visibility
   updateImageVisibility(imageId, isPublic) {
     const images = this.getAllGalleryImages();
-    const updatedImages = images.map(image => 
-      image.id === imageId 
+    const updatedImages = images.map(image =>
+      image.id === imageId
         ? { ...image, isPublic: isPublic }
         : image
     );
-    
+
     localStorage.setItem(this.storageKeys.gallery, JSON.stringify(updatedImages));
     return true;
   }
@@ -341,7 +346,7 @@ class PublicContentService {
   // Get public services
   getPublicServices() {
     const settings = this.getPublicSettings();
-    
+
     if (!settings.showServices) {
       return [];
     }
@@ -359,10 +364,10 @@ class PublicContentService {
       status: 'new',
       isRead: false
     };
-    
+
     inquiries.push(newInquiry);
     localStorage.setItem(this.storageKeys.inquiries, JSON.stringify(inquiries));
-    
+
     return newInquiry;
   }
 
@@ -375,12 +380,12 @@ class PublicContentService {
   // Update inquiry status
   updateInquiryStatus(inquiryId, status) {
     const inquiries = this.getContactInquiries();
-    const updatedInquiries = inquiries.map(inquiry => 
-      inquiry.id === inquiryId 
+    const updatedInquiries = inquiries.map(inquiry =>
+      inquiry.id === inquiryId
         ? { ...inquiry, status, isRead: true }
         : inquiry
     );
-    
+
     localStorage.setItem(this.storageKeys.inquiries, JSON.stringify(updatedInquiries));
     return true;
   }
@@ -390,7 +395,7 @@ class PublicContentService {
     const animals = this.getPublicAnimals();
     const images = this.getPublicGalleryImages();
     const services = this.getPublicServices();
-    
+
     return {
       totalAnimals: animals.length,
       animalTypes: [...new Set(animals.map(a => a.type))].length,
@@ -404,19 +409,19 @@ class PublicContentService {
   // Validate public content settings
   validateSettings(settings) {
     const errors = [];
-    
+
     if (!settings.siteTitle || settings.siteTitle.trim().length === 0) {
       errors.push('Site title is required');
     }
-    
+
     if (!settings.siteDescription || settings.siteDescription.trim().length === 0) {
       errors.push('Site description is required');
     }
-    
+
     if (settings.visibleAnimalTypes.length === 0) {
       errors.push('At least one animal type must be visible');
     }
-    
+
     return errors;
   }
 
@@ -437,11 +442,11 @@ class PublicContentService {
       if (config.settings) {
         this.savePublicSettings(config.settings);
       }
-      
+
       if (config.farmContent) {
         this.saveFarmContent(config.farmContent);
       }
-      
+
       return { success: true, message: 'Configuration imported successfully' };
     } catch (error) {
       return { success: false, message: 'Failed to import configuration: ' + error.message };

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient for background -->
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#4a7c59;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d5016;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Gradient for cow -->
+    <linearGradient id="cowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="95" fill="url(#bgGradient)" stroke="#d4af37" stroke-width="3"/>
+  
+  <!-- Inner background -->
+  <circle cx="100" cy="100" r="80" fill="#f8f6f0" stroke="#2d5016" stroke-width="2"/>
+  
+  <!-- Main dairy cow silhouette (more realistic proportions) -->
+  <g transform="translate(100, 100)" filter="url(#shadow)">
+    <!-- Cow body (main torso) -->
+    <ellipse cx="0" cy="-5" rx="28" ry="18" fill="url(#cowGradient)" stroke="#2d5016" stroke-width="1.5"/>
+    
+    <!-- Cow head -->
+    <ellipse cx="-25" cy="-15" rx="12" ry="10" fill="url(#cowGradient)" stroke="#2d5016" stroke-width="1.5"/>
+    
+    <!-- Cow neck connection -->
+    <ellipse cx="-15" cy="-12" rx="8" ry="6" fill="url(#cowGradient)" stroke="#2d5016" stroke-width="1"/>
+    
+    <!-- Cow legs -->
+    <rect x="-20" y="10" width="3" height="12" fill="#2d5016" rx="1"/>
+    <rect x="-12" y="10" width="3" height="12" fill="#2d5016" rx="1"/>
+    <rect x="8" y="10" width="3" height="12" fill="#2d5016" rx="1"/>
+    <rect x="16" y="10" width="3" height="12" fill="#2d5016" rx="1"/>
+    
+    <!-- Holstein cow spots -->
+    <ellipse cx="-8" cy="-8" rx="4" ry="3" fill="#2d5016"/>
+    <ellipse cx="8" cy="-12" rx="5" ry="3" fill="#2d5016"/>
+    <ellipse cx="15" cy="0" rx="3" ry="2" fill="#2d5016"/>
+    <ellipse cx="-15" cy="2" rx="3" ry="2" fill="#2d5016"/>
+    
+    <!-- Cow ears -->
+    <ellipse cx="-32" cy="-20" rx="3" ry="5" fill="#2d5016"/>
+    <ellipse cx="-18" cy="-22" rx="3" ry="5" fill="#2d5016"/>
+    
+    <!-- Cow tail -->
+    <path d="M28,-2 Q35,5 30,15" stroke="#2d5016" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- Udder (subtle) -->
+    <ellipse cx="5" cy="8" rx="6" ry="3" fill="#f0f0f0" stroke="#2d5016" stroke-width="1"/>
+  </g>
+  
+  <!-- Decorative farm elements -->
+  <g>
+    <!-- Wheat stalks (left) -->
+    <g transform="translate(35, 130)" fill="#d4af37" stroke="#2d5016" stroke-width="0.8">
+      <path d="M0,0 L2,-15 M-2,-12 L6,-12 M-2,-8 L6,-8 M-2,-4 L6,-4"/>
+      <path d="M8,0 L10,-18 M6,-15 L14,-15 M6,-11 L14,-11 M6,-7 L14,-7 M6,-3 L14,-3"/>
+    </g>
+    
+    <!-- Wheat stalks (right) -->
+    <g transform="translate(155, 130)" fill="#d4af37" stroke="#2d5016" stroke-width="0.8">
+      <path d="M0,0 L2,-15 M-2,-12 L6,-12 M-2,-8 L6,-8 M-2,-4 L6,-4"/>
+      <path d="M8,0 L10,-18 M6,-15 L14,-15 M6,-11 L14,-11 M6,-7 L14,-7 M6,-3 L14,-3"/>
+    </g>
+    
+    <!-- Small farm buildings -->
+    <g transform="translate(40, 45) scale(0.4)" fill="#8B4513" stroke="#5D3A1A" stroke-width="1">
+      <path d="M0,20 L0,40 L30,40 L30,20 L15,5 Z"/>
+      <rect x="12" y="30" width="6" height="10" fill="#5D3A1A"/>
+    </g>
+    
+    <g transform="translate(140, 45) scale(0.4)" fill="#8B4513" stroke="#5D3A1A" stroke-width="1">
+      <path d="M0,20 L0,40 L30,40 L30,20 L15,5 Z"/>
+      <rect x="12" y="30" width="6" height="10" fill="#5D3A1A"/>
+    </g>
+  </g>
+  
+  <!-- Farm name with better typography -->
+  <text x="100" y="155" font-family="Georgia, serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2d5016" letter-spacing="1px">ADONAI FARM</text>
+  
+  <!-- Tagline -->
+  <text x="100" y="172" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="#4a7c59" letter-spacing="0.5px">PREMIUM DAIRY EXCELLENCE</text>
+  
+  <!-- Decorative border elements -->
+  <g stroke="#d4af37" stroke-width="1.5" fill="none">
+    <!-- Top arc -->
+    <path d="M70,30 Q100,20 130,30"/>
+    <!-- Bottom arc -->
+    <path d="M70,180 Q100,190 130,180"/>
+  </g>
+  
+  <!-- Quality indicators (small emblems) -->
+  <g fill="#d4af37" stroke="#2d5016" stroke-width="0.5">
+    <!-- Left emblem -->
+    <circle cx="35" cy="100" r="8" fill="none" stroke="#d4af37" stroke-width="1"/>
+    <text x="35" y="104" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#d4af37" font-weight="bold">EST</text>
+    
+    <!-- Right emblem -->
+    <circle cx="165" cy="100" r="8" fill="none" stroke="#d4af37" stroke-width="1"/>
+    <text x="165" y="104" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#d4af37" font-weight="bold">KE</text>
+  </g>
+</svg>

@@ -31,39 +31,39 @@ echo "📦 Copying frontend build..."
 cp -r dist/* ../netlify-build/
 
 # Copy backend images to the build (priority source)
-echo "🖼️ Copying farm images from backend uploads..."
-mkdir -p ../netlify-build/uploads/Adonai
+echo "🖼️ Copying farm images from backend images..."
+mkdir -p ../netlify-build/images/Adonai
 
-# First, try to copy from backend/uploads directory
-if [ -d "../backend/uploads" ]; then
-    # Copy all images from backend/uploads directly to Adonai folder
-    cp ../backend/uploads/*.jpg ../netlify-build/uploads/Adonai/ 2>/dev/null || true
-    cp ../backend/uploads/*.jpeg ../netlify-build/uploads/Adonai/ 2>/dev/null || true
-    cp ../backend/uploads/*.png ../netlify-build/uploads/Adonai/ 2>/dev/null || true
-    cp ../backend/uploads/*.webp ../netlify-build/uploads/Adonai/ 2>/dev/null || true
+# First, try to copy from backend/images directory
+if [ -d "../backend/images" ]; then
+    # Copy all images from backend/images directly to Adonai folder
+    cp ../backend/images/*.jpg ../netlify-build/images/Adonai/ 2>/dev/null || true
+    cp ../backend/images/*.jpeg ../netlify-build/images/Adonai/ 2>/dev/null || true
+    cp ../backend/images/*.png ../netlify-build/images/Adonai/ 2>/dev/null || true
+    cp ../backend/images/*.webp ../netlify-build/images/Adonai/ 2>/dev/null || true
     
     # Also maintain the original structure for compatibility
-    mkdir -p ../netlify-build/uploads
-    cp ../backend/uploads/* ../netlify-build/uploads/ 2>/dev/null || true
+    mkdir -p ../netlify-build/images
+    cp ../backend/images/* ../netlify-build/images/ 2>/dev/null || true
     
-    ADONAI_COUNT=$(ls -1 ../netlify-build/uploads/Adonai 2>/dev/null | wc -l)
-    echo "✅ Copied backend uploads to Adonai folder: $ADONAI_COUNT images"
+    ADONAI_COUNT=$(ls -1 ../netlify-build/images/Adonai 2>/dev/null | wc -l)
+    echo "✅ Copied backend images to Adonai folder: $ADONAI_COUNT images"
     
     # List the copied images for verification
     if [ $ADONAI_COUNT -gt 0 ]; then
         echo "  📸 Images copied:"
-        ls -1 ../netlify-build/uploads/Adonai/ | head -5
+        ls -1 ../netlify-build/images/Adonai/ | head -5
         if [ $ADONAI_COUNT -gt 5 ]; then
             echo "  ... and $((ADONAI_COUNT - 5)) more"
         fi
     fi
 else
-    echo "⚠️ Backend uploads directory not found, checking for individual images..."
+    echo "⚠️ Backend images directory not found, checking for individual images..."
     
     # Fallback: look for images in backend directory
     if [ -d "../backend" ]; then
         find ../backend -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.webp" | while read img; do
-            cp "$img" ../netlify-build/uploads/Adonai/ 2>/dev/null || true
+            cp "$img" ../netlify-build/images/Adonai/ 2>/dev/null || true
         done
         echo "✅ Copied individual images found in backend directory"
     fi
@@ -75,7 +75,7 @@ EXPECTED_IMAGES=("adonai1.jpg" "adonai2.jpg" "adonai3.jpg" "adonai4.jpg" "adonai
 echo "🔍 Verifying expected images..."
 FOUND_COUNT=0
 for img in "${EXPECTED_IMAGES[@]}"; do
-    if [ -f "../netlify-build/uploads/Adonai/$img" ]; then
+    if [ -f "../netlify-build/images/Adonai/$img" ]; then
         ((FOUND_COUNT++))
     else
         echo "  ⚠️ Missing: $img"
@@ -95,8 +95,8 @@ fi
 
 # Verify image availability
 echo "📊 Image inventory:"
-if [ -d "../netlify-build/uploads/Adonai" ]; then
-    BACKEND_IMAGES=$(ls -1 ../netlify-build/uploads/Adonai 2>/dev/null | wc -l)
+if [ -d "../netlify-build/images/Adonai" ]; then
+    BACKEND_IMAGES=$(ls -1 ../netlify-build/images/Adonai 2>/dev/null | wc -l)
     echo "  - Backend images: $BACKEND_IMAGES"
 fi
 if [ -d "../netlify-build/images" ]; then
@@ -113,7 +113,7 @@ cat > netlify-build/_redirects << 'EOF'
 
 # API redirects for local storage fallback
 /api/*  /index.html  200
-/uploads/*  /uploads/:splat  200
+/images/*  /images/:splat  200
 EOF
 
 # Create netlify.toml for build settings
@@ -140,14 +140,14 @@ cat > netlify-build/netlify.toml << 'EOF'
 
 # Static file serving with proper MIME types
 [[headers]]
-  for = "/uploads/Adonai/*"
+  for = "/images/Adonai/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Access-Control-Allow-Origin = "*"
     Content-Type = "image/*"
     
 [[headers]]
-  for = "/uploads/*"
+  for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Access-Control-Allow-Origin = "*"
@@ -411,7 +411,7 @@ This is a complete build of the Adonai Farm website ready for Netlify deployment
 ├── index.html          # Main application
 ├── mobile-config.js    # Mobile detection and configuration
 ├── test-mode.html      # Mode switching utility
-├── uploads/Adonai/     # Farm images
+├── images/Adonai/     # Farm images
 ├── images/             # Fallback images
 ├── js/                 # Application JavaScript
 ├── css/                # Application styles
@@ -486,5 +486,5 @@ echo "🔐 Login: admin / adonai123"
 echo ""
 echo "🔗 Test URLs after deployment:"
 echo "• Main site: https://your-site.netlify.app/"
-echo "• Image test: https://your-site.netlify.app/uploads/Adonai/adonai1.jpg"
+echo "• Image test: https://your-site.netlify.app/images/Adonai/adonai1.jpg"
 echo "• Mode switcher: https://your-site.netlify.app/test-mode.html"

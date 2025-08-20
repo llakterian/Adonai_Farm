@@ -34,7 +34,7 @@ const EMAIL_CONFIG = {
 let emailTransporter = null;
 if (EMAIL_CONFIG.auth.user && EMAIL_CONFIG.auth.pass) {
   emailTransporter = nodemailer.createTransporter(EMAIL_CONFIG);
-  
+
   // Verify email configuration
   emailTransporter.verify((error, success) => {
     if (error) {
@@ -54,7 +54,7 @@ async function sendContactNotification(inquiry) {
     console.log('Email not configured, skipping notification');
     return false;
   }
-  
+
   try {
     const inquiryTypeLabels = {
       'visit': 'Farm Visit/Tour',
@@ -62,9 +62,9 @@ async function sendContactNotification(inquiry) {
       'breeding': 'Breeding Services',
       'general': 'General Questions'
     };
-    
+
     const inquiryTypeLabel = inquiryTypeLabels[inquiry.inquiryType] || inquiry.inquiryType;
-    
+
     // Email to admin
     const adminMailOptions = {
       from: `"Adonai Farm Website" <${EMAIL_CONFIG.auth.user}>`,
@@ -114,7 +114,7 @@ async function sendContactNotification(inquiry) {
         </div>
       `
     };
-    
+
     // Auto-reply to customer
     const customerMailOptions = {
       from: `"Adonai Farm" <${EMAIL_CONFIG.auth.user}>`,
@@ -170,16 +170,16 @@ async function sendContactNotification(inquiry) {
         </div>
       `
     };
-    
+
     // Send both emails
     await Promise.all([
       emailTransporter.sendMail(adminMailOptions),
       emailTransporter.sendMail(customerMailOptions)
     ]);
-    
+
     console.log('Contact notification emails sent successfully');
     return true;
-    
+
   } catch (error) {
     console.error('Error sending contact notification:', error);
     return false;
@@ -198,7 +198,7 @@ app.use(cors({
 app.use(bodyParser.json());
 
 // Enhanced static file serving with caching and optimization
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+app.use('/images', express.static(path.join(__dirname, 'images'), {
   maxAge: '1d', // Cache images for 1 day
   etag: true,
   lastModified: true,
@@ -211,10 +211,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
     } else if (path.endsWith('.webp')) {
       res.setHeader('Content-Type', 'image/webp');
     }
-    
+
     // Enable compression
     res.setHeader('Vary', 'Accept-Encoding');
-    
+
     // Security headers for images
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
@@ -279,17 +279,17 @@ app.post('/api/livestock', authMiddleware, (req, res) => {
 app.put('/api/livestock/:id', authMiddleware, (req, res) => {
   const { id } = req.params;
   const { type, name, dob, sex, notes } = req.body || {};
-  
+
   // Check if animal exists
   const existing = db.prepare('SELECT * FROM animals WHERE id = ?').get(id);
   if (!existing) {
     return res.status(404).json({ error: 'Animal not found' });
   }
-  
+
   // Update the animal
   const stmt = db.prepare('UPDATE animals SET type = ?, name = ?, dob = ?, sex = ?, notes = ? WHERE id = ?');
   stmt.run(type, name, dob, sex, notes, id);
-  
+
   // Return updated animal
   const updated = db.prepare('SELECT * FROM animals WHERE id = ?').get(id);
   res.json(updated);
@@ -297,17 +297,17 @@ app.put('/api/livestock/:id', authMiddleware, (req, res) => {
 
 app.delete('/api/livestock/:id', authMiddleware, (req, res) => {
   const { id } = req.params;
-  
+
   // Check if animal exists
   const existing = db.prepare('SELECT * FROM animals WHERE id = ?').get(id);
   if (!existing) {
     return res.status(404).json({ error: 'Animal not found' });
   }
-  
+
   // Delete the animal
   const stmt = db.prepare('DELETE FROM animals WHERE id = ?');
   const result = stmt.run(id);
-  
+
   if (result.changes > 0) {
     res.json({ success: true, message: 'Animal deleted successfully' });
   } else {
@@ -317,13 +317,13 @@ app.delete('/api/livestock/:id', authMiddleware, (req, res) => {
 
 app.get('/api/reports/animals.csv', authMiddleware, (req, res) => {
   const rows = db.prepare('SELECT * FROM animals').all();
-  const csv = rows.map(r => `${r.id},"${r.type}","${r.name}",${r.dob},${r.sex},"${(r.notes||'').replace(/"/g,'""')}"`).join('\n');
+  const csv = rows.map(r => `${r.id},"${r.type}","${r.name}",${r.dob},${r.sex},"${(r.notes || '').replace(/"/g, '""')}"`).join('\n');
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', 'attachment; filename="animals.csv"');
   res.send('id,type,name,dob,sex,notes\n' + csv);
 });
 
-const uploadDir = path.join(__dirname, 'uploads');
+const uploadDir = path.join(__dirname, 'images');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { cb(null, uploadDir); },
@@ -332,7 +332,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 app.post('/api/gallery/upload', authMiddleware, upload.single('photo'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  const url = '/uploads/' + req.file.filename;
+  const url = '/images/' + req.file.filename;
   db.prepare('INSERT INTO photos (filename, path, uploaded_at) VALUES (?, ?, datetime("now"))').run(req.file.originalname, url);
   res.json({ url, filename: req.file.originalname });
 });
@@ -345,21 +345,21 @@ app.get('/api/gallery', authMiddleware, (req, res) => {
 // Public API to get available farm images (no auth required)
 app.get('/api/public/images', (req, res) => {
   try {
-    const adonaiDir = path.join(__dirname, 'uploads', 'Adonai');
-    
+    const adonaiDir = path.join(__dirname, 'images', 'Adonai');
+
     if (!fs.existsSync(adonaiDir)) {
       return res.json({ images: [], categories: {} });
     }
-    
+
     const files = fs.readdirSync(adonaiDir);
-    const imageFiles = files.filter(file => 
+    const imageFiles = files.filter(file =>
       /\.(jpg|jpeg|png|webp)$/i.test(file)
     );
-    
+
     const images = imageFiles.map(filename => {
       const filePath = path.join(adonaiDir, filename);
       const stats = fs.statSync(filePath);
-      
+
       // Categorize based on filename
       let category = 'facilities';
       if (filename.startsWith('adonai')) {
@@ -367,10 +367,10 @@ app.get('/api/public/images', (req, res) => {
       } else if (filename.startsWith('farm-')) {
         category = 'farm';
       }
-      
+
       return {
         filename,
-        url: `/uploads/Adonai/${filename}`,
+        url: `/images/Adonai/${filename}`,
         category,
         size: stats.size,
         lastModified: stats.mtime.toISOString(),
@@ -378,20 +378,20 @@ app.get('/api/public/images', (req, res) => {
         caption: generateImageCaption(filename)
       };
     });
-    
+
     // Group by category
     const categories = {
       animals: images.filter(img => img.category === 'animals'),
       farm: images.filter(img => img.category === 'farm'),
       facilities: images.filter(img => img.category === 'facilities')
     };
-    
-    res.json({ 
-      images, 
+
+    res.json({
+      images,
       categories,
-      total: images.length 
+      total: images.length
     });
-    
+
   } catch (error) {
     console.error('Error fetching public images:', error);
     res.status(500).json({ error: 'Failed to fetch images' });
@@ -423,36 +423,36 @@ function generateImageCaption(filename) {
 app.get('/api/images/optimized/:size/:filename', (req, res) => {
   const { size, filename } = req.params;
   const validSizes = ['small', 'medium', 'large', 'thumbnail'];
-  
+
   if (!validSizes.includes(size)) {
     return res.status(400).json({ error: 'Invalid size parameter' });
   }
-  
-  const originalPath = path.join(__dirname, 'uploads', 'Adonai', filename);
-  
+
+  const originalPath = path.join(__dirname, 'images', 'Adonai', filename);
+
   if (!fs.existsSync(originalPath)) {
     return res.status(404).json({ error: 'Image not found' });
   }
-  
+
   // For now, serve original image with proper headers
   // In production, you might want to implement actual resizing
   const stats = fs.statSync(originalPath);
-  
+
   res.setHeader('Content-Type', getImageMimeType(filename));
   res.setHeader('Content-Length', stats.size);
   res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 day cache
   res.setHeader('ETag', `"${stats.mtime.getTime()}-${stats.size}"`);
   res.setHeader('Last-Modified', stats.mtime.toUTCString());
-  
+
   // Check if client has cached version
   const ifNoneMatch = req.headers['if-none-match'];
   const ifModifiedSince = req.headers['if-modified-since'];
-  
+
   if (ifNoneMatch === `"${stats.mtime.getTime()}-${stats.size}"` ||
-      (ifModifiedSince && new Date(ifModifiedSince) >= stats.mtime)) {
+    (ifModifiedSince && new Date(ifModifiedSince) >= stats.mtime)) {
     return res.status(304).end();
   }
-  
+
   const stream = fs.createReadStream(originalPath);
   stream.pipe(res);
 });
@@ -485,7 +485,7 @@ app.post('/api/workers', authMiddleware, (req, res) => {
   if (!name || !employee_id) {
     return res.status(400).json({ error: 'Name and employee ID are required' });
   }
-  
+
   try {
     const stmt = db.prepare('INSERT INTO workers (name, employee_id, role, hourly_rate, phone) VALUES (?, ?, ?, ?, ?)');
     const info = stmt.run(name, employee_id, role || '', hourly_rate || 0, phone || '');
@@ -503,12 +503,12 @@ app.post('/api/workers', authMiddleware, (req, res) => {
 app.put('/api/workers/:id', authMiddleware, (req, res) => {
   const { id } = req.params;
   const { name, employee_id, role, hourly_rate, phone } = req.body || {};
-  
+
   const existing = db.prepare('SELECT * FROM workers WHERE id = ?').get(id);
   if (!existing) {
     return res.status(404).json({ error: 'Worker not found' });
   }
-  
+
   try {
     const stmt = db.prepare('UPDATE workers SET name = ?, employee_id = ?, role = ?, hourly_rate = ?, phone = ? WHERE id = ?');
     stmt.run(name, employee_id, role, hourly_rate, phone, id);
@@ -525,18 +525,18 @@ app.put('/api/workers/:id', authMiddleware, (req, res) => {
 
 app.delete('/api/workers/:id', authMiddleware, (req, res) => {
   const { id } = req.params;
-  
+
   const existing = db.prepare('SELECT * FROM workers WHERE id = ?').get(id);
   if (!existing) {
     return res.status(404).json({ error: 'Worker not found' });
   }
-  
+
   // Delete associated time entries first
   db.prepare('DELETE FROM time_entries WHERE worker_id = ?').run(id);
-  
+
   // Delete the worker
   const result = db.prepare('DELETE FROM workers WHERE id = ?').run(id);
-  
+
   if (result.changes > 0) {
     res.json({ success: true, message: 'Worker deleted successfully' });
   } else {
@@ -547,7 +547,7 @@ app.delete('/api/workers/:id', authMiddleware, (req, res) => {
 // Time Tracking APIs
 app.get('/api/time-entries', authMiddleware, (req, res) => {
   const { worker_id, date_from, date_to } = req.query;
-  
+
   let query = `
     SELECT te.*, w.name as worker_name, w.employee_id, w.role, w.hourly_rate
     FROM time_entries te
@@ -555,105 +555,105 @@ app.get('/api/time-entries', authMiddleware, (req, res) => {
   `;
   const params = [];
   const conditions = [];
-  
+
   if (worker_id) {
     conditions.push('te.worker_id = ?');
     params.push(worker_id);
   }
-  
+
   if (date_from) {
     conditions.push('te.date >= ?');
     params.push(date_from);
   }
-  
+
   if (date_to) {
     conditions.push('te.date <= ?');
     params.push(date_to);
   }
-  
+
   if (conditions.length > 0) {
     query += ' WHERE ' + conditions.join(' AND ');
   }
-  
+
   query += ' ORDER BY te.date DESC, te.clock_in DESC';
-  
+
   const rows = db.prepare(query).all(...params);
   res.json(rows);
 });
 
 app.post('/api/time-entries/clock-in', authMiddleware, (req, res) => {
   const { worker_id, notes } = req.body || {};
-  
+
   if (!worker_id) {
     return res.status(400).json({ error: 'Worker ID is required' });
   }
-  
+
   // Check if worker exists
   const worker = db.prepare('SELECT * FROM workers WHERE id = ?').get(worker_id);
   if (!worker) {
     return res.status(404).json({ error: 'Worker not found' });
   }
-  
+
   // Check if worker is already clocked in today
   const today = new Date().toISOString().split('T')[0];
   const existing = db.prepare('SELECT * FROM time_entries WHERE worker_id = ? AND date = ? AND clock_out IS NULL').get(worker_id, today);
-  
+
   if (existing) {
     return res.status(400).json({ error: 'Worker is already clocked in today' });
   }
-  
+
   const now = new Date().toISOString();
   const stmt = db.prepare('INSERT INTO time_entries (worker_id, clock_in, date, notes) VALUES (?, ?, ?, ?)');
   const info = stmt.run(worker_id, now, today, notes || '');
-  
+
   const entry = db.prepare(`
     SELECT te.*, w.name as worker_name, w.employee_id, w.role, w.hourly_rate
     FROM time_entries te
     JOIN workers w ON te.worker_id = w.id
     WHERE te.id = ?
   `).get(info.lastInsertRowid);
-  
+
   res.json(entry);
 });
 
 app.post('/api/time-entries/clock-out', authMiddleware, (req, res) => {
   const { worker_id, notes } = req.body || {};
-  
+
   if (!worker_id) {
     return res.status(400).json({ error: 'Worker ID is required' });
   }
-  
+
   // Find the active clock-in entry for today
   const today = new Date().toISOString().split('T')[0];
   const entry = db.prepare('SELECT * FROM time_entries WHERE worker_id = ? AND date = ? AND clock_out IS NULL').get(worker_id, today);
-  
+
   if (!entry) {
     return res.status(400).json({ error: 'No active clock-in found for today' });
   }
-  
+
   const now = new Date().toISOString();
   const clockIn = new Date(entry.clock_in);
   const clockOut = new Date(now);
   const hoursWorked = (clockOut - clockIn) / (1000 * 60 * 60); // Convert to hours
-  
+
   const updateNotes = notes ? (entry.notes ? entry.notes + '; ' + notes : notes) : entry.notes;
-  
+
   const stmt = db.prepare('UPDATE time_entries SET clock_out = ?, hours_worked = ?, notes = ? WHERE id = ?');
   stmt.run(now, hoursWorked, updateNotes, entry.id);
-  
+
   const updated = db.prepare(`
     SELECT te.*, w.name as worker_name, w.employee_id, w.role, w.hourly_rate
     FROM time_entries te
     JOIN workers w ON te.worker_id = w.id
     WHERE te.id = ?
   `).get(entry.id);
-  
+
   res.json(updated);
 });
 
 app.get('/api/reports/payroll', authMiddleware, (req, res) => {
   const { date_from, date_to } = req.query;
-  
+
   let query = `
     SELECT 
       w.id,
@@ -666,26 +666,26 @@ app.get('/api/reports/payroll', authMiddleware, (req, res) => {
     FROM workers w
     LEFT JOIN time_entries te ON w.id = te.worker_id
   `;
-  
+
   const params = [];
   const conditions = [];
-  
+
   if (date_from) {
     conditions.push('te.date >= ?');
     params.push(date_from);
   }
-  
+
   if (date_to) {
     conditions.push('te.date <= ?');
     params.push(date_to);
   }
-  
+
   if (conditions.length > 0) {
     query += ' WHERE ' + conditions.join(' AND ');
   }
-  
+
   query += ' GROUP BY w.id, w.name, w.employee_id, w.role, w.hourly_rate ORDER BY w.name';
-  
+
   const rows = db.prepare(query).all(...params);
   res.json(rows);
 });
@@ -697,7 +697,7 @@ const securityEvents = new Map();
 // Enhanced input sanitization utilities
 function sanitizeInput(input) {
   if (typeof input !== 'string') return input;
-  
+
   // Remove potentially dangerous characters and patterns
   return input
     .trim()
@@ -713,9 +713,9 @@ function sanitizeInput(input) {
 // Enhanced validation utilities
 function validateEmail(email) {
   if (!email || typeof email !== 'string') return false;
-  
+
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  
+
   // Check for suspicious patterns
   const suspiciousPatterns = [
     /script/i,
@@ -724,13 +724,13 @@ function validateEmail(email) {
     /data:/i,
     /vbscript:/i
   ];
-  
+
   for (const pattern of suspiciousPatterns) {
     if (pattern.test(email)) {
       return false;
     }
   }
-  
+
   return emailRegex.test(email) && email.length <= 254; // RFC 5321 limit
 }
 
@@ -744,20 +744,20 @@ function logSecurityEvent(type, details, req) {
     userAgent: req.headers['user-agent'] || 'unknown',
     details
   };
-  
+
   // Store recent events for analysis
   if (!securityEvents.has(clientIP)) {
     securityEvents.set(clientIP, []);
   }
-  
+
   const events = securityEvents.get(clientIP);
   events.push(event);
-  
+
   // Keep only last 50 events per IP
   if (events.length > 50) {
     events.splice(0, events.length - 50);
   }
-  
+
   console.log('Security Event:', event);
 }
 
@@ -767,27 +767,27 @@ function contactRateLimit(req, res, next) {
   const now = Date.now();
   const windowMs = 15 * 60 * 1000; // 15 minutes
   const maxRequests = 3; // Max 3 submissions per 15 minutes per IP
-  
+
   if (!rateLimitStore.has(clientIP)) {
     rateLimitStore.set(clientIP, []);
   }
-  
+
   const requests = rateLimitStore.get(clientIP);
   // Remove old requests outside the window
   const validRequests = requests.filter(time => now - time < windowMs);
-  
+
   if (validRequests.length >= maxRequests) {
     logSecurityEvent('rate_limit_exceeded', {
       endpoint: '/api/contact',
       requestCount: validRequests.length,
       windowMs
     }, req);
-    
-    return res.status(429).json({ 
-      error: 'Too many contact form submissions. Please wait 15 minutes before trying again.' 
+
+    return res.status(429).json({
+      error: 'Too many contact form submissions. Please wait 15 minutes before trying again.'
     });
   }
-  
+
   validRequests.push(now);
   rateLimitStore.set(clientIP, validRequests);
   next();
@@ -797,25 +797,25 @@ function contactRateLimit(req, res, next) {
 function detectSuspiciousActivity(req) {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
   const events = securityEvents.get(clientIP) || [];
-  const recentEvents = events.filter(event => 
+  const recentEvents = events.filter(event =>
     Date.now() - new Date(event.timestamp).getTime() < 60 * 60 * 1000 // Last hour
   );
-  
+
   const suspiciousPatterns = {
     highFailureRate: recentEvents.filter(e => e.type === 'validation_failed').length > 5,
-    rapidRequests: recentEvents.filter(e => 
+    rapidRequests: recentEvents.filter(e =>
       Date.now() - new Date(e.timestamp).getTime() < 5 * 60 * 1000 // Last 5 minutes
     ).length > 10,
     maliciousContent: recentEvents.some(e => e.type === 'malicious_content_detected')
   };
-  
+
   return Object.values(suspiciousPatterns).some(Boolean);
 }
 
 // Contact Form API
 app.post('/api/contact', contactRateLimit, (req, res) => {
   const { name, email, phone, inquiryType, subject, message } = req.body || {};
-  
+
   // Check for suspicious activity first
   if (detectSuspiciousActivity(req)) {
     logSecurityEvent('suspicious_activity_blocked', {
@@ -824,14 +824,14 @@ app.post('/api/contact', contactRateLimit, (req, res) => {
     }, req);
     return res.status(429).json({ error: 'Request blocked due to suspicious activity' });
   }
-  
+
   // Enhanced input sanitization and validation
   const trimmedName = sanitizeInput(name?.trim());
   const trimmedEmail = sanitizeInput(email?.trim()?.toLowerCase());
   const trimmedPhone = sanitizeInput(phone?.trim());
   const trimmedSubject = sanitizeInput(subject?.trim());
   const trimmedMessage = sanitizeInput(message?.trim());
-  
+
   if (!trimmedName || !trimmedEmail || !trimmedSubject || !trimmedMessage) {
     logSecurityEvent('validation_failed', {
       endpoint: '/api/contact',
@@ -839,7 +839,7 @@ app.post('/api/contact', contactRateLimit, (req, res) => {
     }, req);
     return res.status(400).json({ error: 'Name, email, subject, and message are required' });
   }
-  
+
   // Enhanced email validation
   if (!validateEmail(trimmedEmail)) {
     logSecurityEvent('validation_failed', {
@@ -848,31 +848,31 @@ app.post('/api/contact', contactRateLimit, (req, res) => {
     }, req);
     return res.status(400).json({ error: 'Invalid email address' });
   }
-  
+
   // Phone validation (if provided)
   if (trimmedPhone && !/^[\+]?[0-9\s\-\(\)]{10,}$/.test(trimmedPhone)) {
     return res.status(400).json({ error: 'Invalid phone number format' });
   }
-  
+
   // Message length validation
   if (trimmedMessage.length < 10) {
     return res.status(400).json({ error: 'Message must be at least 10 characters long' });
   }
-  
+
   if (trimmedMessage.length > 2000) {
     return res.status(400).json({ error: 'Message is too long (maximum 2000 characters)' });
   }
-  
+
   // Subject length validation
   if (trimmedSubject.length > 200) {
     return res.status(400).json({ error: 'Subject is too long (maximum 200 characters)' });
   }
-  
+
   // Name length validation
   if (trimmedName.length > 100) {
     return res.status(400).json({ error: 'Name is too long (maximum 100 characters)' });
   }
-  
+
   try {
     // Create contact_inquiries table if it doesn't exist
     db.exec(`
@@ -890,37 +890,37 @@ app.post('/api/contact', contactRateLimit, (req, res) => {
         ip_address TEXT
       )
     `);
-    
+
     // Check for potential duplicate submissions (same email, subject within last hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const duplicateCheck = db.prepare(`
       SELECT id FROM contact_inquiries 
       WHERE email = ? AND subject = ? AND created_at > ?
     `).get(trimmedEmail, trimmedSubject, oneHourAgo);
-    
+
     if (duplicateCheck) {
-      return res.status(400).json({ 
-        error: 'A similar inquiry was already submitted recently. Please wait before submitting again.' 
+      return res.status(400).json({
+        error: 'A similar inquiry was already submitted recently. Please wait before submitting again.'
       });
     }
-    
+
     // Insert the contact inquiry
     const stmt = db.prepare(`
       INSERT INTO contact_inquiries (name, email, phone, inquiry_type, subject, message, ip_address)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    
+
     const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
     const result = stmt.run(
-      trimmedName, 
-      trimmedEmail, 
-      trimmedPhone || null, 
-      inquiryType || 'general', 
-      trimmedSubject, 
+      trimmedName,
+      trimmedEmail,
+      trimmedPhone || null,
+      inquiryType || 'general',
+      trimmedSubject,
       trimmedMessage,
       clientIP
     );
-    
+
     // Send email notifications
     const inquiryData = {
       id: result.lastInsertRowid,
@@ -932,20 +932,20 @@ app.post('/api/contact', contactRateLimit, (req, res) => {
       message: trimmedMessage,
       timestamp: new Date().toISOString()
     };
-    
+
     console.log('New contact inquiry received:', inquiryData);
-    
+
     // Send email notification (async, don't wait for it)
     sendContactNotification(inquiryData).catch(error => {
       console.error('Failed to send email notification:', error);
     });
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       message: 'Your inquiry has been submitted successfully. We will get back to you within 24 hours.',
       id: result.lastInsertRowid
     });
-    
+
   } catch (error) {
     console.error('Error saving contact inquiry:', error);
     res.status(500).json({ error: 'Failed to submit inquiry. Please try again.' });
@@ -967,19 +967,19 @@ app.get('/api/contact', authMiddleware, (req, res) => {
 app.put('/api/contact/:id', authMiddleware, (req, res) => {
   const { id } = req.params;
   const { status } = req.body || {};
-  
+
   if (!status || !['new', 'responded', 'closed'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status. Must be: new, responded, or closed' });
   }
-  
+
   try {
     const stmt = db.prepare('UPDATE contact_inquiries SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
     const result = stmt.run(status, id);
-    
+
     if (result.changes === 0) {
       return res.status(404).json({ error: 'Contact inquiry not found' });
     }
-    
+
     res.json({ success: true, message: 'Status updated successfully' });
   } catch (error) {
     console.error('Error updating contact inquiry:', error);

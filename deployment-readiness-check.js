@@ -16,7 +16,7 @@ class DeploymentReadinessChecker {
   log(message, type = 'info') {
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
-    
+
     if (type === 'error') {
       this.errors.push(message);
     } else if (type === 'warning') {
@@ -27,7 +27,7 @@ class DeploymentReadinessChecker {
   // Check 1: Package.json configurations
   checkPackageConfigurations() {
     this.log('Checking Package Configurations');
-    
+
     const packagePaths = [
       'package.json',
       'frontend/package.json',
@@ -35,12 +35,12 @@ class DeploymentReadinessChecker {
     ];
 
     const results = {};
-    
+
     packagePaths.forEach(packagePath => {
       if (fs.existsSync(packagePath)) {
         const packageContent = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
         const packageName = packagePath.replace('/package.json', '') || 'root';
-        
+
         results[packageName] = {
           name: packageContent.name,
           version: packageContent.version,
@@ -50,11 +50,11 @@ class DeploymentReadinessChecker {
         };
 
         // Check for required scripts
-        const requiredScripts = packagePath === 'frontend/package.json' 
-          ? ['build', 'dev', 'start'] 
+        const requiredScripts = packagePath === 'frontend/package.json'
+          ? ['build', 'dev', 'start']
           : ['start'];
-        
-        const missingScripts = requiredScripts.filter(script => 
+
+        const missingScripts = requiredScripts.filter(script =>
           !packageContent.scripts || !packageContent.scripts[script]
         );
 
@@ -71,14 +71,14 @@ class DeploymentReadinessChecker {
   // Check 2: Build system verification
   checkBuildSystem() {
     this.log('Checking Build System');
-    
+
     const buildFiles = [
       'frontend/vite.config.js',
       'frontend/package.json'
     ];
 
     const missingBuildFiles = buildFiles.filter(file => !fs.existsSync(file));
-    
+
     if (missingBuildFiles.length > 0) {
       throw new Error(`Missing build files: ${missingBuildFiles.join(', ')}`);
     }
@@ -86,14 +86,14 @@ class DeploymentReadinessChecker {
     // Check Vite configuration
     const viteConfigPath = 'frontend/vite.config.js';
     const viteConfig = fs.readFileSync(viteConfigPath, 'utf8');
-    
+
     const viteFeatures = [
       'build',
       'outDir',
       'rollupOptions'
     ];
 
-    const implementedFeatures = viteFeatures.filter(feature => 
+    const implementedFeatures = viteFeatures.filter(feature =>
       viteConfig.includes(feature)
     );
 
@@ -108,7 +108,7 @@ class DeploymentReadinessChecker {
   // Check 3: Environment configuration
   checkEnvironmentConfiguration() {
     this.log('Checking Environment Configuration');
-    
+
     const envFiles = [
       '.env',
       '.env.example',
@@ -117,7 +117,7 @@ class DeploymentReadinessChecker {
     ];
 
     const existingEnvFiles = envFiles.filter(file => fs.existsSync(file));
-    
+
     // Check for environment variables in code
     const configFiles = [
       'frontend/src/auth.js',
@@ -145,7 +145,7 @@ class DeploymentReadinessChecker {
   // Check 4: Static assets and public files
   checkStaticAssets() {
     this.log('Checking Static Assets');
-    
+
     const requiredPublicFiles = [
       'frontend/public/manifest.json',
       'frontend/public/robots.txt',
@@ -154,13 +154,13 @@ class DeploymentReadinessChecker {
     ];
 
     const missingPublicFiles = requiredPublicFiles.filter(file => !fs.existsSync(file));
-    
+
     if (missingPublicFiles.length > 0) {
       this.log(`Warning: Missing public files: ${missingPublicFiles.join(', ')}`, 'warning');
     }
 
     // Check for images
-    const imagesPath = 'backend/uploads/Adonai';
+    const imagesPath = 'backend/images/Adonai';
     let imageCount = 0;
     if (fs.existsSync(imagesPath)) {
       imageCount = fs.readdirSync(imagesPath).length;
@@ -185,7 +185,7 @@ class DeploymentReadinessChecker {
   // Check 5: Database and backend configuration
   checkBackendConfiguration() {
     this.log('Checking Backend Configuration');
-    
+
     const backendFiles = [
       'backend/index.js',
       'backend/package.json',
@@ -193,14 +193,14 @@ class DeploymentReadinessChecker {
     ];
 
     const missingBackendFiles = backendFiles.filter(file => !fs.existsSync(file));
-    
+
     if (missingBackendFiles.length > 0) {
       throw new Error(`Missing backend files: ${missingBackendFiles.join(', ')}`);
     }
 
     // Check backend server implementation
     const backendContent = fs.readFileSync('backend/index.js', 'utf8');
-    
+
     const backendFeatures = [
       'express',
       'cors',
@@ -209,7 +209,7 @@ class DeploymentReadinessChecker {
       'auth'
     ];
 
-    const implementedBackendFeatures = backendFeatures.filter(feature => 
+    const implementedBackendFeatures = backendFeatures.filter(feature =>
       backendContent.toLowerCase().includes(feature)
     );
 
@@ -233,7 +233,7 @@ class DeploymentReadinessChecker {
   // Check 6: Deployment platform configurations
   checkDeploymentPlatforms() {
     this.log('Checking Deployment Platform Configurations');
-    
+
     const deploymentConfigs = [
       { file: 'netlify.toml', platform: 'Netlify' },
       { file: 'vercel.json', platform: 'Vercel' },
@@ -243,13 +243,13 @@ class DeploymentReadinessChecker {
       { file: 'Dockerfile', platform: 'Docker' }
     ];
 
-    const availablePlatforms = deploymentConfigs.filter(config => 
+    const availablePlatforms = deploymentConfigs.filter(config =>
       fs.existsSync(config.file)
     );
 
     // Check specific configurations
     const platformDetails = {};
-    
+
     availablePlatforms.forEach(({ file, platform }) => {
       const content = fs.readFileSync(file, 'utf8');
       platformDetails[platform] = {
@@ -279,7 +279,7 @@ class DeploymentReadinessChecker {
   // Check 7: Security and production readiness
   checkSecurityConfiguration() {
     this.log('Checking Security Configuration');
-    
+
     const securityFiles = [
       'frontend/src/auth.js',
       'frontend/src/utils/security.js',
@@ -287,14 +287,14 @@ class DeploymentReadinessChecker {
     ];
 
     const missingSecurityFiles = securityFiles.filter(file => !fs.existsSync(file));
-    
+
     if (missingSecurityFiles.length > 0) {
       throw new Error(`Missing security files: ${missingSecurityFiles.join(', ')}`);
     }
 
     // Check authentication implementation
     const authContent = fs.readFileSync('frontend/src/auth.js', 'utf8');
-    
+
     const securityFeatures = [
       'authentication',
       'authorization',
@@ -303,15 +303,15 @@ class DeploymentReadinessChecker {
       'logout'
     ];
 
-    const implementedSecurityFeatures = securityFeatures.filter(feature => 
+    const implementedSecurityFeatures = securityFeatures.filter(feature =>
       authContent.toLowerCase().includes(feature)
     );
 
     // Check for HTTPS and security headers
     const backendContent = fs.readFileSync('backend/index.js', 'utf8');
-    const hasSecurityHeaders = backendContent.includes('helmet') || 
-                              backendContent.includes('security') ||
-                              backendContent.includes('cors');
+    const hasSecurityHeaders = backendContent.includes('helmet') ||
+      backendContent.includes('security') ||
+      backendContent.includes('cors');
 
     this.log('✅ Security configuration checked');
     return {
@@ -325,7 +325,7 @@ class DeploymentReadinessChecker {
   // Check 8: Performance optimization
   checkPerformanceOptimization() {
     this.log('Checking Performance Optimization');
-    
+
     const performanceFiles = [
       'frontend/src/utils/imageOptimization.js',
       'frontend/src/components/OptimizedImage.jsx',
@@ -334,17 +334,17 @@ class DeploymentReadinessChecker {
     ];
 
     const existingPerformanceFiles = performanceFiles.filter(file => fs.existsSync(file));
-    
+
     // Check for lazy loading in App.jsx
     const appContent = fs.readFileSync('frontend/src/App.jsx', 'utf8');
     const hasLazyLoading = appContent.includes('React.lazy') && appContent.includes('Suspense');
-    
+
     // Check for code splitting
     const hasCodeSplitting = appContent.includes('lazy(') && appContent.includes('import(');
-    
+
     // Check for service worker
     const hasServiceWorker = fs.existsSync('frontend/public/sw.js');
-    
+
     // Check for PWA manifest
     const hasPWAManifest = fs.existsSync('frontend/public/manifest.json');
 
@@ -436,10 +436,10 @@ class DeploymentReadinessChecker {
     // Final deployment assessment
     console.log('\n🎯 Final Deployment Assessment');
     console.log('===============================');
-    
+
     const criticalChecks = ['Build System', 'Backend Configuration', 'Security Configuration'];
     const criticalFailures = failedChecks.filter(check => criticalChecks.includes(check.name));
-    
+
     if (criticalFailures.length === 0 && failedChecks.length === 0) {
       console.log('🟢 FULLY READY FOR DEPLOYMENT');
       console.log('   All systems are configured and ready.');
@@ -457,7 +457,7 @@ class DeploymentReadinessChecker {
     // Deployment recommendations
     console.log('\n💡 Deployment Recommendations');
     console.log('==============================');
-    
+
     const platformResults = this.checks.find(check => check.name === 'Deployment Platforms');
     if (platformResults && platformResults.result) {
       const platforms = platformResults.result.platforms || [];

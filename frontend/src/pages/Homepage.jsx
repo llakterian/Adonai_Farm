@@ -12,15 +12,15 @@ export default function Homepage() {
   useEffect(() => {
     const loadImages = async () => {
       try {
-        console.log('🖼️ Loading real production images from backend/uploads...');
-        
+        console.log('🖼️ Loading real production images from backend/images...');
+
         // Force initialize the gallery with real production images
         ImageService.initializeGallery();
-        
-        // Load real production images from backend/uploads
+
+        // Load real production images from backend/images
         let farmImages = [];
         let animalImages = [];
-        
+
         try {
           // Get real production images
           farmImages = await ImageService.getPublicImagesAsync('farm');
@@ -31,10 +31,10 @@ export default function Homepage() {
           farmImages = ImageService.getPublicImages('farm');
           animalImages = ImageService.getPublicImages('animals');
         }
-        
+
         console.log('📸 Real farm images loaded:', farmImages.length, farmImages);
         console.log('🐄 Real animal images loaded:', animalImages.length, animalImages);
-        
+
         // Set hero images from real production images (farm-1.jpg, farm-2.jpg, farm-3.jpg)
         if (farmImages.length > 0) {
           // Use the first 3 farm images for hero carousel
@@ -48,14 +48,14 @@ export default function Homepage() {
         } else {
           // Fallback to single image if no farm images available
           console.warn('⚠️ No real farm images found, using single fallback');
-          setHeroImages([{ 
-            filename: 'farm-1.jpg', 
+          setHeroImages([{
+            filename: 'farm-1.jpg',
             url: ImageService.getImageUrl('farm-1.jpg'),
             alt: 'Adonai Farm - Beautiful landscape view',
             category: 'farm'
           }]);
         }
-        
+
         // Set featured images from real production images (adonai*.jpg)
         if (animalImages.length > 0) {
           const featuredImagesWithUrls = animalImages.slice(0, 6).map(img => ({
@@ -69,12 +69,12 @@ export default function Homepage() {
           console.warn('⚠️ No real animal images found');
           setFeaturedImages([]);
         }
-        
+
       } catch (error) {
         console.error('❌ Error loading real production images:', error);
         // Set fallback to real production images
-        setHeroImages([{ 
-          filename: 'farm-1.jpg', 
+        setHeroImages([{
+          filename: 'farm-1.jpg',
           url: ImageService.getImageUrl('farm-1.jpg'),
           alt: 'Adonai Farm Operations',
           category: 'farm'
@@ -107,13 +107,13 @@ export default function Homepage() {
 
   return (
     <div className="homepage">
-      <SEOHead 
+      <SEOHead
         pageType="homepage"
         title="Modern Livestock Farm in Kericho, Kenya"
         description="Adonai Farm - Leading livestock farm in Kericho, Kenya specializing in sustainable farming, quality breeding, farm tours, and premium agricultural products. Visit our 50-acre farm with 200+ animals today!"
         keywords={[
           "livestock farm Kericho",
-          "farm tours Kenya", 
+          "farm tours Kenya",
           "sustainable farming Kericho",
           "premium beef Kenya",
           "dairy products Kericho",
@@ -136,7 +136,7 @@ export default function Homepage() {
       <section className="hero-section">
         <div className="hero-background">
           {heroImages.length > 0 && (
-            <HeroImage 
+            <HeroImage
               filename={heroImages[currentHeroImage]?.filename || 'hero-farm.jpg'}
               alt={heroImages[currentHeroImage]?.alt || 'Adonai Farm'}
             />
@@ -189,14 +189,14 @@ export default function Homepage() {
             <div className="intro-text">
               <h2>About Our Farm</h2>
               <p className="intro-description">
-                At {farmInfo.name}, we combine traditional farming wisdom with modern technology 
-                to raise healthy livestock and produce quality products. Our commitment to 
+                At {farmInfo.name}, we combine traditional farming wisdom with modern technology
+                to raise healthy livestock and produce quality products. Our commitment to
                 sustainable practices ensures the well-being of our animals and the environment.
               </p>
               <p className="intro-details">
-                Established in {farmInfo.established}, we've been proudly serving our community 
-                with premium dairy products, farm-fresh eggs, quality wool, and grass-fed beef. 
-                Our {farmStats.totalAcres}-acre farm is home to {farmStats.totalAnimals}+ animals 
+                Established in {farmInfo.established}, we've been proudly serving our community
+                with premium dairy products, farm-fresh eggs, quality wool, and grass-fed beef.
+                Our {farmStats.totalAcres}-acre farm is home to {farmStats.totalAnimals}+ animals
                 across {farmStats.animalTypes} different species.
               </p>
               <div className="intro-highlights">
@@ -216,7 +216,7 @@ export default function Homepage() {
             </div>
             <div className="intro-image">
               {featuredImages.length > 0 && (
-                <CardImage 
+                <CardImage
                   filename={featuredImages[0]?.filename || 'farm-2.jpg'}
                   alt="Adonai Farm operations"
                 />
@@ -237,7 +237,7 @@ export default function Homepage() {
             {featuredAnimals.slice(0, 6).map((animal, index) => (
               <div key={animal.id} className="animal-card">
                 <div className="animal-card-image">
-                  <CardImage 
+                  <CardImage
                     filename={animal.image}
                     alt={`${animal.name} - ${animal.type}`}
                     size="medium"
@@ -279,7 +279,7 @@ export default function Homepage() {
             {farmServices.slice(0, 6).map((service) => (
               <div key={service.id} className="service-card">
                 <div className="service-image">
-                  <CardImage 
+                  <CardImage
                     filename={service.image}
                     alt={service.name}
                     size="medium"

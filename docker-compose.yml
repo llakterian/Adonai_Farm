@@ -16,7 +16,7 @@ services:
       - JWT_SECRET=${JWT_SECRET:-your_production_jwt_secret_change_this_to_something_secure}
     volumes:
       - backend_data:/app/data  # Database persistence
-      - backend_uploads:/app/uploads  # Photo uploads persistence
+      - backend_images:/app/images  # Photo images persistence
     networks:
       - app-network
 
@@ -40,4 +40,4 @@ networks:
 
 volumes:
   backend_data:  # Persist SQLite database
-  backend_uploads:  # Persist uploaded photos
+  backend_images:  # Persist uploaded photos

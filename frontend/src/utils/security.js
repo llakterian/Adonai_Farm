@@ -33,7 +33,7 @@ const SECURITY_PATTERNS = {
     /setTimeout\s*\(/gi,
     /setInterval\s*\(/gi
   ],
-  
+
   // SQL injection patterns - enhanced detection
   SQL_INJECTION: [
     /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT|TRUNCATE|GRANT|REVOKE)\b)/gi,
@@ -46,7 +46,7 @@ const SECURITY_PATTERNS = {
     /\bload_file\b/gi,
     /\bsystem\b.*?\(/gi
   ],
-  
+
   // Path traversal patterns - comprehensive
   PATH_TRAVERSAL: [
     /\.\./g,
@@ -68,7 +68,7 @@ const SECURITY_PATTERNS = {
     /c:\\users/gi,
     /c:\\program/gi
   ],
-  
+
   // Command injection patterns - enhanced
   COMMAND_INJECTION: [
     /[;&|`$(){}[\]]/g,
@@ -180,7 +180,7 @@ export function sanitizeInput(input, options = {}) {
       userAgent: navigator.userAgent,
       url: window.location.href
     });
-    
+
     // Report to security monitoring
     reportSecurityEvent('input_sanitization', {
       threats,
@@ -217,16 +217,16 @@ export function escapeHTML(text) {
 export function rateLimit(key, maxAttempts = 5, windowMs = 60000) {
   const now = Date.now();
   const windowStart = now - windowMs;
-  
+
   if (!rateLimitStore.has(key)) {
     rateLimitStore.set(key, []);
   }
-  
+
   const attempts = rateLimitStore.get(key);
-  
+
   // Remove old attempts outside the window
   const validAttempts = attempts.filter(timestamp => timestamp > windowStart);
-  
+
   if (validAttempts.length >= maxAttempts) {
     reportSecurityEvent('rate_limit_exceeded', {
       key,
@@ -236,11 +236,11 @@ export function rateLimit(key, maxAttempts = 5, windowMs = 60000) {
     });
     return false;
   }
-  
+
   // Add current attempt
   validAttempts.push(now);
   rateLimitStore.set(key, validAttempts);
-  
+
   return true;
 }
 
@@ -258,31 +258,50 @@ export function reportSecurityEvent(eventType, details = {}) {
     sessionId: getSessionId(),
     ...details
   };
-  
+
   securityEvents.push(event);
-  
+
+  // Check for suspicious user agents
+  const suspiciousUserAgents = [/bot/i, /spider/i, /crawl/i, /curl/i, /wget/i];
+  if (suspiciousUserAgents.some(ua => ua.test(navigator.userAgent))) {
+    event.severity = 'medium';
+    event.threat_type = 'suspicious_user_agent';
+  }
+
+  // Monitor for potential IDOR attempts in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  for (const [key, value] of urlParams.entries()) {
+    if (key.toLowerCase().includes('id') && !/^\d+$/.test(value)) {
+      reportSecurityEvent('potential_idor_attempt', {
+        severity: 'high',
+        parameter: key,
+        value: value
+      });
+    }
+  }
+
   // Keep only last 100 events to prevent memory issues
   if (securityEvents.length > 100) {
     securityEvents.shift();
   }
-  
+
   // Log high severity events immediately
   if (details.severity === 'high') {
     console.error('🚨 HIGH SEVERITY SECURITY EVENT:', event);
   }
-  
+
   // In production, send to security monitoring service
   if (import.meta.env.PROD) {
     // This would typically send to a security monitoring service
     // For now, we'll store in localStorage for admin review
     const existingEvents = JSON.parse(localStorage.getItem('security_events') || '[]');
     existingEvents.push(event);
-    
+
     // Keep only last 50 events in localStorage
     if (existingEvents.length > 50) {
       existingEvents.splice(0, existingEvents.length - 50);
     }
-    
+
     localStorage.setItem('security_events', JSON.stringify(existingEvents));
   }
 }
@@ -311,7 +330,7 @@ export function generateCSP() {
     'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
     'img-src': ["'self'", 'data:', 'https:', 'blob:'],
     'font-src': ["'self'", 'https://fonts.gstatic.com'],
-    'connect-src': ["'self'", 'https:', 'wss:'],
+    'connect-src': ["'self'", "http://localhost:4000", 'https:', 'wss:'],
     'media-src': ["'self'"],
     'object-src': ["'none'"],
     'child-src': ["'none'"],
@@ -341,10 +360,10 @@ export function initializeSecurity() {
 
   // Monitor for suspicious activity
   monitorSuspiciousActivity();
-  
+
   // Set up security event listeners
   setupSecurityEventListeners();
-  
+
   console.log('🔒 Security monitoring initialized');
 }
 
@@ -354,7 +373,7 @@ export function initializeSecurity() {
 function monitorSuspiciousActivity() {
   let rapidClickCount = 0;
   let lastClickTime = 0;
-  
+
   // Monitor rapid clicking (potential bot activity)
   document.addEventListener('click', () => {
     const now = Date.now();
@@ -377,8 +396,8 @@ function monitorSuspiciousActivity() {
   let devToolsOpen = false;
   setInterval(() => {
     const threshold = 160;
-    if (window.outerHeight - window.innerHeight > threshold || 
-        window.outerWidth - window.innerWidth > threshold) {
+    if (window.outerHeight - window.innerHeight > threshold ||
+      window.outerWidth - window.innerWidth > threshold) {
       if (!devToolsOpen) {
         devToolsOpen = true;
         reportSecurityEvent('developer_tools_detected', {
@@ -431,9 +450,9 @@ function setupSecurityEventListeners() {
     ];
 
     const isMatch = suspiciousKeyCombos.some(combo => {
-      return event.key === combo.key && 
-             (!combo.ctrlKey || event.ctrlKey) && 
-             (!combo.shiftKey || event.shiftKey);
+      return event.key === combo.key &&
+        (!combo.ctrlKey || event.ctrlKey) &&
+        (!combo.shiftKey || event.shiftKey);
     });
 
     if (isMatch) {
@@ -453,7 +472,7 @@ function setupSecurityEventListeners() {
  */
 export function getSecurityEvents() {
   const localEvents = JSON.parse(localStorage.getItem('security_events') || '[]');
-  return [...securityEvents, ...localEvents].sort((a, b) => 
+  return [...securityEvents, ...localEvents].sort((a, b) =>
     new Date(b.timestamp) - new Date(a.timestamp)
   );
 }
@@ -476,7 +495,7 @@ export class InputSanitizer {
    */
   static sanitizeHTML(input) {
     if (typeof input !== 'string') return '';
-    
+
     const div = document.createElement('div');
     div.textContent = input;
     return div.innerHTML;
@@ -493,21 +512,21 @@ export class InputSanitizer {
     }
 
     const trimmedEmail = email.trim().toLowerCase();
-    
+
     // Basic email regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     // More comprehensive email validation
     const strictEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    
+
     if (!emailRegex.test(trimmedEmail)) {
       return { isValid: false, error: 'Invalid email format' };
     }
-    
+
     if (!strictEmailRegex.test(trimmedEmail)) {
       return { isValid: false, error: 'Email contains invalid characters' };
     }
-    
+
     // Check for suspicious patterns
     const suspiciousPatterns = [
       /script/i,
@@ -516,13 +535,13 @@ export class InputSanitizer {
       /data:/i,
       /vbscript:/i
     ];
-    
+
     for (const pattern of suspiciousPatterns) {
       if (pattern.test(trimmedEmail)) {
         return { isValid: false, error: 'Email contains invalid content' };
       }
     }
-    
+
     return { isValid: true, sanitized: trimmedEmail };
   }
 
@@ -533,26 +552,26 @@ export class InputSanitizer {
    */
   static validatePhone(phone) {
     if (!phone) return { isValid: true, sanitized: '' }; // Phone is optional
-    
+
     if (typeof phone !== 'string') {
       return { isValid: false, error: 'Invalid phone number format' };
     }
 
     const trimmedPhone = phone.trim();
-    
+
     // Allow international format with + and common separators
     const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
-    
+
     if (!phoneRegex.test(trimmedPhone)) {
       return { isValid: false, error: 'Phone number must be at least 10 digits and contain only numbers, spaces, hyphens, parentheses, and optional + prefix' };
     }
-    
+
     // Extract only digits to check minimum length
     const digitsOnly = trimmedPhone.replace(/[^\d]/g, '');
     if (digitsOnly.length < 10) {
       return { isValid: false, error: 'Phone number must contain at least 10 digits' };
     }
-    
+
     return { isValid: true, sanitized: trimmedPhone };
   }
 
@@ -575,16 +594,16 @@ export class InputSanitizer {
     }
 
     let sanitized = input.trim();
-    
+
     // Check length constraints
     if (sanitized.length < minLength) {
       return { isValid: false, error: `${fieldName} must be at least ${minLength} characters long` };
     }
-    
+
     if (sanitized.length > maxLength) {
       return { isValid: false, error: `${fieldName} must be no more than ${maxLength} characters long` };
     }
-    
+
     // Check for suspicious patterns
     const suspiciousPatterns = [
       /javascript:/i,
@@ -594,18 +613,18 @@ export class InputSanitizer {
       /<script[^>]*>.*?<\/script>/gi,
       /<iframe[^>]*>.*?<\/iframe>/gi
     ];
-    
+
     for (const pattern of suspiciousPatterns) {
       if (pattern.test(sanitized)) {
         return { isValid: false, error: `${fieldName} contains invalid content` };
       }
     }
-    
+
     // Sanitize HTML if not allowed
     if (!allowHTML) {
       sanitized = this.sanitizeHTML(sanitized);
     }
-    
+
     return { isValid: true, sanitized };
   }
 
@@ -617,7 +636,7 @@ export class InputSanitizer {
   static validateContactForm(formData) {
     const errors = {};
     const sanitized = {};
-    
+
     // Validate name
     const nameResult = this.sanitizeText(formData.name, {
       minLength: 2,
@@ -629,7 +648,7 @@ export class InputSanitizer {
     } else {
       sanitized.name = nameResult.sanitized;
     }
-    
+
     // Validate email
     const emailResult = this.validateEmail(formData.email);
     if (!emailResult.isValid) {
@@ -637,7 +656,7 @@ export class InputSanitizer {
     } else {
       sanitized.email = emailResult.sanitized;
     }
-    
+
     // Validate phone (optional)
     const phoneResult = this.validatePhone(formData.phone);
     if (!phoneResult.isValid) {
@@ -645,7 +664,7 @@ export class InputSanitizer {
     } else {
       sanitized.phone = phoneResult.sanitized;
     }
-    
+
     // Validate subject
     const subjectResult = this.sanitizeText(formData.subject, {
       minLength: 5,
@@ -657,7 +676,7 @@ export class InputSanitizer {
     } else {
       sanitized.subject = subjectResult.sanitized;
     }
-    
+
     // Validate message
     const messageResult = this.sanitizeText(formData.message, {
       minLength: 10,
@@ -669,7 +688,7 @@ export class InputSanitizer {
     } else {
       sanitized.message = messageResult.sanitized;
     }
-    
+
     // Validate inquiry type
     const validInquiryTypes = ['visit', 'purchase', 'breeding', 'general'];
     if (!validInquiryTypes.includes(formData.inquiryType)) {
@@ -677,7 +696,7 @@ export class InputSanitizer {
     } else {
       sanitized.inquiryType = formData.inquiryType;
     }
-    
+
     return {
       isValid: Object.keys(errors).length === 0,
       errors,
@@ -702,26 +721,26 @@ export class RateLimiter {
   isAllowed(identifier) {
     const now = Date.now();
     const userRequests = this.requests.get(identifier) || [];
-    
+
     // Remove old requests outside the window
     const validRequests = userRequests.filter(time => now - time < this.windowMs);
-    
+
     if (validRequests.length >= this.maxRequests) {
       const oldestRequest = Math.min(...validRequests);
       const resetTime = oldestRequest + this.windowMs;
       const waitTime = Math.ceil((resetTime - now) / 1000 / 60); // Minutes
-      
+
       return {
         allowed: false,
         error: `Too many requests. Please wait ${waitTime} minutes before trying again.`,
         resetTime
       };
     }
-    
+
     // Add current request
     validRequests.push(now);
     this.requests.set(identifier, validRequests);
-    
+
     return {
       allowed: true,
       remaining: this.maxRequests - validRequests.length
@@ -745,7 +764,7 @@ export class RateLimiter {
     const now = Date.now();
     const userRequests = this.requests.get(identifier) || [];
     const validRequests = userRequests.filter(time => now - time < this.windowMs);
-    
+
     return {
       requestCount: validRequests.length,
       remaining: Math.max(0, this.maxRequests - validRequests.length),
@@ -775,21 +794,21 @@ export class SecurityMonitor {
       userAgent: navigator.userAgent,
       url: window.location.href
     };
-    
+
     this.events.push(event);
-    
+
     // Keep only recent events
     if (this.events.length > this.maxEvents) {
       this.events = this.events.slice(-this.maxEvents);
     }
-    
+
     // Store in localStorage for persistence
     try {
       localStorage.setItem('adonai_security_events', JSON.stringify(this.events));
     } catch (error) {
       console.warn('Failed to store security events:', error);
     }
-    
+
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
       console.log('Security Event:', event);
@@ -813,25 +832,25 @@ export class SecurityMonitor {
     const recentEvents = this.getRecentEvents();
     const now = Date.now();
     const oneHour = 60 * 60 * 1000;
-    
-    const recentFailures = recentEvents.filter(event => 
-      event.type === 'validation_failed' && 
+
+    const recentFailures = recentEvents.filter(event =>
+      event.type === 'validation_failed' &&
       (now - new Date(event.timestamp).getTime()) < oneHour
     );
-    
+
     const suspiciousPatterns = {
       highFailureRate: recentFailures.length > 10,
-      rapidSubmissions: recentEvents.filter(event => 
-        event.type === 'form_submission' && 
+      rapidSubmissions: recentEvents.filter(event =>
+        event.type === 'form_submission' &&
         (now - new Date(event.timestamp).getTime()) < 5 * 60 * 1000 // 5 minutes
       ).length > 3,
-      maliciousContent: recentEvents.some(event => 
+      maliciousContent: recentEvents.some(event =>
         event.details.reason === 'malicious_content'
       )
     };
-    
+
     const isSuspicious = Object.values(suspiciousPatterns).some(Boolean);
-    
+
     return {
       isSuspicious,
       patterns: suspiciousPatterns,
@@ -850,14 +869,14 @@ export class CSPHelper {
   static analyzeCSP() {
     const metaTags = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
     const hasCSP = metaTags.length > 0;
-    
+
     let policies = [];
     if (hasCSP) {
       metaTags.forEach(tag => {
         policies.push(tag.getAttribute('content'));
       });
     }
-    
+
     return {
       hasCSP,
       policies,
@@ -901,13 +920,13 @@ if (typeof window !== 'undefined') {
   } catch (error) {
     console.warn('Failed to load security events:', error);
   }
-  
+
   // Log page load
   securityMonitor.logEvent('page_load', {
     url: window.location.href,
     referrer: document.referrer
   });
-  
+
   // Monitor for suspicious activity
   window.addEventListener('error', (event) => {
     securityMonitor.logEvent('javascript_error', {

@@ -22,16 +22,16 @@ const mockInfrastructure = [
   { id: 2, category: 'vehicle', type: 'Tractor', name: 'Massey Ferguson 4707', model: '4707', year: 2019, purchase_cost: 52000, current_value: 42000, status: 'Active', usage_hours: 1580, fuel_consumption: 9.2, notes: 'Heavy duty operations' },
   { id: 3, category: 'vehicle', type: 'Truck', name: 'Ford F-350', model: 'F-350 Super Duty', year: 2021, purchase_cost: 65000, current_value: 58000, status: 'Active', usage_hours: 850, fuel_consumption: 12.5, notes: 'Transport and delivery' },
   { id: 4, category: 'vehicle', type: 'Pickup', name: 'Toyota Hilux', model: 'Hilux Double Cab', year: 2022, purchase_cost: 35000, current_value: 32000, status: 'Active', usage_hours: 650, fuel_consumption: 10.2, notes: 'Daily farm operations' },
-  
+
   // Buildings
-  { id: 5, category: 'building', type: 'Barn', name: 'Main Livestock Barn', size_sqft: 2400, construction_date: '2018-03-15', capacity: 50, current_usage: 'Dairy cattle housing', value: 85000, notes: 'Climate controlled with automated feeding' },
-  { id: 6, category: 'building', type: 'Storage', name: 'Feed Storage Facility', size_sqft: 1200, construction_date: '2019-08-20', capacity: 200, current_usage: 'Feed and grain storage', value: 45000, notes: 'Moisture controlled environment' },
-  { id: 7, category: 'building', type: 'Office', name: 'Farm Administration Office', size_sqft: 800, construction_date: '2017-05-10', capacity: 8, current_usage: 'Administrative operations', value: 35000, notes: 'Includes meeting room and records storage' },
-  
+  { id: 5, category: 'building', type: 'Barn', name: 'Main Livestock Barn', size_sqft: 2400, construction_date: '2018-03-15', capacity: 50, current_usage: 'Dairy cattle housing', notes: 'Climate controlled with automated feeding' },
+  { id: 6, category: 'building', type: 'Storage', name: 'Feed Storage Facility', size_sqft: 1200, construction_date: '2019-08-20', capacity: 200, current_usage: 'Feed and grain storage', notes: 'Moisture controlled environment' },
+  { id: 7, category: 'building', type: 'Office', name: 'Farm Administration Office', size_sqft: 800, construction_date: '2017-05-10', capacity: 8, current_usage: 'Administrative operations', notes: 'Includes meeting room and records storage' },
+
   // Equipment
-  { id: 8, category: 'equipment', type: 'Machinery', name: 'Hay Baler', model: 'New Holland BR7070', year: 2020, purchase_cost: 28000, current_value: 24000, status: 'Active', usage_hours: 320, notes: 'Round bale production' },
-  { id: 9, category: 'equipment', type: 'Implements', name: 'Disc Harrow', model: 'Case IH True-Tandem 345', year: 2019, purchase_cost: 15000, current_value: 13000, status: 'Active', usage_hours: 180, notes: 'Field preparation' },
-  { id: 10, category: 'equipment', type: 'Tools', name: 'Welding Equipment', model: 'Lincoln Electric', year: 2021, purchase_cost: 3500, current_value: 3200, status: 'Active', usage_hours: 0, notes: 'Maintenance and repairs' }
+  { id: 8, category: 'equipment', type: 'Machinery', name: 'Hay Baler', model: 'New Holland BR7070', year: 2020, status: 'Active', usage_hours: 320, notes: 'Round bale production' },
+  { id: 9, category: 'equipment', type: 'Implements', name: 'Disc Harrow', model: 'Case IH True-Tandem 345', year: 2019, status: 'Active', usage_hours: 180, notes: 'Field preparation' },
+  { id: 10, category: 'equipment', type: 'Tools', name: 'Welding Equipment', model: 'Lincoln Electric', year: 2021, status: 'Active', usage_hours: 0, notes: 'Maintenance and repairs' }
 ];
 
 function Infrastructure() {
@@ -96,16 +96,16 @@ function Infrastructure() {
   function addInfrastructure(e) {
     e.preventDefault();
     if (!form.name.trim()) return;
-    
+
     const newItem = {
       id: Math.max(...infrastructure.map(i => i.id), 0) + 1,
       ...form
     };
-    
+
     const updatedInfrastructure = [...infrastructure, newItem];
     setInfrastructure(updatedInfrastructure);
     localStorage.setItem('adonai_infrastructure', JSON.stringify(updatedInfrastructure));
-    
+
     // Reset form
     setForm({
       category: activeTab === 'vehicles' ? 'vehicle' : activeTab === 'buildings' ? 'building' : 'equipment',
@@ -135,11 +135,11 @@ function Infrastructure() {
   function saveEdit(e) {
     e.preventDefault();
     if (!editForm.name.trim()) return;
-    
-    const updatedInfrastructure = infrastructure.map(item => 
+
+    const updatedInfrastructure = infrastructure.map(item =>
       item.id === editingId ? { ...editForm } : item
     );
-    
+
     setInfrastructure(updatedInfrastructure);
     localStorage.setItem('adonai_infrastructure', JSON.stringify(updatedInfrastructure));
     setEditingId(null);
@@ -176,7 +176,7 @@ function Infrastructure() {
         `"${item.notes || ''}"`
       ].join(','))
     ].join('\n');
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -210,9 +210,9 @@ function Infrastructure() {
   return (
     <div>
       <h1 className="page-title gradient-text">🚜 Farm Infrastructure</h1>
-      
+
       {/* Infrastructure Hero Section */}
-      <div className="card" style={{ 
+      <div className="card" style={{
         background: 'var(--gradient-primary)',
         color: 'white',
         textAlign: 'center',
@@ -224,10 +224,10 @@ function Infrastructure() {
         <p style={{ fontSize: '1.1rem', opacity: 0.9, marginBottom: '1.5rem' }}>
           Managing {infrastructure.length} assets across vehicles, buildings, and equipment
         </p>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          gap: '2rem', 
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '2rem',
           flexWrap: 'wrap'
         }}>
           <div className="float" style={{ textAlign: 'center' }}>
@@ -248,19 +248,19 @@ function Infrastructure() {
       {/* Tab Navigation */}
       <div className="card" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-          <button 
+          <button
             className={`btn ${activeTab === 'vehicles' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setActiveTab('vehicles')}
           >
             🚜 Vehicles ({infrastructure.filter(i => i.category === 'vehicle').length})
           </button>
-          <button 
+          <button
             className={`btn ${activeTab === 'buildings' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setActiveTab('buildings')}
           >
             🏚️ Buildings ({infrastructure.filter(i => i.category === 'building').length})
           </button>
-          <button 
+          <button
             className={`btn ${activeTab === 'equipment' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setActiveTab('equipment')}
           >
@@ -309,8 +309,8 @@ function Infrastructure() {
             {/* Common Fields */}
             <div className="form-group">
               <label>Type</label>
-              <select 
-                value={form.type} 
+              <select
+                value={form.type}
                 onChange={e => setForm({ ...form, type: e.target.value })}
               >
                 {activeTab === 'vehicles' && (
@@ -338,12 +338,12 @@ function Infrastructure() {
                 )}
               </select>
             </div>
-            
+
             <div className="form-group">
               <label>Name</label>
-              <input 
-                placeholder="Enter name" 
-                value={form.name} 
+              <input
+                placeholder="Enter name"
+                value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
                 required
               />
@@ -352,9 +352,9 @@ function Infrastructure() {
             {activeTab !== 'buildings' && (
               <div className="form-group">
                 <label>Model</label>
-                <input 
-                  placeholder="Enter model" 
-                  value={form.model} 
+                <input
+                  placeholder="Enter model"
+                  value={form.model}
                   onChange={e => setForm({ ...form, model: e.target.value })}
                 />
               </div>
@@ -363,11 +363,11 @@ function Infrastructure() {
             {activeTab !== 'buildings' && (
               <div className="form-group">
                 <label>Year</label>
-                <input 
-                  type="number" 
-                  min="1900" 
+                <input
+                  type="number"
+                  min="1900"
                   max={new Date().getFullYear() + 1}
-                  value={form.year} 
+                  value={form.year}
                   onChange={e => setForm({ ...form, year: parseInt(e.target.value) || new Date().getFullYear() })}
                 />
               </div>
@@ -377,35 +377,35 @@ function Infrastructure() {
               <>
                 <div className="form-group">
                   <label>Size (sq ft)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0"
-                    value={form.size_sqft} 
+                    value={form.size_sqft}
                     onChange={e => setForm({ ...form, size_sqft: parseInt(e.target.value) || 0 })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Construction Date</label>
-                  <input 
-                    type="date" 
-                    value={form.construction_date} 
+                  <input
+                    type="date"
+                    value={form.construction_date}
                     onChange={e => setForm({ ...form, construction_date: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Capacity</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0"
-                    value={form.capacity} 
+                    value={form.capacity}
                     onChange={e => setForm({ ...form, capacity: parseInt(e.target.value) || 0 })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Current Usage</label>
-                  <input 
-                    placeholder="What is this building used for?" 
-                    value={form.current_usage} 
+                  <input
+                    placeholder="What is this building used for?"
+                    value={form.current_usage}
                     onChange={e => setForm({ ...form, current_usage: e.target.value })}
                   />
                 </div>
@@ -414,13 +414,13 @@ function Infrastructure() {
 
             <div className="form-group">
               <label>{activeTab === 'buildings' ? 'Value' : 'Purchase Cost'} ($)</label>
-              <input 
-                type="number" 
+              <input
+                type="number"
                 min="0"
-                value={activeTab === 'buildings' ? form.value : form.purchase_cost} 
-                onChange={e => setForm({ 
-                  ...form, 
-                  [activeTab === 'buildings' ? 'value' : 'purchase_cost']: parseFloat(e.target.value) || 0 
+                value={activeTab === 'buildings' ? form.value : form.purchase_cost}
+                onChange={e => setForm({
+                  ...form,
+                  [activeTab === 'buildings' ? 'value' : 'purchase_cost']: parseFloat(e.target.value) || 0
                 })}
               />
             </div>
@@ -428,10 +428,10 @@ function Infrastructure() {
             {activeTab !== 'buildings' && (
               <div className="form-group">
                 <label>Current Value ($)</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   min="0"
-                  value={form.current_value} 
+                  value={form.current_value}
                   onChange={e => setForm({ ...form, current_value: parseFloat(e.target.value) || 0 })}
                 />
               </div>
@@ -452,20 +452,20 @@ function Infrastructure() {
               <>
                 <div className="form-group">
                   <label>Usage Hours</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0"
-                    value={form.usage_hours} 
+                    value={form.usage_hours}
                     onChange={e => setForm({ ...form, usage_hours: parseInt(e.target.value) || 0 })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Fuel Consumption (L/hr)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0"
                     step="0.1"
-                    value={form.fuel_consumption} 
+                    value={form.fuel_consumption}
                     onChange={e => setForm({ ...form, fuel_consumption: parseFloat(e.target.value) || 0 })}
                   />
                 </div>
@@ -475,10 +475,10 @@ function Infrastructure() {
             {activeTab === 'equipment' && (
               <div className="form-group">
                 <label>Usage Hours</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   min="0"
-                  value={form.usage_hours} 
+                  value={form.usage_hours}
                   onChange={e => setForm({ ...form, usage_hours: parseInt(e.target.value) || 0 })}
                 />
               </div>
@@ -486,9 +486,9 @@ function Infrastructure() {
 
             <div className="form-group">
               <label>Notes</label>
-              <textarea 
-                value={form.notes} 
-                onChange={e => setForm({ ...form, notes: e.target.value })} 
+              <textarea
+                value={form.notes}
+                onChange={e => setForm({ ...form, notes: e.target.value })}
                 placeholder="Additional notes..."
                 rows="3"
               />
@@ -517,8 +517,8 @@ function Infrastructure() {
                 <div className="form-grid">
                   <div className="form-group">
                     <label>Type</label>
-                    <select 
-                      value={editForm.type} 
+                    <select
+                      value={editForm.type}
                       onChange={e => setEditForm({ ...editForm, type: e.target.value })}
                     >
                       {item.category === 'vehicle' && (
@@ -546,11 +546,11 @@ function Infrastructure() {
                       )}
                     </select>
                   </div>
-                  
+
                   <div className="form-group">
                     <label>Name</label>
-                    <input 
-                      value={editForm.name} 
+                    <input
+                      value={editForm.name}
                       onChange={e => setEditForm({ ...editForm, name: e.target.value })}
                       required
                     />
@@ -559,8 +559,8 @@ function Infrastructure() {
                   {item.category !== 'building' && (
                     <div className="form-group">
                       <label>Model</label>
-                      <input 
-                        value={editForm.model || ''} 
+                      <input
+                        value={editForm.model || ''}
                         onChange={e => setEditForm({ ...editForm, model: e.target.value })}
                       />
                     </div>
@@ -569,11 +569,11 @@ function Infrastructure() {
                   {item.category !== 'building' && (
                     <div className="form-group">
                       <label>Year</label>
-                      <input 
-                        type="number" 
-                        min="1900" 
+                      <input
+                        type="number"
+                        min="1900"
                         max={new Date().getFullYear() + 1}
-                        value={editForm.year || new Date().getFullYear()} 
+                        value={editForm.year || new Date().getFullYear()}
                         onChange={e => setEditForm({ ...editForm, year: parseInt(e.target.value) || new Date().getFullYear() })}
                       />
                     </div>
@@ -583,34 +583,34 @@ function Infrastructure() {
                     <>
                       <div className="form-group">
                         <label>Size (sq ft)</label>
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           min="0"
-                          value={editForm.size_sqft || 0} 
+                          value={editForm.size_sqft || 0}
                           onChange={e => setEditForm({ ...editForm, size_sqft: parseInt(e.target.value) || 0 })}
                         />
                       </div>
                       <div className="form-group">
                         <label>Construction Date</label>
-                        <input 
-                          type="date" 
-                          value={editForm.construction_date || ''} 
+                        <input
+                          type="date"
+                          value={editForm.construction_date || ''}
                           onChange={e => setEditForm({ ...editForm, construction_date: e.target.value })}
                         />
                       </div>
                       <div className="form-group">
                         <label>Capacity</label>
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           min="0"
-                          value={editForm.capacity || 0} 
+                          value={editForm.capacity || 0}
                           onChange={e => setEditForm({ ...editForm, capacity: parseInt(e.target.value) || 0 })}
                         />
                       </div>
                       <div className="form-group">
                         <label>Current Usage</label>
-                        <input 
-                          value={editForm.current_usage || ''} 
+                        <input
+                          value={editForm.current_usage || ''}
                           onChange={e => setEditForm({ ...editForm, current_usage: e.target.value })}
                         />
                       </div>
@@ -619,13 +619,13 @@ function Infrastructure() {
 
                   <div className="form-group">
                     <label>{item.category === 'building' ? 'Value' : 'Purchase Cost'} ($)</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       min="0"
-                      value={item.category === 'building' ? (editForm.value || 0) : (editForm.purchase_cost || 0)} 
-                      onChange={e => setEditForm({ 
-                        ...editForm, 
-                        [item.category === 'building' ? 'value' : 'purchase_cost']: parseFloat(e.target.value) || 0 
+                      value={item.category === 'building' ? (editForm.value || 0) : (editForm.purchase_cost || 0)}
+                      onChange={e => setEditForm({
+                        ...editForm,
+                        [item.category === 'building' ? 'value' : 'purchase_cost']: parseFloat(e.target.value) || 0
                       })}
                     />
                   </div>
@@ -633,10 +633,10 @@ function Infrastructure() {
                   {item.category !== 'building' && (
                     <div className="form-group">
                       <label>Current Value ($)</label>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         min="0"
-                        value={editForm.current_value || 0} 
+                        value={editForm.current_value || 0}
                         onChange={e => setEditForm({ ...editForm, current_value: parseFloat(e.target.value) || 0 })}
                       />
                     </div>
@@ -645,8 +645,8 @@ function Infrastructure() {
                   {item.category !== 'building' && (
                     <div className="form-group">
                       <label>Status</label>
-                      <select 
-                        value={editForm.status || 'Active'} 
+                      <select
+                        value={editForm.status || 'Active'}
                         onChange={e => setEditForm({ ...editForm, status: e.target.value })}
                       >
                         <option>Active</option>
@@ -660,20 +660,20 @@ function Infrastructure() {
                     <>
                       <div className="form-group">
                         <label>Usage Hours</label>
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           min="0"
-                          value={editForm.usage_hours || 0} 
+                          value={editForm.usage_hours || 0}
                           onChange={e => setEditForm({ ...editForm, usage_hours: parseInt(e.target.value) || 0 })}
                         />
                       </div>
                       <div className="form-group">
                         <label>Fuel Consumption (L/hr)</label>
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           min="0"
                           step="0.1"
-                          value={editForm.fuel_consumption || 0} 
+                          value={editForm.fuel_consumption || 0}
                           onChange={e => setEditForm({ ...editForm, fuel_consumption: parseFloat(e.target.value) || 0 })}
                         />
                       </div>
@@ -683,10 +683,10 @@ function Infrastructure() {
                   {item.category === 'equipment' && (
                     <div className="form-group">
                       <label>Usage Hours</label>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         min="0"
-                        value={editForm.usage_hours || 0} 
+                        value={editForm.usage_hours || 0}
                         onChange={e => setEditForm({ ...editForm, usage_hours: parseInt(e.target.value) || 0 })}
                       />
                     </div>
@@ -694,9 +694,9 @@ function Infrastructure() {
 
                   <div className="form-group">
                     <label>Notes</label>
-                    <textarea 
-                      value={editForm.notes || ''} 
-                      onChange={e => setEditForm({ ...editForm, notes: e.target.value })} 
+                    <textarea
+                      value={editForm.notes || ''}
+                      onChange={e => setEditForm({ ...editForm, notes: e.target.value })}
                       rows="3"
                     />
                   </div>
@@ -723,7 +723,7 @@ function Infrastructure() {
                     {item.status === 'Active' ? '🟢' : item.status === 'Maintenance' ? '🟡' : '🔴'}
                   </div>
                 </div>
-                
+
                 <div className="animal-details">
                   <div className="animal-detail">
                     <strong>Status:</strong>
@@ -754,13 +754,13 @@ function Infrastructure() {
                 )}
 
                 <div className="animal-actions">
-                  <button 
-                    className="btn btn-outline btn-small" 
+                  <button
+                    className="btn btn-outline btn-small"
                     onClick={() => startEdit(item)}
                   >
                     ✏️ Edit
                   </button>
-                  <button 
+                  <button
                     className="btn btn-danger btn-small"
                     onClick={() => setDeleteConfirm(item.id)}
                   >
@@ -793,13 +793,13 @@ function Infrastructure() {
               Are you sure you want to delete this infrastructure item? This action cannot be undone.
             </p>
             <div className="btn-group">
-              <button 
+              <button
                 className="btn btn-danger"
                 onClick={() => deleteInfrastructure(deleteConfirm)}
               >
                 🗑️ Delete Permanently
               </button>
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={() => setDeleteConfirm(null)}
               >

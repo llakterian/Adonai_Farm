@@ -7,9 +7,9 @@ class PerformanceMonitor {
   constructor() {
     this.metrics = new Map();
     this.observers = new Map();
-    this.isEnabled = import.meta.env.DEV || 
-                     localStorage.getItem('performance-monitoring') === 'true';
-    
+    this.isEnabled = import.meta.env.DEV ||
+      localStorage.getItem('performance-monitoring') === 'true';
+
     if (this.isEnabled) {
       this.initializeObservers();
     }
@@ -92,8 +92,8 @@ class PerformanceMonitor {
     const metrics = {
       'DNS Lookup': entry.domainLookupEnd - entry.domainLookupStart,
       'TCP Connection': entry.connectEnd - entry.connectStart,
-      'TLS Handshake': entry.secureConnectionStart > 0 ? 
-                      entry.connectEnd - entry.secureConnectionStart : 0,
+      'TLS Handshake': entry.secureConnectionStart > 0 ?
+        entry.connectEnd - entry.secureConnectionStart : 0,
       'Request': entry.responseStart - entry.requestStart,
       'Response': entry.responseEnd - entry.responseStart,
       'DOM Processing': entry.domContentLoadedEventStart - entry.responseEnd,
@@ -114,11 +114,11 @@ class PerformanceMonitor {
   recordResourceMetrics(entry) {
     const resourceType = this.getResourceType(entry.name);
     const loadTime = entry.responseEnd - entry.startTime;
-    
+
     if (!this.metrics.has(`${resourceType}_load_times`)) {
       this.metrics.set(`${resourceType}_load_times`, []);
     }
-    
+
     this.metrics.get(`${resourceType}_load_times`).push({
       name: entry.name,
       loadTime,
@@ -143,11 +143,11 @@ class PerformanceMonitor {
    */
   recordMetric(name, value) {
     if (!this.isEnabled) return;
-    
+
     if (!this.metrics.has(name)) {
       this.metrics.set(name, []);
     }
-    
+
     this.metrics.get(name).push({
       value,
       timestamp: Date.now()
@@ -159,7 +159,7 @@ class PerformanceMonitor {
    */
   startTiming(name) {
     if (!this.isEnabled) return;
-    
+
     const startTime = performance.now();
     return {
       end: () => {
@@ -175,7 +175,7 @@ class PerformanceMonitor {
    */
   measureComponentRender(componentName, renderFn) {
     if (!this.isEnabled) return renderFn();
-    
+
     const timer = this.startTiming(`${componentName}_render`);
     const result = renderFn();
     timer.end();
@@ -187,23 +187,23 @@ class PerformanceMonitor {
    */
   measureImageLoad(imageUrl) {
     if (!this.isEnabled) return Promise.resolve();
-    
+
     return new Promise((resolve) => {
       const timer = this.startTiming('image_load');
       const img = new Image();
-      
+
       img.onload = () => {
         const loadTime = timer.end();
         this.recordMetric('image_load_success', loadTime);
         resolve({ success: true, loadTime });
       };
-      
+
       img.onerror = () => {
         const loadTime = timer.end();
         this.recordMetric('image_load_error', loadTime);
         resolve({ success: false, loadTime });
       };
-      
+
       img.src = imageUrl;
     });
   }
@@ -213,7 +213,7 @@ class PerformanceMonitor {
    */
   getPerformanceReport() {
     if (!this.isEnabled) return null;
-    
+
     const report = {
       timestamp: new Date().toISOString(),
       metrics: {},
@@ -236,7 +236,7 @@ class PerformanceMonitor {
 
     // Generate summary
     report.summary = this.generatePerformanceSummary(report.metrics);
-    
+
     return report;
   }
 
@@ -249,6 +249,12 @@ class PerformanceMonitor {
       issues: [],
       recommendations: []
     };
+
+    if (!metrics) {
+      summary.score = 0;
+      summary.issues.push('Performance metrics could not be collected.');
+      return summary;
+    }
 
     // Check Core Web Vitals
     if (metrics.LCP && metrics.LCP.latest > 2500) {
@@ -286,40 +292,48 @@ class PerformanceMonitor {
       }
     }
 
+    // Ensure score is not negative
+    summary.score = Math.max(0, summary.score);
     return summary;
   }
 
   /**
    * Log performance report to console
    */
-  logPerformanceReport() {
-    if (!this.isEnabled) return;
-    
-    const report = this.getPerformanceReport();
-    if (report) {
-      console.group('🚀 Performance Report');
-      console.log('Score:', report.summary.score + '/100');
-      
-      if (report.summary.issues.length > 0) {
-        console.group('⚠️ Issues');
-        report.summary.issues.forEach(issue => console.log('•', issue));
-        console.groupEnd();
-      }
-      
-      if (report.summary.recommendations.length > 0) {
-        console.group('💡 Recommendations');
-        report.summary.recommendations.forEach(rec => console.log('•', rec));
-        console.groupEnd();
-      }
-      
-      console.group('📊 Detailed Metrics');
-      Object.entries(report.metrics).forEach(([name, data]) => {
-        console.log(`${name}:`, `${data.latest.toFixed(2)}ms (avg: ${data.average.toFixed(2)}ms)`);
-      });
-      console.groupEnd();
-      
-      console.groupEnd();
+  logPerformanceReport(data) {
+    if (!data || !data.latest) {
+      console.warn("No latest performance data available.");
+      return;
     }
+
+    console.groupCollapsed('🚀 Performance Report');
+    console.log(`Score: ${data.score !== undefined ? `${data.score}/100` : 'N/A'}`);
+
+    if (data.recommendations && data.recommendations.length > 0) {
+      console.warn('⚠️ Recommendations');
+      data.recommendations.forEach(rec => console.warn(`  - ${rec}`));
+    }
+
+    console.group('📊 Detailed Metrics');
+    if (data.metrics) {
+      Object.entries(data.metrics).forEach(([key, value]) => {
+        if (value && typeof value.average === 'number') {
+          console.log(`${key}: ${value.average.toFixed(2)}ms`);
+        }
+      });
+    }
+    console.groupEnd();
+
+    console.group('📈 Latest Performance Entries');
+    // Check if data.metrics exists and has properties before trying to access them
+    if (data.metrics && data.metrics['Total Load Time'] && data.metrics['Total Load Time'].latest !== undefined) {
+      console.log(`Total Load Time: ${data.metrics['Total Load Time'].latest.toFixed(2)}ms`);
+    } else {
+      console.log('No performance entries recorded.');
+    }
+    console.groupEnd();
+
+    console.groupEnd();
   }
 
   /**
@@ -327,36 +341,36 @@ class PerformanceMonitor {
    */
   async testBundlePerformance() {
     if (!this.isEnabled) return;
-    
+
     const timer = this.startTiming('bundle_analysis');
-    
+
     try {
       // Analyze loaded scripts
       const scripts = Array.from(document.querySelectorAll('script[src]'));
       const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-      
+
       const bundleInfo = {
         scripts: scripts.length,
         stylesheets: stylesheets.length,
         totalResources: scripts.length + stylesheets.length
       };
-      
+
       // Check for code splitting
-      const hasCodeSplitting = scripts.some(script => 
+      const hasCodeSplitting = scripts.some(script =>
         script.src.includes('chunk') || script.src.includes('lazy')
       );
-      
+
       bundleInfo.hasCodeSplitting = hasCodeSplitting;
-      
+
       console.log('📦 Bundle Analysis:', bundleInfo);
-      
+
       if (!hasCodeSplitting) {
         console.warn('⚠️ No code splitting detected. Consider implementing lazy loading.');
       }
-      
+
       timer.end();
       return bundleInfo;
-      
+
     } catch (error) {
       console.error('Bundle analysis failed:', error);
       timer.end();
@@ -369,7 +383,7 @@ class PerformanceMonitor {
    */
   testBrowserCompatibility() {
     if (!this.isEnabled) return;
-    
+
     const features = {
       'Intersection Observer': 'IntersectionObserver' in window,
       'Service Worker': 'serviceWorker' in navigator,
@@ -381,7 +395,7 @@ class PerformanceMonitor {
       'ES6 Classes': (() => {
         try {
           // Check if class syntax is supported without eval
-          return typeof class {} === 'function';
+          return typeof class { } === 'function';
         } catch (e) {
           return false;
         }
@@ -393,13 +407,13 @@ class PerformanceMonitor {
         return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
       })()
     };
-    
+
     console.group('🌐 Browser Compatibility');
     Object.entries(features).forEach(([feature, supported]) => {
       console.log(`${supported ? '✅' : '❌'} ${feature}`);
     });
     console.groupEnd();
-    
+
     return features;
   }
 
@@ -408,11 +422,11 @@ class PerformanceMonitor {
    */
   testMobilePerformance() {
     if (!this.isEnabled) return;
-    
+
     const isMobile = window.innerWidth <= 768;
     const touchSupport = 'ontouchstart' in window;
     const devicePixelRatio = window.devicePixelRatio || 1;
-    
+
     const mobileMetrics = {
       isMobile,
       touchSupport,
@@ -431,20 +445,20 @@ class PerformanceMonitor {
         rtt: navigator.connection.rtt
       } : null
     };
-    
+
     console.group('📱 Mobile Performance');
     console.log('Device Info:', mobileMetrics);
-    
+
     if (isMobile && devicePixelRatio > 2) {
       console.warn('⚠️ High DPI mobile device detected. Ensure images are optimized.');
     }
-    
+
     if (mobileMetrics.connection && mobileMetrics.connection.effectiveType === '2g') {
       console.warn('⚠️ Slow connection detected. Consider data-saving optimizations.');
     }
-    
+
     console.groupEnd();
-    
+
     return mobileMetrics;
   }
 
@@ -453,9 +467,9 @@ class PerformanceMonitor {
    */
   async runPerformanceTest() {
     if (!this.isEnabled) return;
-    
+
     console.log('🧪 Running Performance Test Suite...');
-    
+
     const results = {
       timestamp: new Date().toISOString(),
       bundle: await this.testBundlePerformance(),
@@ -463,12 +477,12 @@ class PerformanceMonitor {
       mobile: this.testMobilePerformance(),
       metrics: this.getPerformanceReport()
     };
-    
+
     // Wait a bit for metrics to be collected
     setTimeout(() => {
-      this.logPerformanceReport();
+      this.logPerformanceReport(results);
     }, 2000);
-    
+
     return results;
   }
 

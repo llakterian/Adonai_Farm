@@ -9,10 +9,10 @@ export function arrayToCSV(data, headers) {
   }
 
   const csvRows = [];
-  
+
   // Add headers
   csvRows.push(headers.join(','));
-  
+
   // Add data rows
   data.forEach(item => {
     const row = headers.map(header => {
@@ -25,7 +25,7 @@ export function arrayToCSV(data, headers) {
     });
     csvRows.push(row.join(','));
   });
-  
+
   return csvRows.join('\n');
 }
 
@@ -40,7 +40,7 @@ export function csvToArray(csvString, expectedHeaders) {
 
   // Parse headers
   const headers = parseCSVRow(lines[0]);
-  
+
   // Validate headers
   const missingHeaders = expectedHeaders.filter(h => !headers.includes(h));
   if (missingHeaders.length > 0) {
@@ -70,10 +70,10 @@ function parseCSVRow(row) {
   const result = [];
   let current = '';
   let inQuotes = false;
-  
+
   for (let i = 0; i < row.length; i++) {
     const char = row[i];
-    
+
     if (char === '"') {
       if (inQuotes && row[i + 1] === '"') {
         // Escaped quote
@@ -91,10 +91,10 @@ function parseCSVRow(row) {
       current += char;
     }
   }
-  
+
   // Add the last field
   result.push(current);
-  
+
   return result;
 }
 
@@ -104,7 +104,7 @@ function parseCSVRow(row) {
 export function downloadCSV(csvContent, filename) {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
-  
+
   if (link.download !== undefined) {
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
@@ -184,13 +184,13 @@ export function importAnimalsCSV(csvString, existingAnimals) {
   const requiredHeaders = ['type', 'name', 'sex'];
   const optionalHeaders = ['dob', 'notes'];
   const allHeaders = [...requiredHeaders, ...optionalHeaders];
-  
+
   const importedData = csvToArray(csvString, requiredHeaders);
-  
+
   // Validate and process data
   const processedAnimals = importedData.map((item, index) => {
     const errors = [];
-    
+
     // Validate required fields
     if (!item.type || !item.type.trim()) {
       errors.push('Type is required');
@@ -201,7 +201,7 @@ export function importAnimalsCSV(csvString, existingAnimals) {
     if (!item.sex || !['M', 'F', 'Male', 'Female'].includes(item.sex)) {
       errors.push('Sex must be M, F, Male, or Female');
     }
-    
+
     // Validate date format if provided
     if (item.dob && item.dob.trim()) {
       const date = new Date(item.dob);
@@ -209,14 +209,14 @@ export function importAnimalsCSV(csvString, existingAnimals) {
         errors.push('Invalid date format for date of birth');
       }
     }
-    
+
     if (errors.length > 0) {
       throw new Error(`Row ${index + 2}: ${errors.join(', ')}`);
     }
-    
+
     // Generate new ID
     const maxId = Math.max(...existingAnimals.map(a => a.id), 0);
-    
+
     return {
       id: maxId + index + 1,
       type: item.type.trim(),
@@ -227,7 +227,7 @@ export function importAnimalsCSV(csvString, existingAnimals) {
       created_at: new Date().toISOString().split('T')[0]
     };
   });
-  
+
   return processedAnimals;
 }
 
@@ -236,14 +236,14 @@ export function importAnimalsCSV(csvString, existingAnimals) {
  */
 export function importWorkersCSV(csvString, existingWorkers) {
   const requiredHeaders = ['name', 'employee_id', 'role'];
-  const optionalHeaders = ['hourly_rate', 'phone'];
-  
+  const optionalHeaders = ['phone'];
+
   const importedData = csvToArray(csvString, requiredHeaders);
-  
+
   // Validate and process data
   const processedWorkers = importedData.map((item, index) => {
     const errors = [];
-    
+
     // Validate required fields
     if (!item.name || !item.name.trim()) {
       errors.push('Name is required');
@@ -254,38 +254,29 @@ export function importWorkersCSV(csvString, existingWorkers) {
     if (!item.role || !item.role.trim()) {
       errors.push('Role is required');
     }
-    
+
     // Check for duplicate employee ID
     const existingWorker = existingWorkers.find(w => w.employee_id === item.employee_id.trim());
     if (existingWorker) {
       errors.push(`Employee ID ${item.employee_id} already exists`);
     }
-    
-    // Validate hourly rate if provided
-    if (item.hourly_rate && item.hourly_rate.trim()) {
-      const rate = parseFloat(item.hourly_rate);
-      if (isNaN(rate) || rate < 0) {
-        errors.push('Hourly rate must be a positive number');
-      }
-    }
-    
+
     if (errors.length > 0) {
       throw new Error(`Row ${index + 2}: ${errors.join(', ')}`);
     }
-    
+
     // Generate new ID
     const maxId = Math.max(...existingWorkers.map(w => w.id), 0);
-    
+
     return {
       id: maxId + index + 1,
       name: item.name.trim(),
       employee_id: item.employee_id.trim(),
       role: item.role.trim(),
-      hourly_rate: item.hourly_rate ? parseFloat(item.hourly_rate) : 500,
       phone: item.phone ? item.phone.trim() : ''
     };
   });
-  
+
   return processedWorkers;
 }
 
@@ -298,17 +289,17 @@ export function validateCSVFile(file) {
       reject(new Error('No file selected'));
       return;
     }
-    
+
     if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
       reject(new Error('Please select a CSV file'));
       return;
     }
-    
+
     if (file.size > 5 * 1024 * 1024) { // 5MB limit
       reject(new Error('File size must be less than 5MB'));
       return;
     }
-    
+
     const reader = new FileReader();
     reader.onload = (e) => {
       resolve(e.target.result);

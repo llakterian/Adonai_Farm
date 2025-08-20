@@ -152,7 +152,7 @@ export function exportBackupFile(backup, filename = null) {
 
     const dataStr = JSON.stringify(backup, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    
+
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
@@ -208,7 +208,7 @@ export function validateBackupData(backup) {
     Object.entries(backup.data).forEach(([dataType, data]) => {
       if (VALIDATION_SCHEMAS[dataType] && Array.isArray(data)) {
         const schema = VALIDATION_SCHEMAS[dataType];
-        
+
         data.forEach((item, index) => {
           // Check required fields
           schema.required.forEach(field => {
@@ -362,7 +362,7 @@ export function importBackupFile(file) {
     }
 
     const reader = new FileReader();
-    
+
     reader.onload = (e) => {
       try {
         const backup = JSON.parse(e.target.result);

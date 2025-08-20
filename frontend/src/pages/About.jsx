@@ -4,7 +4,7 @@ import SEOHead from '../components/SEOHead.jsx';
 export default function About() {
   return (
     <>
-      <SEOHead 
+      <SEOHead
         pageType="about"
         title="About Adonai Farm - Our Story & Mission"
         description="Learn about Adonai Farm's journey from humble beginnings to becoming a leading livestock farm in Kericho, Kenya. Discover our mission, values, and commitment to sustainable farming with modern technology."
@@ -13,60 +13,44 @@ export default function About() {
           "sustainable farming Kenya",
           "livestock farm Kericho County",
           "modern farming technology Kenya",
-          "agricultural innovation East Africa",
-          "farm mission values",
-          "Chepsir Kericho farm",
-          "animal welfare farming"
+          "agricultural innovation East Africa"
         ]}
-        image="/images/farm-2.jpg"
+        image="/images/adonai1.jpg"
         url="/about"
         breadcrumbs={[
           { name: "Home", url: "/" },
           { name: "About", url: "/about" }
         ]}
       />
-      <div className="about-page">
-        {/* Hero Section */}
-        <section className="about-hero">
-          <div className="about-hero-content">
-            <h1>About Adonai Farm</h1>
-            <p className="hero-subtitle">
-              Dedicated to sustainable livestock farming with modern technology and traditional care
-            </p>
-          </div>
-        </section>
 
-        {/* Farm History Section */}
-        <section className="about-section">
-          <div className="container">
-            <div className="section-content">
-              <h2>Our Story</h2>
-              <div className="story-content">
-                <div className="story-text">
-                  <p>
-                    Adonai Farm was established with a vision to revolutionize livestock management 
-                    through the integration of modern technology and time-tested farming practices. 
-                    Located in the fertile highlands of Chepsir, Kericho, Kenya, our farm has grown 
-                    from humble beginnings to become a model of sustainable and efficient livestock farming.
-                  </p>
-                  <p>
-                    Our journey began with a simple belief: that technology can enhance, not replace, 
-                    the personal care and attention that livestock deserve. Today, we manage our animals 
-                    with precision tracking, health monitoring, and breeding optimization while maintaining 
-                    the highest standards of animal welfare.
-                  </p>
-                </div>
-                <div className="story-image">
-                  <img 
-                    src="/images/farm-2.jpg" 
-                    alt="Adonai Farm landscape" 
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'block';
-                    }}
-                  />
-                  <div className="image-placeholder" style={{display: 'none'}}>
-                    🌾 Farm Landscape
+      <div className="about-page">
+        {/* Hero Section with Parallax Effect */}
+        <section className="about-hero">
+          <div className="hero-background"></div>
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
+            <div className="container">
+              <div className="hero-text">
+                <span className="hero-badge">🌾 Est. 2020</span>
+                <h1 className="hero-title">
+                  The Story of <span className="highlight">Adonai Farm</span>
+                </h1>
+                <p className="hero-subtitle">
+                  Where tradition meets innovation in the heart of Kericho's fertile highlands.
+                  We're pioneering the future of sustainable livestock farming in Kenya.
+                </p>
+                <div className="hero-stats">
+                  <div className="stat">
+                    <span className="stat-number">100+</span>
+                    <span className="stat-label">Animals</span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-number">4+</span>
+                    <span className="stat-label">Years Experience</span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-number">24/7</span>
+                    <span className="stat-label">Care & Monitoring</span>
                   </div>
                 </div>
               </div>
@@ -74,164 +58,339 @@ export default function About() {
           </div>
         </section>
 
-        {/* Mission & Vision Section */}
-        <section className="about-section mission-section">
+        {/* Our Journey Timeline */}
+        <section className="journey-section">
           <div className="container">
-            <div className="mission-vision-grid">
-              <div className="mission-card">
-                <div className="card-icon">🎯</div>
-                <h3>Our Mission</h3>
-                <p>
-                  To provide high-quality livestock and agricultural products while pioneering 
-                  sustainable farming practices that benefit our community, environment, and 
-                  the future of agriculture in Kenya.
-                </p>
+            <div className="section-header">
+              <h2>🚀 Our Journey</h2>
+              <p>From vision to reality - the milestones that shaped Adonai Farm</p>
+            </div>
+
+            <div className="timeline">
+              <div className="timeline-item">
+                <div className="timeline-marker">🌱</div>
+                <div className="timeline-content">
+                  <h3>2020 - The Beginning</h3>
+                  <p>Started with a vision to revolutionize livestock farming in Kericho County using modern technology while respecting traditional farming wisdom.</p>
+                </div>
               </div>
-              <div className="vision-card">
-                <div className="card-icon">🌟</div>
-                <h3>Our Vision</h3>
-                <p>
-                  To be the leading example of technology-enhanced sustainable farming in East Africa, 
-                  demonstrating that modern innovation and traditional farming wisdom can work 
-                  together for exceptional results.
-                </p>
+
+              <div className="timeline-item">
+                <div className="timeline-marker">🏗️</div>
+                <div className="timeline-content">
+                  <h3>2021 - Infrastructure Development</h3>
+                  <p>Built modern livestock facilities with climate control, advanced water systems, and digital monitoring infrastructure.</p>
+                </div>
+              </div>
+
+              <div className="timeline-item">
+                <div className="timeline-marker">🐄</div>
+                <div className="timeline-content">
+                  <h3>2022 - Livestock Expansion</h3>
+                  <p>Expanded our herd with premium dairy cattle, goats, and sheep. Implemented comprehensive health monitoring and breeding programs.</p>
+                </div>
+              </div>
+
+              <div className="timeline-item">
+                <div className="timeline-marker">💻</div>
+                <div className="timeline-content">
+                  <h3>2023 - Digital Innovation</h3>
+                  <p>Launched our comprehensive farm management system, enabling precise tracking, health monitoring, and production optimization.</p>
+                </div>
+              </div>
+
+              <div className="timeline-item">
+                <div className="timeline-marker">🌟</div>
+                <div className="timeline-content">
+                  <h3>2024 - Community Impact</h3>
+                  <p>Opened our doors for educational tours, consulting services, and became a model farm for sustainable practices in East Africa.</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Values Section */}
-        <section className="about-section values-section">
+        {/* Mission & Vision Cards */}
+        <section className="mission-vision-section">
           <div className="container">
-            <h2>Our Core Values</h2>
-            <div className="values-grid">
-              <div className="value-item">
-                <div className="value-icon">🤝</div>
-                <h4>Integrity</h4>
-                <p>We operate with transparency and honesty in all our farming practices and business dealings.</p>
+            <div className="mission-vision-grid">
+              <div className="mission-card">
+                <div className="card-header">
+                  <div className="card-icon">🎯</div>
+                  <h3>Our Mission</h3>
+                </div>
+                <p>
+                  To revolutionize livestock farming in Kenya by combining cutting-edge technology
+                  with sustainable practices, ensuring the highest standards of animal welfare while
+                  maximizing productivity and environmental stewardship.
+                </p>
+                <div className="card-features">
+                  <span className="feature">🌱 Sustainable Practices</span>
+                  <span className="feature">💻 Modern Technology</span>
+                  <span className="feature">❤️ Animal Welfare</span>
+                </div>
               </div>
-              <div className="value-item">
-                <div className="value-icon">🌱</div>
-                <h4>Sustainability</h4>
-                <p>We are committed to farming practices that protect and enhance our environment for future generations.</p>
+
+              <div className="vision-card">
+                <div className="card-header">
+                  <div className="card-icon">🌟</div>
+                  <h3>Our Vision</h3>
+                </div>
+                <p>
+                  To be East Africa's leading example of technology-enhanced sustainable farming,
+                  inspiring a new generation of farmers and contributing to food security while
+                  preserving our environment for future generations.
+                </p>
+                <div className="card-features">
+                  <span className="feature">🏆 Industry Leadership</span>
+                  <span className="feature">🌍 Environmental Care</span>
+                  <span className="feature">📚 Knowledge Sharing</span>
+                </div>
               </div>
-              <div className="value-item">
-                <div className="value-icon">💡</div>
-                <h4>Innovation</h4>
-                <p>We embrace technology and modern methods to improve efficiency while maintaining quality.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* What Makes Us Special */}
+        <section className="special-section">
+          <div className="container">
+            <div className="section-header">
+              <h2>🌟 What Makes Us Special</h2>
+              <p>Discover the unique approach that sets Adonai Farm apart</p>
+            </div>
+
+            <div className="special-grid">
+              <div className="special-item">
+                <div className="special-icon">📱</div>
+                <h4>Digital Farm Management</h4>
+                <p>Our custom-built system tracks every aspect of farm operations, from individual animal health to production metrics and financial analysis.</p>
+                <div className="special-highlight">Real-time monitoring & analytics</div>
               </div>
-              <div className="value-item">
-                <div className="value-icon">❤️</div>
-                <h4>Animal Welfare</h4>
-                <p>The health and well-being of our livestock is our top priority in everything we do.</p>
+
+              <div className="special-item">
+                <div className="special-icon">🌿</div>
+                <h4>Sustainable Practices</h4>
+                <p>We implement eco-friendly farming methods that protect the environment while maintaining high productivity and animal welfare standards.</p>
+                <div className="special-highlight">Carbon-neutral operations</div>
               </div>
-              <div className="value-item">
-                <div className="value-icon">🏆</div>
-                <h4>Excellence</h4>
-                <p>We strive for the highest standards in all aspects of our farming operations.</p>
+
+              <div className="special-item">
+                <div className="special-icon">🎓</div>
+                <h4>Educational Hub</h4>
+                <p>We share our knowledge through farm tours, workshops, and consulting services, helping other farmers adopt modern practices.</p>
+                <div className="special-highlight">Knowledge transfer programs</div>
               </div>
-              <div className="value-item">
-                <div className="value-icon">🤲</div>
-                <h4>Community</h4>
-                <p>We believe in supporting our local community and sharing knowledge with fellow farmers.</p>
+
+              <div className="special-item">
+                <div className="special-icon">🏥</div>
+                <h4>Premium Animal Care</h4>
+                <p>Our livestock receive world-class veterinary care with preventive health programs, nutrition optimization, and stress-free environments.</p>
+                <div className="special-highlight">24/7 health monitoring</div>
+              </div>
+
+              <div className="special-item">
+                <div className="special-icon">🌾</div>
+                <h4>Quality Genetics</h4>
+                <p>We maintain superior breeding programs with carefully selected genetics to ensure healthy, productive livestock with excellent traits.</p>
+                <div className="special-highlight">Premium bloodlines</div>
+              </div>
+
+              <div className="special-item">
+                <div className="special-icon">🤝</div>
+                <h4>Community Partnership</h4>
+                <p>We actively support local farmers, provide employment opportunities, and contribute to the economic development of Kericho County.</p>
+                <div className="special-highlight">Local community support</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Farm Facilities Showcase */}
+        <section className="facilities-section">
+          <div className="container">
+            <div className="section-header">
+              <h2>🏗️ World-Class Facilities</h2>
+              <p>Tour our modern infrastructure designed for optimal animal welfare and productivity</p>
+            </div>
+
+            <div className="facilities-grid">
+              <div className="facility-card">
+                <div className="facility-image">
+                  <img
+                    src="/images/adonai2.jpg"
+                    alt="Modern livestock housing"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="image-placeholder" style={{ display: 'none' }}>
+                    🏠 Modern Housing
+                  </div>
+                </div>
+                <div className="facility-content">
+                  <h4>🏠 Climate-Controlled Housing</h4>
+                  <p>State-of-the-art livestock housing with automated climate control, ensuring optimal comfort year-round.</p>
+                  <ul>
+                    <li>Temperature & humidity control</li>
+                    <li>Advanced ventilation systems</li>
+                    <li>Comfortable bedding areas</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="facility-card">
+                <div className="facility-image">
+                  <img
+                    src="/images/adonai5.jpg"
+                    alt="Grazing pastures"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="image-placeholder" style={{ display: 'none' }}>
+                    🌾 Grazing Areas
+                  </div>
+                </div>
+                <div className="facility-content">
+                  <h4>🌾 Premium Grazing Areas</h4>
+                  <p>Extensive pastures with rotational grazing systems and nutrient-rich grass varieties for optimal nutrition.</p>
+                  <ul>
+                    <li>Rotational grazing systems</li>
+                    <li>Nutrient-rich pastures</li>
+                    <li>Natural water sources</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="facility-card">
+                <div className="facility-image">
+                  <img
+                    src="/images/adonai7.jpg"
+                    alt="Veterinary facilities"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="image-placeholder" style={{ display: 'none' }}>
+                    🏥 Vet Facilities
+                  </div>
+                </div>
+                <div className="facility-content">
+                  <h4>🏥 Veterinary Center</h4>
+                  <p>Fully equipped on-site veterinary facilities with quarantine areas and emergency care capabilities.</p>
+                  <ul>
+                    <li>Modern medical equipment</li>
+                    <li>Quarantine facilities</li>
+                    <li>Emergency care units</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Team Section */}
-        <section className="about-section team-section">
+        <section className="team-section">
           <div className="container">
-            <h2>Meet Our Team</h2>
-            <p className="section-intro">
-              Our dedicated team combines years of farming experience with modern agricultural expertise 
-              to ensure the best care for our livestock and the highest quality products for our customers.
-            </p>
+            <div className="section-header">
+              <h2>👥 Meet Our Expert Team</h2>
+              <p>The passionate professionals behind Adonai Farm's success</p>
+            </div>
+
             <div className="team-grid">
               <div className="team-member">
                 <div className="member-avatar">👨‍🌾</div>
-                <h4>Farm Management Team</h4>
-                <p className="member-role">Operations & Livestock Care</p>
-                <p>
-                  Our experienced farm managers oversee daily operations, ensuring optimal animal health, 
-                  nutrition, and breeding programs with decades of combined expertise.
-                </p>
+                <div className="member-info">
+                  <h4>Farm Operations Team</h4>
+                  <p className="member-role">Daily Operations & Animal Care</p>
+                  <p>Our experienced farm managers ensure optimal daily operations, from feeding schedules to health monitoring, with over 15 years of combined expertise in livestock management.</p>
+                  <div className="member-skills">
+                    <span className="skill">Animal Husbandry</span>
+                    <span className="skill">Nutrition Management</span>
+                    <span className="skill">Breeding Programs</span>
+                  </div>
+                </div>
               </div>
+
               <div className="team-member">
                 <div className="member-avatar">👩‍💻</div>
-                <h4>Technology Team</h4>
-                <p className="member-role">Systems & Data Management</p>
-                <p>
-                  Our tech specialists maintain our advanced farm management systems, ensuring accurate 
-                  tracking, reporting, and optimization of all farm operations.
-                </p>
+                <div className="member-info">
+                  <h4>Technology & Systems Team</h4>
+                  <p className="member-role">Digital Innovation & Data Management</p>
+                  <p>Our tech specialists maintain and develop our advanced farm management systems, ensuring seamless integration of technology with traditional farming practices.</p>
+                  <div className="member-skills">
+                    <span className="skill">Farm Management Systems</span>
+                    <span className="skill">Data Analytics</span>
+                    <span className="skill">IoT Integration</span>
+                  </div>
+                </div>
               </div>
+
               <div className="team-member">
                 <div className="member-avatar">👨‍⚕️</div>
-                <h4>Veterinary Partners</h4>
-                <p className="member-role">Animal Health & Wellness</p>
-                <p>
-                  We work closely with qualified veterinarians to maintain the highest standards of 
-                  animal health, preventive care, and breeding programs.
-                </p>
+                <div className="member-info">
+                  <h4>Veterinary Partners</h4>
+                  <p className="member-role">Animal Health & Wellness</p>
+                  <p>We collaborate with certified veterinarians who provide comprehensive health services, from routine check-ups to emergency care and breeding consultations.</p>
+                  <div className="member-skills">
+                    <span className="skill">Preventive Care</span>
+                    <span className="skill">Emergency Medicine</span>
+                    <span className="skill">Reproductive Health</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Location & Facilities Section */}
-        <section className="about-section location-section">
+        {/* Location & Contact CTA */}
+        <section className="location-cta-section">
           <div className="container">
-            <h2>Our Location & Facilities</h2>
-            <div className="location-content">
+            <div className="location-cta-content">
               <div className="location-info">
-                <h3>📍 Chepsir, Kericho, Kenya</h3>
+                <h2>📍 Visit Us in Kericho</h2>
                 <p>
-                  Strategically located in the fertile highlands of Kericho County, our farm benefits 
-                  from ideal climate conditions, rich soils, and abundant water resources that create 
-                  the perfect environment for livestock farming.
+                  Located in the beautiful highlands of Chepsir, Kericho County, our farm benefits
+                  from ideal climate conditions and rich soils perfect for livestock farming.
                 </p>
-                <div className="facility-features">
-                  <h4>Our Facilities Include:</h4>
-                  <ul>
-                    <li>🏠 Modern livestock housing with climate control</li>
-                    <li>🌾 Extensive grazing pastures and feed production areas</li>
-                    <li>💧 Advanced water management and irrigation systems</li>
-                    <li>🏥 On-site veterinary facilities and quarantine areas</li>
-                    <li>📊 Digital monitoring and management systems</li>
-                    <li>🚜 Modern farm equipment and machinery</li>
-                  </ul>
+                <div className="location-features">
+                  <div className="location-feature">
+                    <span className="feature-icon">🌡️</span>
+                    <span>Ideal Climate (18-25°C year-round)</span>
+                  </div>
+                  <div className="location-feature">
+                    <span className="feature-icon">💧</span>
+                    <span>Abundant Water Resources</span>
+                  </div>
+                  <div className="location-feature">
+                    <span className="feature-icon">🌱</span>
+                    <span>Fertile Highland Soils</span>
+                  </div>
+                  <div className="location-feature">
+                    <span className="feature-icon">🛣️</span>
+                    <span>Easy Access from Major Roads</span>
+                  </div>
                 </div>
               </div>
-              <div className="location-image">
-                <img 
-                  src="/images/farm-3.jpg" 
-                  alt="Farm facilities" 
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'block';
-                  }}
-                />
-                <div className="image-placeholder" style={{display: 'none'}}>
-                  🏗️ Farm Facilities
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Contact CTA Section */}
-        <section className="about-section cta-section">
-          <div className="container">
-            <div className="cta-content">
-              <h2>Ready to Learn More?</h2>
-              <p>
-                We'd love to share more about our farming practices, arrange a farm visit, 
-                or discuss how we can serve your livestock and agricultural needs.
-              </p>
-              <div className="cta-buttons">
-                <a href="/contact" className="btn btn-primary">Contact Us</a>
-                <a href="/services" className="btn btn-outline">Our Services</a>
+              <div className="cta-actions">
+                <h3>Ready to Experience Adonai Farm?</h3>
+                <p>Schedule a visit, learn about our services, or explore partnership opportunities.</p>
+                <div className="cta-buttons">
+                  <a href="/contact" className="btn btn-primary btn-large">
+                    📞 Contact Us
+                  </a>
+                  <a href="/services" className="btn btn-outline btn-large">
+                    🌾 Our Services
+                  </a>
+                </div>
+                <div className="contact-quick">
+                  <span>📞 +254 722 759 217</span>
+                  <span>📧 info@adonaifarm.co.ke</span>
+                </div>
               </div>
             </div>
           </div>

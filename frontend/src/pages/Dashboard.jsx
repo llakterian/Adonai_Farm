@@ -42,7 +42,7 @@ export default function Dashboard() {
   async function loadData() {
     try {
       setLoading(true);
-      
+
       // Load data from localStorage
       const savedAnimals = localStorage.getItem('adonai_animals');
       if (savedAnimals) {
@@ -71,7 +71,7 @@ export default function Dashboard() {
 
       // Calculate performance metrics
       calculatePerformanceMetrics();
-      
+
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
@@ -87,29 +87,29 @@ export default function Dashboard() {
     thisMonth.setMonth(thisMonth.getMonth() - 1);
 
     // Calculate today's metrics
-    const todayTimeEntries = timeEntries.filter(entry => 
+    const todayTimeEntries = timeEntries.filter(entry =>
       entry.clock_in && entry.clock_in.startsWith(today)
     );
 
-    const todayHours = todayTimeEntries.reduce((sum, entry) => 
+    const todayHours = todayTimeEntries.reduce((sum, entry) =>
       sum + (entry.hours_worked || 0), 0
     );
 
     // Calculate weekly metrics
-    const weeklyTimeEntries = timeEntries.filter(entry => 
+    const weeklyTimeEntries = timeEntries.filter(entry =>
       entry.clock_in && new Date(entry.clock_in) >= thisWeek
     );
 
-    const weeklyHours = weeklyTimeEntries.reduce((sum, entry) => 
+    const weeklyHours = weeklyTimeEntries.reduce((sum, entry) =>
       sum + (entry.hours_worked || 0), 0
     );
 
     // Calculate infrastructure utilization
-    const activeInfrastructure = infrastructure.filter(item => 
+    const activeInfrastructure = infrastructure.filter(item =>
       item.status === 'Active'
     ).length;
 
-    const totalInfrastructureValue = infrastructure.reduce((sum, item) => 
+    const totalInfrastructureValue = infrastructure.reduce((sum, item) =>
       sum + (item.current_value || item.value || 0), 0
     );
 
@@ -117,10 +117,10 @@ export default function Dashboard() {
       todayHours: todayHours.toFixed(1),
       weeklyHours: weeklyHours.toFixed(1),
       activeWorkers: todayTimeEntries.length,
-      infrastructureUtilization: infrastructure.length > 0 ? 
+      infrastructureUtilization: infrastructure.length > 0 ?
         ((activeInfrastructure / infrastructure.length) * 100).toFixed(1) : 0,
       totalAssetValue: totalInfrastructureValue,
-      animalsThisMonth: animals.filter(animal => 
+      animalsThisMonth: animals.filter(animal =>
         animal.created_at && new Date(animal.created_at) >= thisMonth
       ).length
     });
@@ -217,7 +217,7 @@ export default function Dashboard() {
   return (
     <div className="admin-container">
       {/* Hero Welcome Section with Live Time & Weather */}
-      <div className="card" style={{ 
+      <div className="card" style={{
         background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
         color: 'white',
         textAlign: 'center',
@@ -225,12 +225,12 @@ export default function Dashboard() {
         position: 'relative',
         overflow: 'hidden'
       }}>
-        <div style={{ 
-          position: 'absolute', 
-          top: '1rem', 
-          right: '1rem', 
-          background: 'rgba(255,255,255,0.2)', 
-          padding: '0.5rem 1rem', 
+        <div style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem',
+          background: 'rgba(255,255,255,0.2)',
+          padding: '0.5rem 1rem',
           borderRadius: '20px',
           backdropFilter: 'blur(10px)'
         }}>
@@ -238,13 +238,13 @@ export default function Dashboard() {
           <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>{weather.status}</div>
           <div style={{ fontSize: '0.8rem', color: 'var(--accent-gold)' }}>{weather.temp}</div>
         </div>
-        
-        <div style={{ 
-          position: 'absolute', 
-          top: '1rem', 
-          left: '1rem', 
-          background: 'rgba(255,255,255,0.2)', 
-          padding: '0.5rem 1rem', 
+
+        <div style={{
+          position: 'absolute',
+          top: '1rem',
+          left: '1rem',
+          background: 'rgba(255,255,255,0.2)',
+          padding: '0.5rem 1rem',
           borderRadius: '20px',
           backdropFilter: 'blur(10px)'
         }}>
@@ -257,9 +257,9 @@ export default function Dashboard() {
         </div>
 
         <div style={{ padding: '2rem 0' }}>
-          <h1 style={{ 
-            color: 'var(--accent-gold)', 
-            marginBottom: '1rem', 
+          <h1 style={{
+            color: 'var(--accent-gold)',
+            marginBottom: '1rem',
             fontSize: '3rem',
             textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
           }}>
@@ -273,10 +273,10 @@ export default function Dashboard() {
               Welcome back, {user.name}!
             </p>
           )}
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: '2rem', 
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '2rem',
             marginTop: '1.5rem',
             flexWrap: 'wrap'
           }}>
@@ -306,7 +306,7 @@ export default function Dashboard() {
 
       {/* Role-Specific Performance Metrics */}
       {isAdmin() && (
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
           color: 'white',
           marginBottom: '2rem'
@@ -337,7 +337,7 @@ export default function Dashboard() {
 
       {/* Supervisor Performance Metrics */}
       {isSupervisor() && (
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, var(--light-green) 0%, var(--accent-gold) 100%)',
           color: 'white',
           marginBottom: '2rem'
@@ -368,7 +368,7 @@ export default function Dashboard() {
 
       {/* Worker Personal Dashboard */}
       {isWorker() && (
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, var(--accent-gold) 0%, var(--warm-brown) 100%)',
           color: 'white',
           marginBottom: '2rem'
@@ -399,7 +399,7 @@ export default function Dashboard() {
 
       {/* Notification Summary Widget */}
       {notifications.length > 0 && (
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
           color: 'white',
           marginBottom: '2rem'
@@ -408,10 +408,10 @@ export default function Dashboard() {
             <h2 style={{ color: 'white', margin: 0 }}>
               🔔 Recent Notifications
             </h2>
-            <Link 
-              to="/notifications" 
-              style={{ 
-                color: 'white', 
+            <Link
+              to="/notifications"
+              style={{
+                color: 'white',
                 textDecoration: 'none',
                 background: 'rgba(255,255,255,0.2)',
                 padding: '0.5rem 1rem',
@@ -424,7 +424,7 @@ export default function Dashboard() {
           </div>
           <div style={{ display: 'grid', gap: '0.5rem' }}>
             {notifications.map(notification => (
-              <div 
+              <div
                 key={notification.id}
                 style={{
                   background: 'rgba(255,255,255,0.1)',
@@ -437,8 +437,8 @@ export default function Dashboard() {
               >
                 <div style={{ fontSize: '1.2rem' }}>
                   {notification.type === 'maintenance' ? '🔧' :
-                   notification.type === 'event' ? '📅' :
-                   notification.type === 'system' ? '⚙️' : '⏰'}
+                    notification.type === 'event' ? '📅' :
+                      notification.type === 'system' ? '⚙️' : '⏰'}
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>
@@ -448,15 +448,15 @@ export default function Dashboard() {
                     {notification.message}
                   </div>
                 </div>
-                <div style={{ 
-                  fontSize: '0.7rem', 
+                <div style={{
+                  fontSize: '0.7rem',
                   opacity: 0.8,
                   background: 'rgba(255,255,255,0.2)',
                   padding: '0.25rem 0.5rem',
                   borderRadius: '10px'
                 }}>
                   {notification.priority === 'critical' ? '🚨' :
-                   notification.priority === 'high' ? '⚠️' : '📋'}
+                    notification.priority === 'high' ? '⚠️' : '📋'}
                 </div>
               </div>
             ))}
@@ -466,7 +466,7 @@ export default function Dashboard() {
 
       {/* Quick Navigation - Admin Only */}
       {(isAdmin() || isSupervisor()) && (
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
           color: 'white',
           marginBottom: '2rem'
@@ -474,18 +474,18 @@ export default function Dashboard() {
           <h2 style={{ color: 'var(--accent-gold)', marginBottom: '1.5rem' }}>
             🚀 Quick Actions
           </h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '1rem' 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem'
           }}>
-            <Link 
-              to="/dashboard/contact" 
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                padding: '1rem', 
-                borderRadius: '8px', 
-                textDecoration: 'none', 
+            <Link
+              to="/dashboard/contact"
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
+                textDecoration: 'none',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
@@ -508,13 +508,13 @@ export default function Dashboard() {
                 <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage customer messages</div>
               </div>
             </Link>
-            <Link 
-              to="/dashboard/public-content" 
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                padding: '1rem', 
-                borderRadius: '8px', 
-                textDecoration: 'none', 
+            <Link
+              to="/dashboard/public-content"
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
+                textDecoration: 'none',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
@@ -537,13 +537,13 @@ export default function Dashboard() {
                 <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage public content</div>
               </div>
             </Link>
-            <Link 
-              to="/dashboard/animals" 
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                padding: '1rem', 
-                borderRadius: '8px', 
-                textDecoration: 'none', 
+            <Link
+              to="/dashboard/animals"
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
+                textDecoration: 'none',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
@@ -566,13 +566,13 @@ export default function Dashboard() {
                 <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>View and manage livestock</div>
               </div>
             </Link>
-            <Link 
-              to="/dashboard/workers" 
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                padding: '1rem', 
-                borderRadius: '8px', 
-                textDecoration: 'none', 
+            <Link
+              to="/dashboard/workers"
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
+                textDecoration: 'none',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
@@ -595,13 +595,13 @@ export default function Dashboard() {
                 <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage staff and time</div>
               </div>
             </Link>
-            <Link 
-              to="/dashboard/reports" 
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                padding: '1rem', 
-                borderRadius: '8px', 
-                textDecoration: 'none', 
+            <Link
+              to="/dashboard/reports"
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
+                textDecoration: 'none',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
@@ -624,12 +624,12 @@ export default function Dashboard() {
                 <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>View farm reports</div>
               </div>
             </Link>
-            <button 
+            <button
               onClick={() => setShowImageTest(true)}
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                padding: '1rem', 
-                borderRadius: '8px', 
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
                 border: 'none',
                 color: 'white',
                 display: 'flex',
@@ -654,12 +654,12 @@ export default function Dashboard() {
                 <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Test deployment images</div>
               </div>
             </button>
-            <button 
+            <button
               onClick={() => setShowSecurityTest(true)}
-              style={{ 
-                background: 'rgba(255,255,255,0.1)', 
-                padding: '1rem', 
-                borderRadius: '8px', 
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                padding: '1rem',
+                borderRadius: '8px',
                 border: 'none',
                 color: 'white',
                 display: 'flex',
@@ -712,7 +712,7 @@ export default function Dashboard() {
       {(isAdmin() || isSupervisor()) && (
         <>
           {/* Farm Overview KPIs */}
-          <div className="card" style={{ 
+          <div className="card" style={{
             background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
             color: 'white',
             marginBottom: '2rem'
@@ -735,13 +735,13 @@ export default function Dashboard() {
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
                       <XAxis dataKey="month" stroke="white" />
                       <YAxis stroke="white" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(0,0,0,0.8)', 
-                          border: 'none', 
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(0,0,0,0.8)',
+                          border: 'none',
                           borderRadius: '8px',
                           color: 'white'
-                        }} 
+                        }}
                       />
                       <Legend />
                       <Line type="monotone" dataKey="animals" stroke="var(--accent-gold)" strokeWidth={3} name="Animals" />
@@ -768,13 +768,13 @@ export default function Dashboard() {
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
                       <XAxis dataKey="day" stroke="white" />
                       <YAxis stroke="white" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(0,0,0,0.8)', 
-                          border: 'none', 
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(0,0,0,0.8)',
+                          border: 'none',
                           borderRadius: '8px',
                           color: 'white'
-                        }} 
+                        }}
                       />
                       <Legend />
                       <Area type="monotone" dataKey="productivity" stackId="1" stroke="var(--accent-gold)" fill="var(--accent-gold)" fillOpacity={0.6} name="Productivity %" />
@@ -890,7 +890,7 @@ export default function Dashboard() {
       {/* Farm Assets Overview */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
         {/* Vehicles Section */}
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, #8b4513 0%, #a0522d 100%)',
           color: 'white'
         }}>
@@ -899,9 +899,9 @@ export default function Dashboard() {
           </h3>
           <div style={{ display: 'grid', gap: '1rem' }}>
             {Object.entries(farmAssets.vehicles).map(([vehicle, count]) => (
-              <div key={vehicle} style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
+              <div key={vehicle} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 background: 'rgba(255,255,255,0.1)',
                 padding: '0.75rem',
@@ -910,15 +910,15 @@ export default function Dashboard() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span style={{ fontSize: '1.5rem' }}>
-                    {vehicle.includes('Tractor') ? '🚜' : 
-                     vehicle.includes('Pickup') ? '🛻' : '🚛'}
+                    {vehicle.includes('Tractor') ? '🚜' :
+                      vehicle.includes('Pickup') ? '🛻' : '🚛'}
                   </span>
                   <span style={{ fontWeight: '500' }}>{vehicle}</span>
                 </div>
-                <div style={{ 
-                  background: 'var(--accent-gold)', 
-                  color: 'var(--primary-green)', 
-                  padding: '0.25rem 0.75rem', 
+                <div style={{
+                  background: 'var(--accent-gold)',
+                  color: 'var(--primary-green)',
+                  padding: '0.25rem 0.75rem',
                   borderRadius: '15px',
                   fontWeight: 'bold'
                 }}>
@@ -930,7 +930,7 @@ export default function Dashboard() {
         </div>
 
         {/* Staff Section */}
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, var(--light-green) 0%, #6b8e23 100%)',
           color: 'white'
         }}>
@@ -939,9 +939,9 @@ export default function Dashboard() {
           </h3>
           <div style={{ display: 'grid', gap: '1rem' }}>
             {Object.entries(farmAssets.staff).map(([role, count]) => (
-              <div key={role} style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
+              <div key={role} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 background: 'rgba(255,255,255,0.1)',
                 padding: '0.75rem',
@@ -950,16 +950,16 @@ export default function Dashboard() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span style={{ fontSize: '1.5rem' }}>
-                    {role.includes('Worker') ? '👷' : 
-                     role.includes('Driver') ? '🚗' : 
-                     role.includes('Milkmen') ? '🥛' : '👨‍💼'}
+                    {role.includes('Worker') ? '👷' :
+                      role.includes('Driver') ? '🚗' :
+                        role.includes('Milkmen') ? '🥛' : '👨‍💼'}
                   </span>
                   <span style={{ fontWeight: '500' }}>{role}</span>
                 </div>
-                <div style={{ 
-                  background: 'var(--accent-gold)', 
-                  color: 'var(--primary-green)', 
-                  padding: '0.25rem 0.75rem', 
+                <div style={{
+                  background: 'var(--accent-gold)',
+                  color: 'var(--primary-green)',
+                  padding: '0.25rem 0.75rem',
                   borderRadius: '15px',
                   fontWeight: 'bold'
                 }}>
@@ -971,7 +971,7 @@ export default function Dashboard() {
         </div>
 
         {/* Crops & Land Section */}
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, #556b2f 0%, #6b8e23 100%)',
           color: 'white'
         }}>
@@ -980,9 +980,9 @@ export default function Dashboard() {
           </h3>
           <div style={{ display: 'grid', gap: '1rem' }}>
             {Object.entries(farmAssets.crops).map(([crop, area]) => (
-              <div key={crop} style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
+              <div key={crop} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 background: 'rgba(255,255,255,0.1)',
                 padding: '0.75rem',
@@ -991,15 +991,15 @@ export default function Dashboard() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span style={{ fontSize: '1.5rem' }}>
-                    {crop.includes('Tea') ? '🍃' : 
-                     crop.includes('Pasture') ? '🌾' : '🌿'}
+                    {crop.includes('Tea') ? '🍃' :
+                      crop.includes('Pasture') ? '🌾' : '🌿'}
                   </span>
                   <span style={{ fontWeight: '500' }}>{crop}</span>
                 </div>
-                <div style={{ 
-                  background: 'var(--accent-gold)', 
-                  color: 'var(--primary-green)', 
-                  padding: '0.25rem 0.75rem', 
+                <div style={{
+                  background: 'var(--accent-gold)',
+                  color: 'var(--primary-green)',
+                  padding: '0.25rem 0.75rem',
                   borderRadius: '15px',
                   fontWeight: 'bold',
                   fontSize: '0.9rem'
@@ -1012,7 +1012,7 @@ export default function Dashboard() {
         </div>
 
         {/* Infrastructure Section */}
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--warm-brown) 100%)',
           color: 'white'
         }}>
@@ -1021,9 +1021,9 @@ export default function Dashboard() {
           </h3>
           <div style={{ display: 'grid', gap: '1rem' }}>
             {Object.entries(farmAssets.infrastructure).map(([facility, count]) => (
-              <div key={facility} style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
+              <div key={facility} style={{
+                display: 'flex',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 background: 'rgba(255,255,255,0.1)',
                 padding: '0.75rem',
@@ -1032,16 +1032,16 @@ export default function Dashboard() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span style={{ fontSize: '1.5rem' }}>
-                    {facility.includes('Milking') ? '🥛' : 
-                     facility.includes('Barn') ? '🏚️' : 
-                     facility.includes('Feed') ? '🌾' : '💧'}
+                    {facility.includes('Milking') ? '🥛' :
+                      facility.includes('Barn') ? '🏚️' :
+                        facility.includes('Feed') ? '🌾' : '💧'}
                   </span>
                   <span style={{ fontWeight: '500' }}>{facility}</span>
                 </div>
-                <div style={{ 
-                  background: 'var(--accent-gold)', 
-                  color: 'var(--primary-green)', 
-                  padding: '0.25rem 0.75rem', 
+                <div style={{
+                  background: 'var(--accent-gold)',
+                  color: 'var(--primary-green)',
+                  padding: '0.25rem 0.75rem',
                   borderRadius: '15px',
                   fontWeight: 'bold'
                 }}>
@@ -1054,7 +1054,7 @@ export default function Dashboard() {
       </div>
 
       {/* Farm Operations Status */}
-      <div className="card" style={{ 
+      <div className="card" style={{
         background: 'linear-gradient(135deg, var(--accent-gold) 0%, #f4d03f 100%)',
         color: 'var(--primary-green)',
         marginBottom: '2rem'
@@ -1098,10 +1098,10 @@ export default function Dashboard() {
                 <div className="animal-header">
                   <div>
                     <div className="animal-name" style={{ fontSize: '1.1rem' }}>
-                      {animal.type === 'Dairy Cattle' ? '🐄' : 
-                       animal.type === 'Beef Cattle' ? '🐂' :
-                       animal.type.includes('Goat') ? '🐐' :
-                       animal.type.includes('Sheep') ? '🐑' : '🐔'} {animal.name}
+                      {animal.type === 'Dairy Cattle' ? '🐄' :
+                        animal.type === 'Beef Cattle' ? '🐂' :
+                          animal.type.includes('Goat') ? '🐐' :
+                            animal.type.includes('Sheep') ? '🐑' : '🐔'} {animal.name}
                     </div>
                     <div className="animal-type">{animal.type}</div>
                   </div>
@@ -1132,8 +1132,8 @@ export default function Dashboard() {
           <div className="gallery-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
             {photos.slice(0, 6).map(photo => (
               <div key={photo.id} className="gallery-item">
-                <img 
-                  src={`http://localhost:4000${photo.path}`} 
+                <img
+                  src={`http://localhost:4000${photo.path}`}
                   alt={photo.filename}
                   style={{ width: '100%', height: '150px', objectFit: 'cover' }}
                 />
@@ -1149,15 +1149,53 @@ export default function Dashboard() {
           🌾 Our Beautiful Farm
         </h3>
         <div className="gallery-grid">
-          <div className="gallery-item">
-            <img src="/images/farm-2.jpg" alt="Farm View 1" />
-          </div>
-          <div className="gallery-item">
-            <img src="/images/farm-3.jpg" alt="Farm View 2" />
-          </div>
-          <div className="gallery-item">
-            <img src="/images/farm-4.jpg" alt="Farm View 3" />
-          </div>
+          {[
+            { src: '/images/adonai1.jpg', alt: 'Dairy Cattle at Adonai Farm', icon: '🐄', label: 'Dairy Cattle', color: 'var(--sage-green)' },
+            { src: '/images/adonai2.jpg', alt: 'Beef Cattle at Adonai Farm', icon: '🐂', label: 'Beef Cattle', color: 'var(--earth-taupe)' },
+            { src: '/images/adonai3.jpg', alt: 'Goats at Adonai Farm', icon: '🐐', label: 'Farm Goats', color: 'var(--olive-green)' },
+            { src: '/images/adonai4.jpg', alt: 'Sheep at Adonai Farm', icon: '🐑', label: 'Prize Sheep', color: 'var(--moss-green)' },
+            { src: '/images/adonai5.jpg', alt: 'Poultry at Adonai Farm', icon: '🐔', label: 'Free-Range Poultry', color: 'var(--wheat-gold)' },
+            { src: '/images/adonai6.jpg', alt: 'Farm Facilities', icon: '🏡', label: 'Farm Facilities', color: 'var(--forest-green)' }
+          ].map((image, index) => (
+            <div key={index} className="gallery-item">
+              <img
+                src={image.src}
+                alt={image.alt}
+                style={{
+                  width: '100%',
+                  height: '200px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  transition: 'transform 0.3s ease'
+                }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+                onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+                onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+              />
+              <div
+                className="image-placeholder"
+                style={{
+                  display: 'none',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  height: '200px',
+                  background: image.color,
+                  color: 'white',
+                  borderRadius: '8px',
+                  fontSize: '1.2rem',
+                  fontWeight: '600',
+                  gap: '0.5rem'
+                }}
+              >
+                <span style={{ fontSize: '2rem' }}>{image.icon}</span>
+                <span>{image.label}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

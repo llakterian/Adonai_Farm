@@ -17,7 +17,7 @@ class IntegrationTestSuite {
     const timestamp = new Date().toISOString();
     const logMessage = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
     console.log(logMessage);
-    
+
     if (type === 'error') {
       this.errors.push(message);
     } else if (type === 'warning') {
@@ -43,26 +43,26 @@ class IntegrationTestSuite {
   async testRoutingStructure() {
     const appPath = 'frontend/src/App.jsx';
     const routeProtectionPath = 'frontend/src/components/RouteProtection.jsx';
-    
+
     if (!fs.existsSync(appPath)) {
       throw new Error('App.jsx not found');
     }
-    
+
     if (!fs.existsSync(routeProtectionPath)) {
       throw new Error('RouteProtection.jsx not found');
     }
 
     const appContent = fs.readFileSync(appPath, 'utf8');
-    
+
     // Check for public routes
     const publicRoutes = ['/', '/about', '/services', '/contact', '/gallery', '/animals'];
     const adminRoutes = ['/dashboard', '/login', '/admin'];
-    
-    const missingPublicRoutes = publicRoutes.filter(route => 
+
+    const missingPublicRoutes = publicRoutes.filter(route =>
       !appContent.includes(`path="${route}"`)
     );
-    
-    const missingAdminRoutes = adminRoutes.filter(route => 
+
+    const missingAdminRoutes = adminRoutes.filter(route =>
       !appContent.includes(`path="${route}"`) && route !== '/admin' // /admin redirects to /login
     );
 
@@ -130,29 +130,29 @@ class IntegrationTestSuite {
   // Test 3: Verify image service and gallery functionality
   async testImageServiceIntegration() {
     const imageServicePath = 'frontend/src/services/ImageService.js';
-    const uploadsPath = 'backend/uploads/Adonai';
-    
+    const imagesPath = 'backend/images/Adonai';
+
     if (!fs.existsSync(imageServicePath)) {
       throw new Error('ImageService.js not found');
     }
 
-    if (!fs.existsSync(uploadsPath)) {
-      throw new Error('Uploads directory not found');
+    if (!fs.existsSync(imagesPath)) {
+      throw new Error('images directory not found');
     }
 
     // Check for expected farm images
     const expectedImages = [
-      'farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg', 
+      'farm-1.jpg', 'farm-2.jpg', 'farm-3.jpg', 'farm-4.jpg',
       'farm-5.jpg', 'farm-6.jpg', 'farm-7.jpg'
     ];
-    
+
     const expectedAnimalImages = [
       'adonai1.jpg', 'adonai2.jpg', 'adonai3.jpg', 'adonai4.jpg',
       'adonai5.jpg', 'adonai6.jpg', 'adonai7.jpg', 'adonai8.jpg',
       'adonai9.jpg', 'adonaix.jpg', 'adonaixi.jpg', 'adonaixii.jpg', 'adonaixiii.jpg'
     ];
 
-    const uploadedFiles = fs.readdirSync(uploadsPath);
+    const uploadedFiles = fs.readdirSync(imagesPath);
     const missingFarmImages = expectedImages.filter(img => !uploadedFiles.includes(img));
     const missingAnimalImages = expectedAnimalImages.filter(img => !uploadedFiles.includes(img));
 
@@ -167,7 +167,7 @@ class IntegrationTestSuite {
     // Check ImageService implementation
     const imageServiceContent = fs.readFileSync(imageServicePath, 'utf8');
     const requiredMethods = ['getPublicImages', 'getImageUrl', 'getImagesByCategory'];
-    const missingMethods = requiredMethods.filter(method => 
+    const missingMethods = requiredMethods.filter(method =>
       !imageServiceContent.includes(method)
     );
 
@@ -187,7 +187,7 @@ class IntegrationTestSuite {
   async testContactFormIntegration() {
     const contactPagePath = 'frontend/src/pages/Contact.jsx';
     const contactManagementPath = 'frontend/src/pages/ContactManagement.jsx';
-    
+
     if (!fs.existsSync(contactPagePath)) {
       throw new Error('Contact.jsx not found');
     }
@@ -201,7 +201,7 @@ class IntegrationTestSuite {
 
     // Check for form elements
     const requiredFormElements = ['name', 'email', 'subject', 'message'];
-    const missingFormElements = requiredFormElements.filter(element => 
+    const missingFormElements = requiredFormElements.filter(element =>
       !contactContent.toLowerCase().includes(element)
     );
 
@@ -243,7 +243,7 @@ class IntegrationTestSuite {
     // Check SEO implementation
     const seoContent = fs.readFileSync(seoHeadPath, 'utf8');
     const requiredMetaTags = ['title', 'description', 'og:title', 'og:description'];
-    const missingMetaTags = requiredMetaTags.filter(tag => 
+    const missingMetaTags = requiredMetaTags.filter(tag =>
       !seoContent.includes(tag)
     );
 
@@ -269,7 +269,7 @@ class IntegrationTestSuite {
     }
 
     const stylesContent = fs.readFileSync(stylesPath, 'utf8');
-    
+
     // Check for responsive design patterns
     const responsivePatterns = [
       '@media',
@@ -279,7 +279,7 @@ class IntegrationTestSuite {
       'grid'
     ];
 
-    const responsiveFeatures = responsivePatterns.filter(pattern => 
+    const responsiveFeatures = responsivePatterns.filter(pattern =>
       stylesContent.includes(pattern)
     );
 
@@ -311,7 +311,7 @@ class IntegrationTestSuite {
     }
 
     const authContent = fs.readFileSync(authPath, 'utf8');
-    
+
     // Check for security functions
     const securityFunctions = [
       'isAuthenticated',
@@ -320,7 +320,7 @@ class IntegrationTestSuite {
       'refreshSession'
     ];
 
-    const missingFunctions = securityFunctions.filter(func => 
+    const missingFunctions = securityFunctions.filter(func =>
       !authContent.includes(func)
     );
 
@@ -359,7 +359,7 @@ class IntegrationTestSuite {
     if (fs.existsSync(frontendPackagePath)) {
       const packageContent = JSON.parse(fs.readFileSync(frontendPackagePath, 'utf8'));
       const requiredScripts = ['build', 'dev', 'preview'];
-      const missingScripts = requiredScripts.filter(script => 
+      const missingScripts = requiredScripts.filter(script =>
         !packageContent.scripts || !packageContent.scripts[script]
       );
 
@@ -493,10 +493,10 @@ class IntegrationTestSuite {
     // Deployment readiness assessment
     console.log('\n🚀 Deployment Readiness Assessment');
     console.log('===================================');
-    
+
     const criticalTests = ['Routing Structure', 'Component Existence', 'Security Implementation'];
     const criticalFailures = failedTests.filter(test => criticalTests.includes(test.name));
-    
+
     if (criticalFailures.length === 0 && failedTests.length <= 2) {
       console.log('✅ READY FOR DEPLOYMENT');
       console.log('   All critical systems are functional.');

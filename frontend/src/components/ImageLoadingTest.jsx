@@ -30,7 +30,7 @@ const ImageLoadingTest = ({ onClose }) => {
     // Test images to verify
     const testImages = [
       'adonai1.jpg',
-      'adonai2.jpg', 
+      'adonai2.jpg',
       'farm-1.jpg',
       'farm-2.jpg',
       'nonexistent.jpg' // This should fail and test fallbacks
@@ -147,7 +147,7 @@ const ImageLoadingTest = ({ onClose }) => {
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
           <h2>🔍 Image Loading Test</h2>
-          <button 
+          <button
             onClick={onClose}
             style={{
               background: '#f44336',
@@ -211,9 +211,9 @@ const ImageLoadingTest = ({ onClose }) => {
                     border: `2px solid ${getStatusColor(result.status)}`,
                     borderRadius: '4px',
                     padding: '15px',
-                    backgroundColor: result.status === 'success' ? '#f8fff8' : 
-                                   result.status === 'fallback-success' ? '#fff8f0' :
-                                   result.status === 'failed' ? '#fff8f8' : '#f8f8ff'
+                    backgroundColor: result.status === 'success' ? '#f8fff8' :
+                      result.status === 'fallback-success' ? '#fff8f0' :
+                        result.status === 'failed' ? '#fff8f8' : '#f8f8ff'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
@@ -221,15 +221,15 @@ const ImageLoadingTest = ({ onClose }) => {
                       {getStatusIcon(result.status)}
                     </span>
                     <strong>{result.filename}</strong>
-                    <span style={{ 
-                      marginLeft: 'auto', 
+                    <span style={{
+                      marginLeft: 'auto',
                       color: getStatusColor(result.status),
                       fontWeight: 'bold'
                     }}>
                       {result.status.toUpperCase()}
                     </span>
                   </div>
-                  
+
                   <div style={{ fontSize: '14px', color: '#666' }}>
                     <div><strong>Primary URL:</strong> {result.primaryUrl}</div>
                     <div><strong>Fallback URL:</strong> {result.fallbackUrl}</div>
@@ -244,12 +244,12 @@ const ImageLoadingTest = ({ onClose }) => {
                   {/* Show actual image if it loaded */}
                   {result.status === 'success' && (
                     <div style={{ marginTop: '10px' }}>
-                      <img 
-                        src={result.primaryUrl} 
+                      <img
+                        src={result.primaryUrl}
                         alt={result.filename}
-                        style={{ 
-                          maxWidth: '100px', 
-                          maxHeight: '100px', 
+                        style={{
+                          maxWidth: '100px',
+                          maxHeight: '100px',
                           objectFit: 'cover',
                           borderRadius: '4px'
                         }}
@@ -278,8 +278,8 @@ const ImageLoadingTest = ({ onClose }) => {
             <li><strong>Error (🚫):</strong> Network or other error occurred</li>
           </ul>
           <p style={{ margin: '10px 0 0 0' }}>
-            <strong>Tip:</strong> If images are failing, check that the build script copied images to /uploads/Adonai/ 
-            and that your Netlify deployment includes the uploads directory.
+            <strong>Tip:</strong> If images are failing, check that the build script copied images to /images/Adonai/
+            and that your Netlify deployment includes the images directory.
           </p>
         </div>
       </div>

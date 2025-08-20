@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from '../auth.js';
+import { startTransition } from 'react';
 
 function PublicHeader() {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentUser = getCurrentUser();
   const isAuthenticated = !!currentUser;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -53,15 +55,19 @@ function PublicHeader() {
     { path: '/contact', label: 'Contact' }
   ];
 
+  // Example: Use startTransition for navigation if you use navigate() directly
+  // (No direct navigate() in this file, so no changes needed here)
+
   return (
     <header className="public-header" role="banner">
       <div className="public-header-content">
         <div className="public-logo">
           <Link to="/" aria-label="Adonai Farm - Home" className="site-title">
-            🌾 Adonai Farm
+            <img src="/images/logo.svg" alt="Adonai Farm Logo" style={{ height: 60, verticalAlign: 'middle' }} />
+            &nbsp;Adonai Farm
           </Link>
         </div>
-        
+
         <nav className="public-nav" role="navigation" aria-label="Main navigation">
           {publicNavItems.map(item => (
             <Link
@@ -88,7 +94,7 @@ function PublicHeader() {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button 
+        <button
           className="mobile-menu-toggle"
           onClick={toggleMobileMenu}
           aria-label="Toggle mobile menu"
@@ -109,18 +115,18 @@ function PublicHeader() {
               {item.label}
             </Link>
           ))}
-          
+
           {isAuthenticated ? (
-            <Link 
-              to="/dashboard" 
+            <Link
+              to="/dashboard"
               className="btn btn-primary"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Go to Dashboard
             </Link>
           ) : (
-            <Link 
-              to="/admin" 
+            <Link
+              to="/admin"
               className="btn btn-outline"
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -141,7 +147,7 @@ function PublicFooter() {
           <h3 id="farm-info">🌾 Adonai Farm</h3>
           <p>Managing livestock with care, precision, and modern technology for sustainable farming excellence.</p>
         </section>
-        
+
         <section className="footer-section" aria-labelledby="quick-links">
           <h4 id="quick-links">Quick Links</h4>
           <nav aria-label="Footer navigation">
@@ -153,7 +159,7 @@ function PublicFooter() {
             </ul>
           </nav>
         </section>
-        
+
         <section className="footer-section" aria-labelledby="contact-info">
           <h4 id="contact-info">Contact Info</h4>
           <address>
@@ -162,7 +168,7 @@ function PublicFooter() {
             <p>📍 Chepsir, Kericho, Kenya</p>
           </address>
         </section>
-        
+
         <section className="footer-section" aria-labelledby="social-media">
           <h4 id="social-media">Follow Us</h4>
           <div className="social-links">
@@ -172,7 +178,7 @@ function PublicFooter() {
           </div>
         </section>
       </div>
-      
+
       <div className="footer-bottom">
         <p>&copy; 2025 Adonai Farm. All rights reserved.</p>
         <p>Built by <a href="mailto:triolinkl@gmail.com" className="triolink-credit">TrioLink</a> - Want a system like this? Contact us!</p>
@@ -181,20 +187,20 @@ function PublicFooter() {
   );
 }
 
-export default function PublicLayout({ children }) {
+export default function PublicLayout() {
   return (
     <div className="public-layout">
       {/* Skip Link for Screen Readers */}
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      
+
       <PublicHeader />
-      
+
       <main id="main-content" className="public-main" role="main">
-        {children}
+        <Outlet />
       </main>
-      
+
       <PublicFooter />
     </div>
   );

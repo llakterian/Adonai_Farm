@@ -50,25 +50,25 @@ criticalFiles.forEach(file => {
   }
 });
 
-// Check uploads directory structure
+// Check images directory structure
 console.log('\n🖼️ Checking image directory structure...');
-const uploadsDir = path.join(buildDir, 'uploads', 'Adonai');
+const imagesDir = path.join(buildDir, 'images', 'Adonai');
 const imagesDir = path.join(buildDir, 'images');
 
-if (fs.existsSync(uploadsDir)) {
-  console.log('  ✅ /uploads/Adonai/ directory exists');
-  
+if (fs.existsSync(imagesDir)) {
+  console.log('  ✅ /images/Adonai/ directory exists');
+
   // Check for expected images
-  const availableImages = fs.readdirSync(uploadsDir).filter(file => 
+  const availableImages = fs.readdirSync(imagesDir).filter(file =>
     file.match(/\.(jpg|jpeg|png|webp)$/i)
   );
-  
-  console.log(`  📊 Found ${availableImages.length} images in uploads directory`);
-  
+
+  console.log(`  📊 Found ${availableImages.length} images in images directory`);
+
   // Check specific expected images
   let foundImages = 0;
   let missingImages = [];
-  
+
   expectedImages.forEach(img => {
     if (availableImages.includes(img)) {
       foundImages++;
@@ -76,20 +76,20 @@ if (fs.existsSync(uploadsDir)) {
       missingImages.push(img);
     }
   });
-  
+
   console.log(`  ✅ ${foundImages}/${expectedImages.length} expected images found`);
-  
+
   if (missingImages.length > 0) {
     console.log('  ⚠️ Missing images:');
     missingImages.forEach(img => console.log(`    - ${img}`));
   }
-  
+
 } else {
-  console.log('  ❌ /uploads/Adonai/ directory missing');
+  console.log('  ❌ /images/Adonai/ directory missing');
 }
 
 if (fs.existsSync(imagesDir)) {
-  const fallbackImages = fs.readdirSync(imagesDir).filter(file => 
+  const fallbackImages = fs.readdirSync(imagesDir).filter(file =>
     file.match(/\.(jpg|jpeg|png|webp)$/i)
   );
   console.log(`  ✅ /images/ fallback directory with ${fallbackImages.length} images`);
@@ -102,15 +102,15 @@ console.log('\n⚙️ Checking Netlify configuration...');
 const netlifyTomlPath = path.join(buildDir, 'netlify.toml');
 if (fs.existsSync(netlifyTomlPath)) {
   const netlifyConfig = fs.readFileSync(netlifyTomlPath, 'utf8');
-  
+
   // Check for important configuration sections
   const checks = [
     { pattern: /\[\[redirects\]\]/, name: 'SPA redirects' },
-    { pattern: /\/uploads\/Adonai\/\*/, name: 'Image headers for /uploads/Adonai/*' },
+    { pattern: /\/images\/Adonai\/\*/, name: 'Image headers for /images/Adonai/*' },
     { pattern: /Cache-Control.*immutable/, name: 'Image caching headers' },
     { pattern: /X-Frame-Options/, name: 'Security headers' }
   ];
-  
+
   checks.forEach(check => {
     if (check.pattern.test(netlifyConfig)) {
       console.log(`  ✅ ${check.name} configured`);
@@ -127,13 +127,13 @@ console.log('\n🔀 Checking redirects configuration...');
 const redirectsPath = path.join(buildDir, '_redirects');
 if (fs.existsSync(redirectsPath)) {
   const redirectsConfig = fs.readFileSync(redirectsPath, 'utf8');
-  
-  if (redirectsConfig.includes('/uploads/*')) {
+
+  if (redirectsConfig.includes('/images/*')) {
     console.log('  ✅ Upload redirects configured');
   } else {
     console.log('  ⚠️ Upload redirects missing');
   }
-  
+
   if (redirectsConfig.includes('/*    /index.html   200')) {
     console.log('  ✅ SPA fallback configured');
   } else {
@@ -148,7 +148,7 @@ console.log('\n📱 Checking mobile configuration...');
 const mobileConfigPath = path.join(buildDir, 'mobile-config.js');
 if (fs.existsSync(mobileConfigPath)) {
   const mobileConfig = fs.readFileSync(mobileConfigPath, 'utf8');
-  
+
   if (mobileConfig.includes('localStorage.setItem(\'use-local-storage\', \'true\')')) {
     console.log('  ✅ Mobile localStorage detection configured');
   } else {
@@ -162,7 +162,7 @@ if (fs.existsSync(mobileConfigPath)) {
 const indexPath = path.join(buildDir, 'index.html');
 if (fs.existsSync(indexPath)) {
   const indexContent = fs.readFileSync(indexPath, 'utf8');
-  
+
   if (indexContent.includes('mobile-config.js')) {
     console.log('  ✅ Mobile config included in index.html');
   } else {
@@ -182,17 +182,17 @@ if (totalIssues === 0) {
   console.log('✅ Image structure configured correctly');
   console.log('✅ Netlify configuration optimized');
   console.log('✅ Mobile support enabled');
-  
+
   console.log('\n🚀 Next Steps:');
   console.log('1. Upload adonai-farm-netlify.zip to Netlify');
   console.log('2. Test image loading on the deployed site');
   console.log('3. Verify mobile functionality');
   console.log('4. Check /test-mode.html for mode switching');
-  
+
 } else {
   console.log(`⚠️ Found ${totalIssues} potential issues`);
   console.log('Please review the warnings above before deploying');
-  
+
   if (missingFiles.length > 0) {
     console.log('\n❌ Critical files missing - deployment may fail');
   } else {
@@ -207,10 +207,10 @@ console.log('=====================');
 
 function getDirectorySize(dirPath) {
   let totalSize = 0;
-  
+
   function calculateSize(currentPath) {
     const stats = fs.statSync(currentPath);
-    
+
     if (stats.isDirectory()) {
       const files = fs.readdirSync(currentPath);
       files.forEach(file => {
@@ -220,11 +220,11 @@ function getDirectorySize(dirPath) {
       totalSize += stats.size;
     }
   }
-  
+
   if (fs.existsSync(dirPath)) {
     calculateSize(dirPath);
   }
-  
+
   return totalSize;
 }
 
@@ -237,11 +237,11 @@ function formatBytes(bytes) {
 }
 
 const totalSize = getDirectorySize(buildDir);
-const uploadsSize = getDirectorySize(uploadsDir);
+const imagesSize = getDirectorySize(imagesDir);
 const imagesSize = getDirectorySize(imagesDir);
 
 console.log(`Total build size: ${formatBytes(totalSize)}`);
-console.log(`Images (/uploads/): ${formatBytes(uploadsSize)}`);
+console.log(`Images (/images/): ${formatBytes(imagesSize)}`);
 console.log(`Fallback images (/images/): ${formatBytes(imagesSize)}`);
 
 if (totalSize > 100 * 1024 * 1024) { // 100MB
@@ -254,6 +254,6 @@ console.log('\n🔗 Useful URLs after deployment:');
 console.log('- Main site: https://your-site.netlify.app/');
 console.log('- Test mode: https://your-site.netlify.app/test-mode.html');
 console.log('- Admin login: https://your-site.netlify.app/login');
-console.log('- Sample image: https://your-site.netlify.app/uploads/Adonai/adonai1.jpg');
+console.log('- Sample image: https://your-site.netlify.app/images/Adonai/adonai1.jpg');
 
 process.exit(totalIssues > 0 ? 1 : 0);

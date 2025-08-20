@@ -74,7 +74,7 @@
                 imageCard.className = 'image-card';
                 
                 const img = document.createElement('img');
-                const imageUrl = `/uploads/Adonai/${filename}`;
+                const imageUrl = `/images/Adonai/${filename}`;
                 
                 img.onload = function() {
                     loadedImages++;
@@ -120,7 +120,7 @@
         console.log('🔍 Image Loading Test Started');
         console.log('Expected images:', expectedImages);
         console.log('Base URL:', window.location.origin);
-        console.log('Test URL example:', window.location.origin + '/uploads/Adonai/adonai1.jpg');
+        console.log('Test URL example:', window.location.origin + '/images/Adonai/adonai1.jpg');
     </script>
 </body>
 </html>

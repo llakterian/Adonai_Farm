@@ -1,30 +1,154 @@
-// Comprehensive mock data for Adonai Farm
-// This file contains all the mock data exported from auth.js plus additional farm data
+// Mock data for various farm entities
 
-import { 
-  mockAnimals, 
-  mockWorkers, 
-  mockGalleryImages, 
-  mockProductionRecords, 
-  mockFeedRecords, 
-  mockHealthRecords, 
-  mockBreedingRecords 
-} from './auth.js';
+// Mock data for animals
+export const mockAnimals = [
+  {
+    id: 1,
+    name: "Bessie",
+    type: "Dairy Cattle",
+    sex: "F",
+    dob: "2022-03-15",
+    notes: "Excellent milk producer, very gentle temperament",
+    image: "adonai1.jpg",
+    isFeatured: true
+  },
+  {
+    id: 2,
+    name: "Thunder",
+    type: "Beef Cattle",
+    sex: "M",
+    dob: "2021-08-20",
+    notes: "Prize breeding bull with champion genetics",
+    image: "adonai2.jpg",
+    isFeatured: true
+  },
+  {
+    id: 3,
+    name: "Luna",
+    type: "Dairy Goat",
+    sex: "F",
+    dob: "2022-05-10",
+    notes: "Produces rich, creamy goat milk",
+    image: "adonai3.jpg",
+    isFeatured: true
+  },
+  {
+    id: 4,
+    name: "Woolly",
+    type: "Pedigree Sheep",
+    sex: "F",
+    dob: "2022-01-25",
+    notes: "Award-winning wool quality",
+    image: "adonai4.jpg",
+    isFeatured: true
+  },
+  {
+    id: 5,
+    name: "Champion",
+    type: "Beef Goat",
+    sex: "M",
+    dob: "2021-11-12",
+    notes: "Strong breeding goat with excellent genetics",
+    image: "adonai5.jpg",
+    isFeatured: true
+  },
+  {
+    id: 6,
+    name: "Henrietta",
+    type: "Chicken",
+    sex: "F",
+    dob: "2023-02-14",
+    notes: "Excellent egg layer, very friendly",
+    image: "adonai6.jpg",
+    isFeatured: true
+  },
+  {
+    id: 7,
+    name: "Daisy",
+    type: "Dairy Cattle",
+    sex: "F",
+    dob: "2021-12-08",
+    notes: "Consistent milk producer, calm nature",
+    image: "adonai7.jpg",
+    isFeatured: false
+  },
+  {
+    id: 8,
+    name: "Rocky",
+    type: "Beef Cattle",
+    sex: "M",
+    dob: "2022-06-30",
+    notes: "Strong and healthy young bull",
+    image: "adonai8.jpg",
+    isFeatured: false
+  },
+  {
+    id: 9,
+    name: "Nanny",
+    type: "Dairy Goat",
+    sex: "F",
+    dob: "2022-04-18",
+    notes: "Playful and productive dairy goat",
+    image: "adonai9.jpg",
+    isFeatured: false
+  },
+  {
+    id: 10,
+    name: "Cotton",
+    type: "Sheep",
+    sex: "F",
+    dob: "2022-09-05",
+    notes: "Soft wool and gentle temperament",
+    image: "adonaix.jpg",
+    isFeatured: false
+  },
+  {
+    id: 11,
+    name: "Brownie",
+    type: "Beef Goat",
+    sex: "F",
+    dob: "2023-01-20",
+    notes: "Young and energetic, good for breeding",
+    image: "adonaixi.jpg",
+    isFeatured: false
+  },
+  {
+    id: 12,
+    name: "Clucky",
+    type: "Poultry",
+    sex: "F",
+    dob: "2023-03-10",
+    notes: "Free-range chicken, excellent forager",
+    image: "adonaixii.jpg",
+    isFeatured: false
+  }
+];
 
-// Export all existing mock data
-export {
-  mockAnimals,
-  mockWorkers,
-  mockGalleryImages,
-  mockProductionRecords,
-  mockFeedRecords,
-  mockHealthRecords,
-  mockBreedingRecords
+// Mock data for workers
+export const mockWorkers = [];
+
+// Mock data for production records
+export const mockProductionRecords = {
+  milk: [],
+  eggs: [],
+  wool: [],
 };
 
-// Additional farm information for public display
+// Farm statistics for public display
+export const farmStats = {
+  totalAnimals: mockAnimals.length,
+  animalTypes: [...new Set(mockAnimals.map(a => a.type))].length,
+  totalAcres: 250,
+  yearsInOperation: new Date().getFullYear() - 2018,
+  dailyMilkProduction: mockProductionRecords.milk[0]?.totalLiters || 0,
+  dailyEggProduction: mockProductionRecords.eggs[0]?.totalCount || 0,
+  staff: mockWorkers.length
+};
+
+// Farm information and statistics
 export const farmInfo = {
   name: "Adonai Farm",
+  location: "Chepsir, Kericho, Kenya",
   tagline: "Sustainable Livestock Management with Modern Technology",
   mission: "Managing our livestock with care, precision, and modern technology for sustainable farming excellence.",
   established: "2018",
@@ -52,18 +176,7 @@ export const farmInfo = {
   }
 };
 
-// Farm statistics for public display
-export const farmStats = {
-  totalAnimals: mockAnimals.length,
-  animalTypes: [...new Set(mockAnimals.map(a => a.type))].length,
-  totalAcres: 250,
-  yearsInOperation: new Date().getFullYear() - 2018,
-  dailyMilkProduction: mockProductionRecords.milk[0]?.totalLiters || 0,
-  dailyEggProduction: mockProductionRecords.eggs[0]?.totalCount || 0,
-  staff: mockWorkers.length
-};
-
-// Services offered by the farm
+// Farm services and products information
 export const farmServices = [
   {
     id: 1,
@@ -80,7 +193,7 @@ export const farmServices = [
     description: "Free-range eggs from our Rhode Island Red and Leghorn chickens",
     category: "products",
     available: true,
-    pricing: "KES 600/dozen",
+    pricing: "Contact for pricing",
     image: "adonai6.jpg"
   },
   {
@@ -99,7 +212,7 @@ export const farmServices = [
     category: "products",
     available: "seasonal",
     pricing: "Contact for pricing",
-    image: "adonai2.jpg"
+    image: "Beefcattle.jpg"
   },
   {
     id: 5,
@@ -107,8 +220,8 @@ export const farmServices = [
     description: "Educational tours for schools, families, and agricultural enthusiasts",
     category: "services",
     available: true,
-    pricing: "KES 1,500/person",
-    image: "farm-1.jpg"
+    pricing: "Contact for pricing",
+    image: "Visitors.jpg"
   },
   {
     id: 6,
@@ -117,7 +230,7 @@ export const farmServices = [
     category: "services",
     available: true,
     pricing: "Contact for pricing",
-    image: "adonai5.jpg"
+    image: "Bighegoat.jpg"
   },
   {
     id: 7,
@@ -125,19 +238,19 @@ export const farmServices = [
     description: "Expert advice on sustainable farming practices and livestock management",
     category: "services",
     available: true,
-    pricing: "KES 10,000/hour",
+    pricing: "Contact for pricing",
     image: "farm-3.jpg"
   }
 ];
 
-// Featured animals for public display (subset of all animals with public-friendly info)
+// Farm animals showcase data
 export const featuredAnimals = [
   {
     id: 1,
     name: "Bessie",
     type: "Holstein Dairy Cow",
     description: "Our star milk producer, known for her gentle nature and excellent health record",
-    image: "adonai1.jpg",
+    image: "Dairycows.jpg",
     funFact: "Produces over 28 liters of milk daily",
     age: "2 years old"
   },
@@ -146,7 +259,7 @@ export const featuredAnimals = [
     name: "Thunder",
     type: "Angus Bull",
     description: "Our prize breeding bull with champion genetics and calm temperament",
-    image: "adonai2.jpg",
+    image: "Beefcattle.jpg",
     funFact: "Weighs nearly 1000kg but is gentle as a lamb",
     age: "3 years old"
   },
@@ -155,7 +268,7 @@ export const featuredAnimals = [
     name: "Nanny & Luna",
     type: "Dairy Goats",
     description: "Our friendly goat duo, always ready to greet visitors with their playful antics",
-    image: "adonai3.jpg",
+    image: "GoAtS.jpg",
     funFact: "Produce the creamiest goat milk in the region",
     age: "1-2 years old"
   },
@@ -164,7 +277,7 @@ export const featuredAnimals = [
     name: "Woolly & Cotton",
     type: "Prize Sheep",
     description: "Our wool-producing champions, providing premium quality fleece",
-    image: "adonai4.jpg",
+    image: "Ewes.jpg",
     funFact: "Woolly's fleece won first place at the county fair",
     age: "1-2 years old"
   },
@@ -173,7 +286,7 @@ export const featuredAnimals = [
     name: "Champion",
     type: "Suffolk Ram",
     description: "Our pedigree ram with show-winning genetics and impressive stature",
-    image: "adonai5.jpg",
+    image: "Bighegoat.jpg",
     funFact: "Has sired over 20 prize-winning offspring",
     age: "3 years old"
   },
@@ -260,7 +373,7 @@ export const farmNews = [
     summary: "Our sheep Woolly took first place in the wool quality competition at the annual county fair.",
     date: "2024-02-05",
     category: "awards",
-    image: "adonai4.jpg"
+    image: "Ewes.jpg"
   },
   {
     id: 3,
@@ -276,12 +389,12 @@ export const farmNews = [
 export const dataHelpers = {
   // Get animals by type
   getAnimalsByType: (type) => mockAnimals.filter(animal => animal.type === type),
-  
+
   // Get production data for date range
   getProductionByDateRange: (startDate, endDate, type = 'all') => {
     const start = new Date(startDate);
     const end = new Date(endDate);
-    
+
     if (type === 'all') {
       return {
         milk: mockProductionRecords.milk.filter(record => {
@@ -298,25 +411,25 @@ export const dataHelpers = {
         })
       };
     }
-    
+
     return mockProductionRecords[type]?.filter(record => {
       const date = new Date(record.date);
       return date >= start && date <= end;
     }) || [];
   },
-  
+
   // Get health records for specific animal
   getHealthRecordsForAnimal: (animalId) => {
     return mockHealthRecords.filter(record => record.animalId === animalId);
   },
-  
+
   // Get breeding records for specific animal
   getBreedingRecordsForAnimal: (animalId) => {
-    return mockBreedingRecords.filter(record => 
+    return mockBreedingRecords.filter(record =>
       record.maleId === animalId || record.femaleId === animalId
     );
   },
-  
+
   // Calculate farm statistics
   calculateStats: () => {
     const totalMilkProduction = mockProductionRecords.milk.reduce((sum, record) => sum + record.totalLiters, 0);
@@ -325,12 +438,12 @@ export const dataHelpers = {
       const qualityScore = record.averageQuality === 'A+' ? 4 : record.averageQuality === 'A' ? 3 : 2;
       return index === array.length - 1 ? (sum + qualityScore) / array.length : sum + qualityScore;
     }, 0);
-    
+
     return {
       totalMilkProduction,
       totalEggProduction,
       averageMilkQuality: averageMilkQuality > 3.5 ? 'A+' : averageMilkQuality > 2.5 ? 'A' : 'B',
-      healthyAnimals: mockAnimals.filter(animal => 
+      healthyAnimals: mockAnimals.filter(animal =>
         animal.healthRecords && animal.healthRecords.length > 0
       ).length,
       breedingSuccess: mockBreedingRecords.filter(record => record.success).length
@@ -349,9 +462,5 @@ export default {
   dataHelpers,
   mockAnimals,
   mockWorkers,
-  mockGalleryImages,
   mockProductionRecords,
-  mockFeedRecords,
-  mockHealthRecords,
-  mockBreedingRecords
 };

@@ -100,7 +100,7 @@ All mobile admin UI fixes have been successfully implemented, tested, and optimi
 1. Visit your Netlify URL
 2. Test mobile functionality on actual devices
 3. Verify admin login works
-4. Check image loading: `/uploads/Adonai/adonai1.jpg`
+4. Check image loading: `/images/Adonai/adonai1.jpg`
 5. Test mode switcher: `/test-mode.html`
 
 ### Step 3: Mobile Verification
@@ -133,7 +133,7 @@ After deployment, test these URLs:
 - **Main Site**: `https://your-site.netlify.app/`
 - **Admin Login**: `https://your-site.netlify.app/login`
 - **Test Mode**: `https://your-site.netlify.app/test-mode.html`
-- **Sample Image**: `https://your-site.netlify.app/uploads/Adonai/adonai1.jpg`
+- **Sample Image**: `https://your-site.netlify.app/images/Adonai/adonai1.jpg`
 - **Gallery**: `https://your-site.netlify.app/gallery`
 
 ## 📈 Performance Benefits

@@ -4,7 +4,7 @@ node_modules/
 
 # Production builds
 frontend/dist/
-backend/uploads/
+backend/images/
 backend/data/
 
 # Environment variables

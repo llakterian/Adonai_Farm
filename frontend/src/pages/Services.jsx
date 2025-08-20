@@ -1,455 +1,432 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SEOHead from '../components/SEOHead.jsx';
 
 export default function Services() {
+  const [selectedService, setSelectedService] = useState(null);
+
+  const services = [
+    {
+      id: 'farm-management',
+      title: 'Digital Farm Management System',
+      icon: '💻',
+      category: 'Technology',
+      price: 'Custom Pricing',
+      description: 'Complete digital solution for modern farm management with real-time monitoring and analytics.',
+      features: [
+        'Livestock tracking and health monitoring',
+        'Worker time tracking and payroll management',
+        'Inventory and feed management',
+        'Financial reporting and analytics',
+        'Mobile-responsive dashboard',
+        'Photo gallery and documentation',
+        'Multi-user access with role-based permissions'
+      ],
+      benefits: [
+        'Increase farm productivity by 30%',
+        'Reduce operational costs',
+        'Improve animal health monitoring',
+        'Streamline workforce management',
+        'Generate detailed reports for decision making'
+      ]
+    },
+    {
+      id: 'livestock-breeding',
+      title: 'Professional Livestock Breeding',
+      icon: '🐄',
+      category: 'Breeding',
+      price: 'From KSh 15,000',
+      description: 'Expert breeding services for dairy cattle, beef cattle, goats, and sheep with proven genetics.',
+      features: [
+        'Artificial insemination services',
+        'Genetic selection and breeding programs',
+        'Pregnancy monitoring and care',
+        'Breeding record management',
+        'Nutritional guidance for breeding stock',
+        'Health monitoring during breeding cycles'
+      ],
+      benefits: [
+        'Improved livestock genetics',
+        'Higher milk and meat production',
+        'Reduced breeding costs',
+        'Better disease resistance',
+        'Increased farm profitability'
+      ]
+    },
+    {
+      id: 'farm-tours',
+      title: 'Educational Farm Tours',
+      icon: '🚜',
+      category: 'Education',
+      price: 'KSh 500 per person',
+      description: 'Interactive educational tours showcasing modern farming practices and sustainable agriculture.',
+      features: [
+        'Guided tours of all farm facilities',
+        'Meet and interact with farm animals',
+        'Learn about sustainable farming practices',
+        'Hands-on farming activities',
+        'Educational materials and resources',
+        'Group discounts available'
+      ],
+      benefits: [
+        'Educational experience for all ages',
+        'Understanding of modern farming',
+        'Connection with nature and animals',
+        'Support for local agriculture',
+        'Perfect for schools and families'
+      ]
+    },
+    {
+      id: 'consulting',
+      title: 'Agricultural Consulting',
+      icon: '📊',
+      category: 'Consulting',
+      price: 'From KSh 5,000/day',
+      description: 'Professional consulting services for farm setup, optimization, and digital transformation.',
+      features: [
+        'Farm setup and planning consultation',
+        'Digital transformation guidance',
+        'Livestock management optimization',
+        'Financial planning and budgeting',
+        'Technology implementation support',
+        'Ongoing support and training'
+      ],
+      benefits: [
+        'Expert guidance from experienced farmers',
+        'Customized solutions for your farm',
+        'Reduced startup risks',
+        'Faster return on investment',
+        'Access to latest farming technologies'
+      ]
+    },
+    {
+      id: 'products',
+      title: 'Premium Farm Products',
+      icon: '🥛',
+      category: 'Products',
+      price: 'Market Rates',
+      description: 'Fresh, high-quality dairy products, meat, and other farm produce directly from our farm.',
+      features: [
+        'Fresh daily milk and dairy products',
+        'Premium grass-fed beef',
+        'Free-range poultry and eggs',
+        'Organic vegetables and herbs',
+        'Custom processing services',
+        'Direct farm-to-table delivery'
+      ],
+      benefits: [
+        'Guaranteed freshness and quality',
+        'Support for local farming',
+        'Traceable source and production',
+        'Competitive pricing',
+        'Sustainable farming practices'
+      ]
+    },
+    {
+      id: 'training',
+      title: 'Farmer Training Programs',
+      icon: '🎓',
+      category: 'Education',
+      price: 'From KSh 2,000',
+      description: 'Comprehensive training programs for modern farming techniques and digital farm management.',
+      features: [
+        'Digital farm management training',
+        'Livestock care and breeding workshops',
+        'Financial management for farmers',
+        'Sustainable farming practices',
+        'Technology adoption guidance',
+        'Certification programs available'
+      ],
+      benefits: [
+        'Improved farming skills and knowledge',
+        'Higher farm productivity',
+        'Better financial management',
+        'Access to modern farming techniques',
+        'Networking with other farmers'
+      ]
+    }
+  ];
+
+  const categories = ['All', 'Technology', 'Breeding', 'Education', 'Consulting', 'Products'];
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const filteredServices = selectedCategory === 'All'
+    ? services
+    : services.filter(service => service.category === selectedCategory);
+
+  const openServiceModal = (service) => {
+    setSelectedService(service);
+  };
+
+  const closeServiceModal = () => {
+    setSelectedService(null);
+  };
+
   return (
     <>
-      <SEOHead 
+      <SEOHead
         pageType="services"
-        title="Farm Services - Livestock Breeding, Tours & Agricultural Consulting"
-        description="Comprehensive livestock services at Adonai Farm: professional breeding, educational farm tours (KSh 500), premium meat & dairy products, and agricultural consulting in Kericho, Kenya."
+        title="Farm Services - Digital Management, Breeding & Agricultural Consulting"
+        description="Comprehensive agricultural services at Adonai Farm: digital farm management systems, professional livestock breeding, educational tours, consulting, and premium farm products in Kericho, Kenya."
         keywords={[
-          "livestock breeding Kenya",
+          "digital farm management Kenya",
+          "livestock breeding services",
           "farm tours Kericho",
-          "agricultural consulting Kenya", 
-          "premium beef Kericho",
-          "dairy products Kenya",
-          "farm visits Kericho County",
-          "veterinary services livestock",
-          "digital farm management",
-          "livestock nutrition consulting",
-          "farm education tours"
+          "agricultural consulting Kenya",
+          "farm management software",
+          "livestock tracking system",
+          "dairy farming services",
+          "farm education programs",
+          "sustainable agriculture Kenya",
+          "modern farming techniques"
         ]}
-        image="/images/farm-3.jpg"
+        image="/images/adonai1.jpg"
         url="/services"
         breadcrumbs={[
           { name: "Home", url: "/" },
           { name: "Services", url: "/services" }
         ]}
       />
+
       <div className="services-page">
         {/* Hero Section */}
         <section className="services-hero">
-          <div className="services-hero-content">
-            <h1>Our Services</h1>
-            <p className="hero-subtitle">
-              Comprehensive livestock and agricultural services backed by modern technology and expertise
-            </p>
+          <div className="hero-background"></div>
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
+            <div className="container">
+              <div className="hero-text">
+                <span className="hero-badge">🌾 Professional Services</span>
+                <h1 className="hero-title">
+                  Comprehensive <span className="highlight">Agricultural Services</span>
+                </h1>
+                <p className="hero-subtitle">
+                  From cutting-edge digital farm management to traditional breeding expertise,
+                  we provide complete solutions for modern agriculture in Kenya.
+                </p>
+                <div className="hero-stats">
+                  <div className="stat">
+                    <span className="stat-number">6+</span>
+                    <span className="stat-label">Service Categories</span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-number">100+</span>
+                    <span className="stat-label">Satisfied Clients</span>
+                  </div>
+                  <div className="stat">
+                    <span className="stat-number">5+</span>
+                    <span className="stat-label">Years Experience</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Main Services Section */}
-        <section className="services-section">
+        {/* Service Categories Filter */}
+        <section className="services-filter">
+          <div className="container">
+            <h2 className="filter-title">🔍 Explore Our Services</h2>
+            <div className="filter-buttons">
+              {categories.map(category => (
+                <button
+                  key={category}
+                  className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  <span className="filter-name">{category}</span>
+                  <span className="filter-count">
+                    ({category === 'All' ? services.length : services.filter(s => s.category === category).length})
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Services Grid */}
+        <section className="services-grid-section">
+          <div className="container">
+            <div className="services-grid">
+              {filteredServices.map(service => (
+                <div key={service.id} className="service-card" onClick={() => openServiceModal(service)}>
+                  <div className="service-header">
+                    <div className="service-icon">{service.icon}</div>
+                    <div className="service-category">{service.category}</div>
+                  </div>
+
+                  <div className="service-content">
+                    <h3 className="service-title">{service.title}</h3>
+                    <p className="service-description">{service.description}</p>
+
+                    <div className="service-price">
+                      <span className="price-label">Starting from</span>
+                      <span className="price-value">{service.price}</span>
+                    </div>
+
+                    <div className="service-features">
+                      <h4>Key Features:</h4>
+                      <ul>
+                        {service.features.slice(0, 3).map((feature, index) => (
+                          <li key={index}>✓ {feature}</li>
+                        ))}
+                        {service.features.length > 3 && (
+                          <li className="more-features">+ {service.features.length - 3} more features</li>
+                        )}
+                      </ul>
+                    </div>
+
+                    <div className="service-cta">
+                      <span>Click to learn more →</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Us */}
+        <section className="why-choose-us">
           <div className="container">
             <div className="section-header">
-              <h2>Our Premium Services</h2>
-              <p className="section-subtitle">
-                Discover how Adonai Farm can serve your agricultural needs with our comprehensive range of professional services
-              </p>
+              <h2>🌟 Why Choose Adonai Farm Services?</h2>
+              <p>We combine traditional farming wisdom with modern technology to deliver exceptional results</p>
             </div>
-            
-            <div className="services-grid">
-              
-              {/* 1. Farm Visits & Tours - Most accessible entry point */}
-              <div className="service-card featured-service">
-                <div className="service-number">01</div>
-                <div className="service-header">
-                  <div className="service-icon">🌾</div>
-                  <div className="service-title">
-                    <h3>Farm Visits & Educational Tours</h3>
-                    <span className="service-badge">Most Popular</span>
-                  </div>
-                </div>
-                <p className="service-description">
-                  Experience modern farming firsthand! Join our guided tours to see cutting-edge 
-                  livestock management, meet our animals, and learn sustainable farming practices.
-                </p>
-                <div className="service-highlights">
-                  <div className="highlight-item">
-                    <span className="highlight-icon">👨‍🌾</span>
-                    <span>Expert-guided walkthrough</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">📱</span>
-                    <span>Technology demonstrations</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🐄</span>
-                    <span>Meet our friendly animals</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🎓</span>
-                    <span>Educational sessions</span>
-                  </div>
-                </div>
-                <div className="service-pricing">
-                  <div className="pricing-header">
-                    <h4>Tour Packages</h4>
-                  </div>
-                  <div className="price-options">
-                    <div className="price-option recommended">
-                      <div className="price-header">
-                        <span className="price-type">Family Experience</span>
-                        <span className="price-badge">Best Value</span>
-                      </div>
-                      <span className="price">KSh 500 <small>per person</small></span>
-                      <span className="price-description">Perfect for families & individuals</span>
-                    </div>
-                    <div className="price-option">
-                      <span className="price-type">School Groups (10+)</span>
-                      <span className="price">KSh 300 <small>per student</small></span>
-                      <span className="price-description">Educational group discounts</span>
-                    </div>
-                    <div className="price-option">
-                      <span className="price-type">Professional Tours</span>
-                      <span className="price">Custom Pricing</span>
-                      <span className="price-description">For agricultural professionals</span>
-                    </div>
-                  </div>
-                  <div className="availability-info">
-                    <span className="availability-icon">🕒</span>
-                    <span>Available Monday-Saturday, 9 AM - 4 PM</span>
-                  </div>
-                </div>
+
+            <div className="benefits-grid">
+              <div className="benefit-card">
+                <div className="benefit-icon">🏆</div>
+                <h3>Proven Expertise</h3>
+                <p>Years of experience in livestock management and sustainable farming practices in Kenya's highlands.</p>
               </div>
 
-              {/* 2. Premium Products - Direct customer benefit */}
-              <div className="service-card">
-                <div className="service-number">02</div>
-                <div className="service-header">
-                  <div className="service-icon">🥩</div>
-                  <div className="service-title">
-                    <h3>Premium Farm Products</h3>
-                    <span className="service-badge quality-badge">Farm Fresh</span>
-                  </div>
-                </div>
-                <p className="service-description">
-                  Enjoy the finest quality meat, dairy, and livestock products from our carefully 
-                  managed, healthy animals. Every product comes with full traceability and quality assurance.
-                </p>
-                <div className="service-highlights">
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🏆</span>
-                    <span>Premium quality guarantee</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🌱</span>
-                    <span>Naturally raised animals</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">📋</span>
-                    <span>Full traceability records</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🚚</span>
-                    <span>Fresh delivery available</span>
-                  </div>
-                </div>
-                <div className="product-categories">
-                  <div className="category-item">
-                    <span className="category-icon">🥩</span>
-                    <div className="category-info">
-                      <h5>Fresh Meat</h5>
-                      <p>Premium beef, mutton & processed products</p>
-                    </div>
-                  </div>
-                  <div className="category-item">
-                    <span className="category-icon">🥛</span>
-                    <div className="category-info">
-                      <h5>Dairy Products</h5>
-                      <p>Fresh milk, cheese & organic dairy</p>
-                    </div>
-                  </div>
-                  <div className="category-item">
-                    <span className="category-icon">🐄</span>
-                    <div className="category-info">
-                      <h5>Live Animals</h5>
-                      <p>Breeding stock & healthy livestock</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="service-pricing">
-                  <div className="pricing-note">
-                    <span className="pricing-icon">💰</span>
-                    <span>Competitive seasonal pricing • Pre-orders recommended</span>
-                  </div>
-                  <div className="availability-info">
-                    <span className="availability-icon">📅</span>
-                    <span>Fresh products available weekly</span>
-                  </div>
-                </div>
+              <div className="benefit-card">
+                <div className="benefit-icon">💻</div>
+                <h3>Technology-Driven</h3>
+                <p>Cutting-edge digital solutions that streamline farm operations and improve productivity.</p>
               </div>
 
-              {/* 3. Professional Breeding - High-value service */}
-              <div className="service-card">
-                <div className="service-number">03</div>
-                <div className="service-header">
-                  <div className="service-icon">🧬</div>
-                  <div className="service-title">
-                    <h3>Professional Livestock Breeding</h3>
-                    <span className="service-badge expert-badge">Expert Service</span>
-                  </div>
-                </div>
-                <p className="service-description">
-                  Enhance your livestock quality with our professional breeding services. We use 
-                  genetic optimization and advanced health tracking to improve productivity and animal welfare.
-                </p>
-                <div className="service-highlights">
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🔬</span>
-                    <span>Genetic analysis & optimization</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">💉</span>
-                    <span>Professional AI services</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🤱</span>
-                    <span>Pregnancy monitoring & care</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">📊</span>
-                    <span>Complete breeding records</span>
-                  </div>
-                </div>
-                <div className="breeding-process">
-                  <h5>Our Breeding Process</h5>
-                  <div className="process-steps">
-                    <div className="process-step">
-                      <span className="step-number">1</span>
-                      <span className="step-text">Genetic Assessment</span>
-                    </div>
-                    <div className="process-step">
-                      <span className="step-number">2</span>
-                      <span className="step-text">Breeding Plan</span>
-                    </div>
-                    <div className="process-step">
-                      <span className="step-number">3</span>
-                      <span className="step-text">Implementation</span>
-                    </div>
-                    <div className="process-step">
-                      <span className="step-number">4</span>
-                      <span className="step-text">Monitoring & Care</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="service-pricing">
-                  <div className="pricing-note">
-                    <span className="pricing-icon">🎯</span>
-                    <span>Customized programs tailored to your goals</span>
-                  </div>
-                  <div className="consultation-cta">
-                    <span>Contact us for a personalized breeding consultation</span>
-                  </div>
-                </div>
+              <div className="benefit-card">
+                <div className="benefit-icon">🌱</div>
+                <h3>Sustainable Practices</h3>
+                <p>Environmentally responsible farming methods that ensure long-term sustainability and profitability.</p>
               </div>
 
-              {/* 4. Agricultural Consulting - Professional service */}
-              <div className="service-card">
-                <div className="service-number">04</div>
-                <div className="service-header">
-                  <div className="service-icon">📈</div>
-                  <div className="service-title">
-                    <h3>Agricultural Consulting & Training</h3>
-                    <span className="service-badge consulting-badge">Transform Your Farm</span>
-                  </div>
-                </div>
-                <p className="service-description">
-                  Transform your farming operations with our expert consulting services. We help 
-                  implement modern livestock management systems and provide comprehensive training.
-                </p>
-                <div className="service-highlights">
-                  <div className="highlight-item">
-                    <span className="highlight-icon">🎯</span>
-                    <span>Farm optimization strategies</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">💻</span>
-                    <span>Technology integration</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">👥</span>
-                    <span>Staff training programs</span>
-                  </div>
-                  <div className="highlight-item">
-                    <span className="highlight-icon">📞</span>
-                    <span>Ongoing support</span>
-                  </div>
-                </div>
-                <div className="consulting-packages">
-                  <div className="package-item">
-                    <div className="package-header">
-                      <h5>Discovery Consultation</h5>
-                      <span className="package-price">KSh 5,000</span>
-                    </div>
-                    <p>Comprehensive farm assessment & recommendations</p>
-                  </div>
-                  <div className="package-item featured-package">
-                    <div className="package-header">
-                      <h5>System Implementation</h5>
-                      <span className="package-price">Custom Quote</span>
-                    </div>
-                    <p>Complete system setup & integration</p>
-                  </div>
-                  <div className="package-item">
-                    <div className="package-header">
-                      <h5>Ongoing Support</h5>
-                      <span className="package-price">Monthly Plans</span>
-                    </div>
-                    <p>Continuous guidance & optimization</p>
-                  </div>
-                </div>
+              <div className="benefit-card">
+                <div className="benefit-icon">🤝</div>
+                <h3>Personalized Support</h3>
+                <p>Tailored solutions and ongoing support to meet your specific farming needs and goals.</p>
               </div>
 
-            </div>
-          </div>
-        </section>
-
-        {/* Specialized Services Section */}
-        <section className="services-section specialized-section">
-          <div className="container">
-            <h2>Specialized Services</h2>
-            <div className="specialized-services">
-              
-              <div className="specialized-service">
-                <div className="service-header">
-                  <div className="service-icon">🏥</div>
-                  <h3>Veterinary Support Services</h3>
-                </div>
-                <p>
-                  Working with qualified veterinarians, we provide health monitoring, 
-                  preventive care, and emergency veterinary support for livestock.
-                </p>
-                <div className="service-details">
-                  <span className="detail-item">🩺 Health checkups</span>
-                  <span className="detail-item">💉 Vaccination programs</span>
-                  <span className="detail-item">🚨 Emergency care</span>
-                </div>
+              <div className="benefit-card">
+                <div className="benefit-icon">📈</div>
+                <h3>Measurable Results</h3>
+                <p>Data-driven approach with clear metrics and reporting to track your farm's progress and success.</p>
               </div>
 
-              <div className="specialized-service">
-                <div className="service-header">
-                  <div className="service-icon">📱</div>
-                  <h3>Digital Farm Management</h3>
-                </div>
-                <p>
-                  Custom digital solutions for livestock tracking, breeding management, 
-                  and farm operations optimization using our proven systems.
-                </p>
-                <div className="service-details">
-                  <span className="detail-item">📊 Data analytics</span>
-                  <span className="detail-item">📋 Record keeping</span>
-                  <span className="detail-item">📈 Performance tracking</span>
-                </div>
-              </div>
-
-              <div className="specialized-service">
-                <div className="service-header">
-                  <div className="service-icon">🌾</div>
-                  <h3>Feed & Nutrition Consulting</h3>
-                </div>
-                <p>
-                  Expert advice on livestock nutrition, feed optimization, and pasture 
-                  management to maximize animal health and productivity.
-                </p>
-                <div className="service-details">
-                  <span className="detail-item">🥬 Nutrition planning</span>
-                  <span className="detail-item">🌱 Pasture management</span>
-                  <span className="detail-item">⚖️ Feed optimization</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* Service Areas & Availability */}
-        <section className="services-section availability-section">
-          <div className="container">
-            <div className="availability-content">
-              <div className="service-areas">
-                <h3>Service Areas</h3>
-                <p>We primarily serve the Kericho County region and surrounding areas:</p>
-                <ul className="areas-list">
-                  <li>📍 Kericho County (Primary)</li>
-                  <li>📍 Bomet County</li>
-                  <li>📍 Nakuru County (Selected areas)</li>
-                  <li>📍 Kisumu County (Selected areas)</li>
-                </ul>
-                <p className="service-note">
-                  For services outside our primary area, additional travel charges may apply. 
-                  Contact us to discuss your specific location.
-                </p>
-              </div>
-              
-              <div className="operating-hours">
-                <h3>Operating Hours</h3>
-                <div className="hours-grid">
-                  <div className="hours-item">
-                    <span className="day">Monday - Friday</span>
-                    <span className="time">7:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="hours-item">
-                    <span className="day">Saturday</span>
-                    <span className="time">8:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="hours-item">
-                    <span className="day">Sunday</span>
-                    <span className="time">Emergency services only</span>
-                  </div>
-                </div>
-                <p className="emergency-note">
-                  🚨 Emergency veterinary support available 24/7 for existing clients
-                </p>
+              <div className="benefit-card">
+                <div className="benefit-icon">🌍</div>
+                <h3>Local Knowledge</h3>
+                <p>Deep understanding of Kericho's climate, soil conditions, and local farming challenges.</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Contact & Booking Section */}
-        <section className="services-section booking-section">
+        {/* Call to Action */}
+        <section className="services-cta">
           <div className="container">
-            <div className="booking-content">
-              <h2>Ready to Get Started?</h2>
-              <p>
-                Contact us today to discuss your needs, schedule a farm visit, or learn more 
-                about how our services can benefit your agricultural operations.
-              </p>
-              
-              <div className="contact-methods">
-                <div className="contact-method">
-                  <div className="contact-icon">📞</div>
-                  <h4>Call Us</h4>
-                  <p>+254 722 759 217</p>
-                  <span className="contact-note">Available during business hours</span>
-                </div>
-                
-                <div className="contact-method">
-                  <div className="contact-icon">📧</div>
-                  <h4>Email Us</h4>
-                  <p>info@adonaifarm.co.ke</p>
-                  <span className="contact-note">We respond within 24 hours</span>
-                </div>
-                
-                <div className="contact-method">
-                  <div className="contact-icon">📍</div>
-                  <h4>Visit Us</h4>
-                  <p>Chepsir, Kericho, Kenya</p>
-                  <span className="contact-note">By appointment only</span>
+            <div className="cta-content">
+              <div className="cta-text">
+                <h2>🚀 Ready to Transform Your Farm?</h2>
+                <p>
+                  Get started with our professional services today. Whether you need digital farm management,
+                  breeding expertise, or agricultural consulting, we're here to help you succeed.
+                </p>
+                <div className="cta-features">
+                  <div className="cta-feature">
+                    <span className="feature-icon">📞</span>
+                    <span>Free consultation</span>
+                  </div>
+                  <div className="cta-feature">
+                    <span className="feature-icon">⚡</span>
+                    <span>Quick implementation</span>
+                  </div>
+                  <div className="cta-feature">
+                    <span className="feature-icon">🎯</span>
+                    <span>Customized solutions</span>
+                  </div>
+                  <div className="cta-feature">
+                    <span className="feature-icon">📊</span>
+                    <span>Proven results</span>
+                  </div>
                 </div>
               </div>
-
-              <div className="booking-cta">
+              <div className="cta-actions">
                 <a href="/contact" className="btn btn-primary btn-large">
-                  Contact Us Today
+                  📞 Get Free Consultation
                 </a>
-                <p className="cta-note">
-                  Ready to discuss your agricultural needs? We're here to help!
-                </p>
+                <a href="/animals" className="btn btn-outline btn-large">
+                  🐄 See Our Animals
+                </a>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Service Detail Modal */}
+        {selectedService && (
+          <div className="service-modal-overlay" onClick={closeServiceModal}>
+            <div className="service-modal" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close" onClick={closeServiceModal}>✕</button>
+
+              <div className="modal-content">
+                <div className="modal-header">
+                  <div className="modal-icon">{selectedService.icon}</div>
+                  <div className="modal-title-section">
+                    <h2>{selectedService.title}</h2>
+                    <p className="modal-category">{selectedService.category}</p>
+                    <div className="modal-price">{selectedService.price}</div>
+                  </div>
+                </div>
+
+                <div className="modal-description">
+                  <h3>About This Service</h3>
+                  <p>{selectedService.description}</p>
+                </div>
+
+                <div className="modal-details">
+                  <div className="detail-section">
+                    <h4>🎯 Features & Capabilities</h4>
+                    <ul className="features-list">
+                      {selectedService.features.map((feature, index) => (
+                        <li key={index}>✓ {feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="detail-section">
+                    <h4>💡 Benefits & Outcomes</h4>
+                    <ul className="benefits-list">
+                      {selectedService.benefits.map((benefit, index) => (
+                        <li key={index}>🌟 {benefit}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="modal-actions">
+                  <a href="/contact" className="btn btn-primary">
+                    📞 Get Quote
+                  </a>
+                  <button className="btn btn-outline" onClick={closeServiceModal}>
+                    ← Back to Services
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

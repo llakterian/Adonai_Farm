@@ -87,7 +87,7 @@ npm run dev
 - **Express.js** - Web framework
 - **SQLite** - Lightweight database
 - **JWT** - Authentication
-- **Multer** - File uploads
+- **Multer** - File images
 - **bcrypt** - Password hashing
 
 ### DevOps
@@ -110,7 +110,7 @@ adonai_farm/
 │   ├── index.js            # Main server file
 │   ├── migrate_and_seed.js # Database setup
 │   ├── data/               # SQLite database
-│   ├── uploads/            # Photo uploads
+│   ├── images/            # Photo images
 │   └── Dockerfile
 ├── docker-compose.yml      # Multi-container setup
 ├── deploy.sh              # Quick deployment script

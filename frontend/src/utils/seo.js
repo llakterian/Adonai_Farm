@@ -3,45 +3,45 @@ export const farmBusinessInfo = {
   name: "Adonai Farm",
   description: "Modern livestock farm in Kericho, Kenya specializing in sustainable farming, quality breeding, and premium agricultural products",
   url: "https://adonaifarm.co.ke",
-  logo: "https://adonaifarm.co.ke/images/logo.png",
-  image: "https://adonaifarm.co.ke/images/hero-farm.jpg",
-  
+  logo: "/images/logo.png",
+  image: "/images/adonaixiii.jpg",
+
   // Business details
   type: "Farm",
   category: "Agriculture",
   foundingDate: "2020",
-  
+
   // Location information for local SEO
   address: {
     streetAddress: "Chepsir",
     addressLocality: "Kericho",
-    addressRegion: "Kericho County", 
+    addressRegion: "Kericho County",
     addressCountry: "Kenya",
     postalCode: "20200"
   },
-  
+
   // Contact information
   contact: {
     telephone: "+254722759217",
     email: "info@adonaifarm.co.ke"
   },
-  
+
   // Operating hours
   openingHours: [
     "Mo-Fr 07:00-18:00",
     "Sa 08:00-16:00"
   ],
-  
+
   // Services offered
   services: [
     "Livestock Breeding",
     "Farm Tours",
-    "Agricultural Consulting", 
+    "Agricultural Consulting",
     "Premium Meat Products",
     "Dairy Products",
     "Veterinary Support"
   ],
-  
+
   // Keywords for SEO
   keywords: [
     "livestock farm Kenya",
@@ -82,7 +82,7 @@ export const generateMetaTags = (pageData) => {
     title: fullTitle,
     description: fullDescription,
     keywords: allKeywords,
-    
+
     // Open Graph tags for social media
     ogTitle: fullTitle,
     ogDescription: fullDescription,
@@ -90,14 +90,14 @@ export const generateMetaTags = (pageData) => {
     ogUrl: fullUrl,
     ogType: type,
     ogSiteName: farmBusinessInfo.name,
-    
+
     // Twitter Card tags
     twitterCard: "summary_large_image",
     twitterTitle: fullTitle,
     twitterDescription: fullDescription,
     twitterImage: fullImage,
     twitterSite: "@adonaifarm", // Add if Twitter account exists
-    
+
     // Additional meta tags
     canonical: fullUrl,
     robots: "index, follow",
@@ -105,7 +105,7 @@ export const generateMetaTags = (pageData) => {
     author: author || farmBusinessInfo.name,
     publishedTime,
     modifiedTime,
-    
+
     // Local business specific
     geoRegion: "KE-30", // Kericho County code
     geoPlacename: "Kericho, Kenya",
@@ -198,7 +198,7 @@ export const generateStructuredData = (pageType, pageData = {}) => {
               }
             },
             {
-              "@type": "Offer", 
+              "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
                 "name": "Farm Tours",

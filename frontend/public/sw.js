@@ -23,7 +23,7 @@ const STATIC_FILES = [
 // Install event - cache static files
 self.addEventListener('install', (event) => {
   console.log('Service Worker: Installing...');
-  
+
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
@@ -34,7 +34,7 @@ self.addEventListener('install', (event) => {
         console.error('Service Worker: Failed to cache static files', error);
       })
   );
-  
+
   // Force the waiting service worker to become the active service worker
   self.skipWaiting();
 });
@@ -42,15 +42,15 @@ self.addEventListener('install', (event) => {
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('Service Worker: Activating...');
-  
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== STATIC_CACHE && 
-              cacheName !== DYNAMIC_CACHE && 
-              cacheName !== IMAGE_CACHE && 
-              cacheName !== API_CACHE) {
+          if (cacheName !== STATIC_CACHE &&
+            cacheName !== DYNAMIC_CACHE &&
+            cacheName !== IMAGE_CACHE &&
+            cacheName !== API_CACHE) {
             console.log('Service Worker: Deleting old cache', cacheName);
             return caches.delete(cacheName);
           }
@@ -58,7 +58,7 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-  
+
   // Ensure the service worker takes control immediately
   self.clients.claim();
 });
@@ -67,12 +67,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-  
+
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
   }
-  
+
   // Handle different types of requests
   if (url.origin === location.origin) {
     // Same origin requests
@@ -86,40 +86,40 @@ self.addEventListener('fetch', (event) => {
 // Handle same-origin requests with specialized caching strategies
 async function handleSameOriginRequest(request) {
   const url = new URL(request.url);
-  
+
   try {
     // For HTML pages, use network-first strategy
     if (request.headers.get('accept')?.includes('text/html')) {
       return await networkFirstStrategy(request);
     }
-    
-    // For farm images from uploads, use specialized image caching
-    if (url.pathname.includes('/uploads/') && isImageRequest(request)) {
+
+    // For farm images from images, use specialized image caching
+    if (url.pathname.includes('/images/') && isImageRequest(request)) {
       return await imageFirstStrategy(request);
     }
-    
+
     // For public images, use cache-first strategy
     if (url.pathname.includes('/images/') && isImageRequest(request)) {
       return await cacheFirstStrategy(request, IMAGE_CACHE);
     }
-    
+
     // For API requests, use network-first with API cache
     if (url.pathname.includes('/api/')) {
       return await networkFirstStrategy(request, API_CACHE);
     }
-    
+
     // For static assets, use cache-first strategy
     if (url.pathname.includes('/static/') ||
-        url.pathname.endsWith('.js') ||
-        url.pathname.endsWith('.css') ||
-        url.pathname.endsWith('.woff') ||
-        url.pathname.endsWith('.woff2')) {
+      url.pathname.endsWith('.js') ||
+      url.pathname.endsWith('.css') ||
+      url.pathname.endsWith('.woff') ||
+      url.pathname.endsWith('.woff2')) {
       return await cacheFirstStrategy(request);
     }
-    
+
     // For other requests, use network-first strategy
     return await networkFirstStrategy(request);
-    
+
   } catch (error) {
     console.error('Service Worker: Request failed', error);
     return await getOfflineFallback(request);
@@ -130,7 +130,7 @@ async function handleSameOriginRequest(request) {
 function isImageRequest(request) {
   const url = new URL(request.url);
   return /\.(jpg|jpeg|png|gif|webp|svg|ico)$/i.test(url.pathname) ||
-         request.headers.get('accept')?.includes('image/');
+    request.headers.get('accept')?.includes('image/');
 }
 
 // Handle cross-origin requests
@@ -138,13 +138,13 @@ async function handleCrossOriginRequest(request) {
   try {
     // Try network first for cross-origin requests
     const networkResponse = await fetch(request);
-    
+
     // Cache successful responses
     if (networkResponse.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
     // Try to serve from cache if network fails
@@ -152,7 +152,7 @@ async function handleCrossOriginRequest(request) {
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     // Return offline fallback
     return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
   }
@@ -161,19 +161,19 @@ async function handleCrossOriginRequest(request) {
 // Cache-first strategy: Check cache first, then network
 async function cacheFirstStrategy(request, cacheName = DYNAMIC_CACHE) {
   const cachedResponse = await caches.match(request);
-  
+
   if (cachedResponse) {
     return cachedResponse;
   }
-  
+
   try {
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
     return await getOfflineFallback(request);
@@ -183,10 +183,10 @@ async function cacheFirstStrategy(request, cacheName = DYNAMIC_CACHE) {
 // Specialized image-first strategy for farm images
 async function imageFirstStrategy(request) {
   const url = new URL(request.url);
-  
+
   // Check image cache first
   const cachedResponse = await caches.match(request, { cacheName: IMAGE_CACHE });
-  
+
   if (cachedResponse) {
     // Check if cached image is still fresh (24 hours)
     const cachedDate = cachedResponse.headers.get('date');
@@ -197,36 +197,36 @@ async function imageFirstStrategy(request) {
       }
     }
   }
-  
+
   try {
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       // Cache the image with extended headers
       const cache = await caches.open(IMAGE_CACHE);
       const responseToCache = networkResponse.clone();
-      
+
       // Add custom headers for cache management
       const headers = new Headers(responseToCache.headers);
       headers.set('sw-cached-date', new Date().toISOString());
       headers.set('cache-control', 'public, max-age=86400'); // 24 hours
-      
+
       const cachedResponse = new Response(responseToCache.body, {
         status: responseToCache.status,
         statusText: responseToCache.statusText,
         headers: headers
       });
-      
+
       cache.put(request, cachedResponse);
     }
-    
+
     return networkResponse;
   } catch (error) {
     // If network fails, return cached version even if stale
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     // Try to find a fallback image
     return await getImageFallback(request);
   }
@@ -236,11 +236,11 @@ async function imageFirstStrategy(request) {
 async function getImageFallback(request) {
   const url = new URL(request.url);
   const filename = url.pathname.split('/').pop();
-  
+
   // Try to find similar images in cache
   const cache = await caches.open(IMAGE_CACHE);
   const cachedRequests = await cache.keys();
-  
+
   // For animal images, try other animal images
   if (filename.startsWith('adonai')) {
     for (const cachedRequest of cachedRequests) {
@@ -252,7 +252,7 @@ async function getImageFallback(request) {
       }
     }
   }
-  
+
   // For farm images, try other farm images
   if (filename.startsWith('farm-')) {
     for (const cachedRequest of cachedRequests) {
@@ -264,14 +264,14 @@ async function getImageFallback(request) {
       }
     }
   }
-  
+
   // Try public images as final fallback
   const publicImageFallbacks = ['/images/hero-farm.jpg', '/images/farm-2.jpg', '/images/farm-3.jpg'];
   for (const fallbackUrl of publicImageFallbacks) {
     const fallbackResponse = await caches.match(fallbackUrl);
     if (fallbackResponse) return fallbackResponse;
   }
-  
+
   // Return placeholder image
   return new Response(getPlaceholderImageSVG(), {
     headers: { 'Content-Type': 'image/svg+xml' }
@@ -291,20 +291,20 @@ function getPlaceholderImageSVG() {
 async function networkFirstStrategy(request, cacheName = DYNAMIC_CACHE) {
   try {
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
-    
+
     return networkResponse;
   } catch (error) {
     const cachedResponse = await caches.match(request);
-    
+
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     return await getOfflineFallback(request);
   }
 }
@@ -312,14 +312,14 @@ async function networkFirstStrategy(request, cacheName = DYNAMIC_CACHE) {
 // Get offline fallback response
 async function getOfflineFallback(request) {
   const url = new URL(request.url);
-  
+
   // For HTML requests, return the main app shell
   if (request.headers.get('accept')?.includes('text/html')) {
     const cachedApp = await caches.match('/');
     if (cachedApp) {
       return cachedApp;
     }
-    
+
     return new Response(`
       <!DOCTYPE html>
       <html>
@@ -370,10 +370,10 @@ async function getOfflineFallback(request) {
       headers: { 'Content-Type': 'text/html' }
     });
   }
-  
+
   // For other requests, return a simple offline response
-  return new Response('Offline', { 
-    status: 503, 
+  return new Response('Offline', {
+    status: 503,
     statusText: 'Service Unavailable',
     headers: { 'Content-Type': 'text/plain' }
   });
@@ -382,7 +382,7 @@ async function getOfflineFallback(request) {
 // Background sync for offline actions
 self.addEventListener('sync', (event) => {
   console.log('Service Worker: Background sync triggered', event.tag);
-  
+
   if (event.tag === 'background-sync') {
     event.waitUntil(syncOfflineData());
   }
@@ -393,7 +393,7 @@ async function syncOfflineData() {
   try {
     // Get offline queue from IndexedDB or localStorage
     const offlineQueue = await getOfflineQueue();
-    
+
     for (const item of offlineQueue) {
       try {
         await processOfflineItem(item);
@@ -402,7 +402,7 @@ async function syncOfflineData() {
         console.error('Failed to sync offline item:', item, error);
       }
     }
-    
+
     console.log('Service Worker: Offline data synced successfully');
   } catch (error) {
     console.error('Service Worker: Failed to sync offline data', error);
@@ -431,7 +431,7 @@ async function removeFromOfflineQueue(itemId) {
 // Push notification handling
 self.addEventListener('push', (event) => {
   console.log('Service Worker: Push notification received');
-  
+
   const options = {
     body: event.data ? event.data.text() : 'New notification from Adonai Farm',
     icon: '/images/farm-icon-192.png',
@@ -454,7 +454,7 @@ self.addEventListener('push', (event) => {
       }
     ]
   };
-  
+
   event.waitUntil(
     self.registration.showNotification('Adonai Farm', options)
   );
@@ -463,9 +463,9 @@ self.addEventListener('push', (event) => {
 // Notification click handling
 self.addEventListener('notificationclick', (event) => {
   console.log('Service Worker: Notification clicked');
-  
+
   event.notification.close();
-  
+
   if (event.action === 'explore') {
     // Open the app to the notifications page
     event.waitUntil(
@@ -485,11 +485,11 @@ self.addEventListener('notificationclick', (event) => {
 // Message handling from main thread
 self.addEventListener('message', (event) => {
   console.log('Service Worker: Message received', event.data);
-  
+
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
+
   if (event.data && event.data.type === 'CACHE_URLS') {
     event.waitUntil(
       caches.open(DYNAMIC_CACHE).then((cache) => {

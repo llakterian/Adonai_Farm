@@ -8,7 +8,7 @@ const MOCK_IMAGES = [
   // Farm facility images
   {
     filename: "farm-1.jpg",
-    url: "/uploads/Adonai/farm-1.jpg",
+    url: "/images/Adonai/farm-1.jpg",
     category: "farm",
     size: 212647,
     lastModified: "2025-08-15T06:53:10.545Z",
@@ -16,17 +16,17 @@ const MOCK_IMAGES = [
     caption: "Main farm buildings and operational facilities"
   },
   {
-    filename: "farm-2.jpg", 
-    url: "/uploads/Adonai/farm-2.jpg",
+    filename: "farm-2.jpg",
+    url: "/images/Adonai/farm-2.jpg",
     category: "farm",
     size: 106585,
     lastModified: "2025-08-15T06:53:20.336Z",
-    alt: "Adonai Farm operations and facilities 2", 
+    alt: "Adonai Farm operations and facilities 2",
     caption: "Pasture land and grazing areas"
   },
   {
     filename: "farm-3.jpg",
-    url: "/uploads/Adonai/farm-3.jpg", 
+    url: "/images/Adonai/farm-3.jpg",
     category: "farm",
     size: 267450,
     lastModified: "2025-08-15T06:53:31.034Z",
@@ -35,8 +35,8 @@ const MOCK_IMAGES = [
   },
   {
     filename: "farm-4.jpg",
-    url: "/uploads/Adonai/farm-4.jpg",
-    category: "farm", 
+    url: "/images/Adonai/farm-4.jpg",
+    category: "farm",
     size: 243034,
     lastModified: "2025-08-15T06:53:43.125Z",
     alt: "Adonai Farm operations and facilities 4",
@@ -44,25 +44,25 @@ const MOCK_IMAGES = [
   },
   {
     filename: "farm-5.jpg",
-    url: "/uploads/Adonai/farm-5.jpg",
+    url: "/images/Adonai/farm-5.jpg",
     category: "farm",
     size: 169225,
-    lastModified: "2025-08-15T06:53:53.822Z", 
+    lastModified: "2025-08-15T06:53:53.822Z",
     alt: "Adonai Farm operations and facilities 5",
     caption: "Dairy processing and milking facilities"
   },
   {
     filename: "farm-6.jpg",
-    url: "/uploads/Adonai/farm-6.jpg",
+    url: "/images/Adonai/farm-6.jpg",
     category: "farm",
     size: 160097,
     lastModified: "2025-08-15T06:54:02.461Z",
-    alt: "Adonai Farm operations and facilities 6", 
+    alt: "Adonai Farm operations and facilities 6",
     caption: "Farm infrastructure and support buildings"
   },
   {
     filename: "farm-7.jpg",
-    url: "/uploads/Adonai/farm-7.jpg",
+    url: "/images/Adonai/farm-7.jpg",
     category: "farm",
     size: 119808,
     lastModified: "2025-08-15T06:54:22.383Z",
@@ -72,7 +72,7 @@ const MOCK_IMAGES = [
   // Animal images
   {
     filename: "adonai1.jpg",
-    url: "/uploads/Adonai/adonai1.jpg",
+    url: "/images/Adonai/adonai1.jpg",
     category: "animals",
     size: 1426574,
     lastModified: "2025-08-09T14:11:19.930Z",
@@ -80,8 +80,8 @@ const MOCK_IMAGES = [
     caption: "Our diverse livestock - dairy & beef cattle, goats, sheep, and poultry"
   },
   {
-    filename: "adonai2.jpg", 
-    url: "/uploads/Adonai/adonai2.jpg",
+    filename: "adonai2.jpg",
+    url: "/images/Adonai/adonai2.jpg",
     category: "animals",
     size: 531604,
     lastModified: "2025-08-09T14:11:35.812Z",
@@ -90,7 +90,7 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonai3.jpg",
-    url: "/uploads/Adonai/adonai3.jpg", 
+    url: "/images/Adonai/adonai3.jpg",
     category: "animals",
     size: 473486,
     lastModified: "2025-08-09T14:11:55.299Z",
@@ -99,16 +99,16 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonai4.jpg",
-    url: "/uploads/Adonai/adonai4.jpg",
+    url: "/images/Adonai/adonai4.jpg",
     category: "animals",
     size: 861884,
     lastModified: "2025-08-09T14:12:09.611Z",
-    alt: "Adonai Farm livestock - cattle, goats, sheep, and poultry 4", 
+    alt: "Adonai Farm livestock - cattle, goats, sheep, and poultry 4",
     caption: "Premium breeding programs and animal care"
   },
   {
     filename: "adonai5.jpg",
-    url: "/uploads/Adonai/adonai5.jpg",
+    url: "/images/Adonai/adonai5.jpg",
     category: "animals",
     size: 414851,
     lastModified: "2025-08-09T14:12:25.148Z",
@@ -117,8 +117,8 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonai6.jpg",
-    url: "/uploads/Adonai/adonai6.jpg",
-    category: "animals", 
+    url: "/images/Adonai/adonai6.jpg",
+    category: "animals",
     size: 834620,
     lastModified: "2025-08-09T14:12:40.761Z",
     alt: "Adonai Farm livestock - cattle, goats, sheep, and poultry 6",
@@ -126,7 +126,7 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonai7.jpg",
-    url: "/uploads/Adonai/adonai7.jpg",
+    url: "/images/Adonai/adonai7.jpg",
     category: "animals",
     size: 849597,
     lastModified: "2025-08-09T14:13:05.469Z",
@@ -135,16 +135,16 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonai8.jpg",
-    url: "/uploads/Adonai/adonai8.jpg",
+    url: "/images/Adonai/adonai8.jpg",
     category: "animals",
     size: 983207,
-    lastModified: "2025-08-09T14:13:23.976Z", 
+    lastModified: "2025-08-09T14:13:23.976Z",
     alt: "Adonai Farm livestock - cattle, goats, sheep, and poultry 8",
     caption: "Quality livestock production and management"
   },
   {
     filename: "adonai9.jpg",
-    url: "/uploads/Adonai/adonai9.jpg",
+    url: "/images/Adonai/adonai9.jpg",
     category: "animals",
     size: 1020964,
     lastModified: "2025-08-09T14:13:41.152Z",
@@ -153,7 +153,7 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonaix.jpg",
-    url: "/uploads/Adonai/adonaix.jpg",
+    url: "/images/Adonai/adonaix.jpg",
     category: "animals",
     size: 957047,
     lastModified: "2025-08-09T14:13:59.887Z",
@@ -161,8 +161,8 @@ const MOCK_IMAGES = [
     caption: "Premium livestock breeding and care"
   },
   {
-    filename: "adonaixi.jpg", 
-    url: "/uploads/Adonai/adonaixi.jpg",
+    filename: "adonaixi.jpg",
+    url: "/images/Adonai/adonaixi.jpg",
     category: "animals",
     size: 497827,
     lastModified: "2025-08-09T14:14:17.243Z",
@@ -171,7 +171,7 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonaixii.jpg",
-    url: "/uploads/Adonai/adonaixii.jpg",
+    url: "/images/Adonai/adonaixii.jpg",
     category: "animals",
     size: 798032,
     lastModified: "2025-08-09T14:14:31.573Z",
@@ -180,11 +180,11 @@ const MOCK_IMAGES = [
   },
   {
     filename: "adonaixiii.jpg",
-    url: "/uploads/Adonai/adonaixiii.jpg",
+    url: "/images/Adonai/adonaixiii.jpg",
     category: "animals",
     size: 754720,
     lastModified: "2025-08-09T14:14:58.679Z",
-    alt: "Adonai Farm livestock - cattle, goats, sheep, and poultry 13", 
+    alt: "Adonai Farm livestock - cattle, goats, sheep, and poultry 13",
     caption: "Comprehensive livestock management system"
   },
   // Fallback images for mobile/offline use
@@ -248,7 +248,7 @@ class LocalStorageBackend {
       farm: images.filter(img => img.category === 'farm'),
       facilities: images.filter(img => img.category === 'facilities')
     };
-    
+
     return {
       images,
       categories,
@@ -333,7 +333,7 @@ class LocalStorageBackend {
     };
     contacts.push(newContact);
     localStorage.setItem('adonai_contacts', JSON.stringify(contacts));
-    
+
     // Simulate email notification
     console.log('📧 Contact form submitted:', newContact);
     return { success: true, message: 'Thank you for your inquiry! We will get back to you soon.' };

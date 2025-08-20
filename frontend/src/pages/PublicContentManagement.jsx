@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCurrentUser, mockAnimals, mockGalleryImages } from '../auth.js';
+import { getCurrentUser, mockAnimals } from '../auth.js';
+import { realGalleryImages } from '../mockData.js';
 import PublicContentService from '../services/PublicContentService.js';
 import ContentManagementTest from '../components/ContentManagementTest.jsx';
 
@@ -21,7 +22,7 @@ export default function PublicContentManagement() {
 
   const loadData = () => {
     setLoading(true);
-    
+
     try {
       // Load data using PublicContentService
       setAnimals(PublicContentService.getAllAnimals());
@@ -29,7 +30,7 @@ export default function PublicContentManagement() {
       setPublicSettings(PublicContentService.getPublicSettings());
       setFarmContent(PublicContentService.getFarmContent());
       setInquiries(PublicContentService.getContactInquiries());
-      
+
       setLoading(false);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -42,7 +43,7 @@ export default function PublicContentManagement() {
       // Validate settings before saving
       const errors = PublicContentService.validateSettings(publicSettings);
       setValidationErrors(errors);
-      
+
       if (errors.length > 0) {
         setSaveStatus('error');
         return;
@@ -51,7 +52,7 @@ export default function PublicContentManagement() {
       // Save settings using service
       PublicContentService.savePublicSettings(publicSettings);
       setSaveStatus('success');
-      
+
       setTimeout(() => setSaveStatus(''), 3000);
     } catch (error) {
       console.error('Error saving settings:', error);
@@ -75,11 +76,11 @@ export default function PublicContentManagement() {
   const toggleAnimalVisibility = (animalId) => {
     const animal = animals.find(a => a.id === animalId);
     const newVisibility = !animal.isPublicVisible;
-    
+
     PublicContentService.updateAnimalVisibility(animalId, newVisibility);
-    
-    const updatedAnimals = animals.map(animal => 
-      animal.id === animalId 
+
+    const updatedAnimals = animals.map(animal =>
+      animal.id === animalId
         ? { ...animal, isPublicVisible: newVisibility }
         : animal
     );
@@ -89,11 +90,11 @@ export default function PublicContentManagement() {
   const toggleImageVisibility = (imageId) => {
     const image = galleryImages.find(img => img.id === imageId);
     const newVisibility = !image.isPublic;
-    
+
     PublicContentService.updateImageVisibility(imageId, newVisibility);
-    
-    const updatedImages = galleryImages.map(image => 
-      image.id === imageId 
+
+    const updatedImages = galleryImages.map(image =>
+      image.id === imageId
         ? { ...image, isPublic: newVisibility }
         : image
     );
@@ -102,7 +103,7 @@ export default function PublicContentManagement() {
 
   const toggleFeaturedAnimal = (animalId) => {
     const newFeaturedStatus = PublicContentService.toggleFeaturedAnimal(animalId);
-    
+
     // Update local state
     const updatedSettings = PublicContentService.getPublicSettings();
     setPublicSettings(updatedSettings);
@@ -112,7 +113,7 @@ export default function PublicContentManagement() {
     const updatedTypes = visible
       ? [...publicSettings.visibleAnimalTypes, type]
       : publicSettings.visibleAnimalTypes.filter(t => t !== type);
-    
+
     setPublicSettings({
       ...publicSettings,
       visibleAnimalTypes: updatedTypes
@@ -120,8 +121,8 @@ export default function PublicContentManagement() {
   };
 
   const getPublicAnimals = () => {
-    return animals.filter(animal => 
-      animal.isPublicVisible !== false && 
+    return animals.filter(animal =>
+      animal.isPublicVisible !== false &&
       publicSettings.visibleAnimalTypes.includes(animal.type)
     );
   };
@@ -194,37 +195,37 @@ export default function PublicContentManagement() {
 
       {/* Tab Navigation */}
       <div className="tab-navigation">
-        <button 
+        <button
           className={activeTab === 'animals' ? 'active' : ''}
           onClick={() => setActiveTab('animals')}
         >
           🐄 Animal Visibility
         </button>
-        <button 
+        <button
           className={activeTab === 'gallery' ? 'active' : ''}
           onClick={() => setActiveTab('gallery')}
         >
           📸 Gallery Images
         </button>
-        <button 
+        <button
           className={activeTab === 'content' ? 'active' : ''}
           onClick={() => setActiveTab('content')}
         >
           📝 Farm Content
         </button>
-        <button 
+        <button
           className={activeTab === 'inquiries' ? 'active' : ''}
           onClick={() => setActiveTab('inquiries')}
         >
           📧 Inquiries ({inquiries.filter(i => !i.isRead).length})
         </button>
-        <button 
+        <button
           className={activeTab === 'settings' ? 'active' : ''}
           onClick={() => setActiveTab('settings')}
         >
           ⚙️ General Settings
         </button>
-        <button 
+        <button
           className={activeTab === 'test' ? 'active' : ''}
           onClick={() => setActiveTab('test')}
         >
@@ -243,9 +244,9 @@ export default function PublicContentManagement() {
                 <div key={type} className="animal-type-card">
                   <div className="animal-type-info">
                     <span className="animal-emoji">
-                      {type.includes('Cattle') ? '🐄' : 
-                       type.includes('Goat') ? '🐐' : 
-                       type.includes('Sheep') ? '🐑' : '🐔'}
+                      {type.includes('Cattle') ? '🐄' :
+                        type.includes('Goat') ? '🐐' :
+                          type.includes('Sheep') ? '🐑' : '🐔'}
                     </span>
                     <span className="animal-type-name">{type}</span>
                     <span className="animal-count">
@@ -274,9 +275,9 @@ export default function PublicContentManagement() {
                   <div className="animal-info">
                     <div className="animal-header">
                       <span className="animal-emoji">
-                        {animal.type.includes('Cattle') ? '🐄' : 
-                         animal.type.includes('Goat') ? '🐐' : 
-                         animal.type.includes('Sheep') ? '🐑' : '🐔'}
+                        {animal.type.includes('Cattle') ? '🐄' :
+                          animal.type.includes('Goat') ? '🐐' :
+                            animal.type.includes('Sheep') ? '🐑' : '🐔'}
                       </span>
                       <div>
                         <h4>{animal.name}</h4>
@@ -321,8 +322,8 @@ export default function PublicContentManagement() {
               {galleryImages.map(image => (
                 <div key={image.id} className="image-visibility-card">
                   <div className="image-preview">
-                    <img 
-                      src={image.fallbackPath || '/images/hero-farm.jpg'} 
+                    <img
+                      src={image.fallbackPath || '/images/hero-farm.jpg'}
                       alt={image.caption || image.filename}
                       onError={(e) => {
                         e.target.src = '/images/hero-farm.jpg';
@@ -407,7 +408,7 @@ export default function PublicContentManagement() {
                 />
               </div>
             </div>
-            
+
             <h4>Contact Information</h4>
             <div className="form-grid">
               <div className="form-group">
@@ -536,7 +537,7 @@ export default function PublicContentManagement() {
           <div className="card">
             <h3>Contact Inquiries</h3>
             <p>Manage inquiries received through the public website contact forms</p>
-            
+
             {inquiries.length === 0 ? (
               <div className="empty-state">
                 <h4>No inquiries yet</h4>
@@ -550,19 +551,19 @@ export default function PublicContentManagement() {
                       <div className="inquiry-info">
                         <h4>{inquiry.name}</h4>
                         <p className="inquiry-meta">
-                          {inquiry.email} • {inquiry.phone} • 
+                          {inquiry.email} • {inquiry.phone} •
                           {new Date(inquiry.timestamp).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="inquiry-status">
                         <span className={`status-badge ${inquiry.status}`}>
-                          {inquiry.status === 'new' ? '🆕 New' : 
-                           inquiry.status === 'responded' ? '✅ Responded' : 
-                           '📁 Closed'}
+                          {inquiry.status === 'new' ? '🆕 New' :
+                            inquiry.status === 'responded' ? '✅ Responded' :
+                              '📁 Closed'}
                         </span>
                       </div>
                     </div>
-                    
+
                     <div className="inquiry-content">
                       <div className="inquiry-subject">
                         <strong>Subject:</strong> {inquiry.subject}
@@ -575,9 +576,9 @@ export default function PublicContentManagement() {
                         <p>{inquiry.message}</p>
                       </div>
                     </div>
-                    
+
                     <div className="inquiry-actions">
-                      <button 
+                      <button
                         className="btn btn-sm btn-outline"
                         onClick={() => {
                           PublicContentService.updateInquiryStatus(inquiry.id, 'responded');
@@ -587,7 +588,7 @@ export default function PublicContentManagement() {
                       >
                         ✅ Mark Responded
                       </button>
-                      <button 
+                      <button
                         className="btn btn-sm btn-outline"
                         onClick={() => {
                           PublicContentService.updateInquiryStatus(inquiry.id, 'closed');
@@ -597,7 +598,7 @@ export default function PublicContentManagement() {
                       >
                         📁 Close
                       </button>
-                      <a 
+                      <a
                         href={`mailto:${inquiry.email}?subject=Re: ${inquiry.subject}`}
                         className="btn btn-sm btn-primary"
                       >
@@ -618,7 +619,7 @@ export default function PublicContentManagement() {
           <div className="card">
             <h3>Public Website Settings</h3>
             <p>Configure general settings for the public farm website</p>
-            
+
             <div className="settings-grid">
               <div className="setting-item">
                 <label className="setting-label">

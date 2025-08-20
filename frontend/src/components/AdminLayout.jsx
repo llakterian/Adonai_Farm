@@ -1,200 +1,180 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+// frontend/src/components/AdminLayout.jsx
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { getCurrentUser, logout } from '../auth.js';
+import { notificationSystem } from '../utils/notifications';
+import { startTransition } from 'react';
 
-export default function AdminLayout({ children }) {
+const AdminLayout = ({ children }) => {
   const currentUser = getCurrentUser();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Add admin-dashboard class to body when admin pages are loaded
-    document.body.classList.add('admin-dashboard');
-    
-    // Cleanup when component unmounts
-    return () => {
-      document.body.classList.remove('admin-dashboard');
+    const loadNotifications = async () => {
+      const notifications = await notificationSystem.getActiveNotifications();
+      setNotifications(notifications);
     };
+    loadNotifications();
   }, []);
 
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
-
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isMobileMenuOpen && !event.target.closest('.admin-header-fixed')) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isMobileMenuOpen]);
-
-  // Prevent body scroll when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
-
   const handleLogout = () => {
-    const confirmLogout = window.confirm('Are you sure you want to logout?');
-    if (confirmLogout) {
-      logout();
-    }
+    logout();
+    navigate('/login');
   };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Helper function to determine if a tab is active
-  const isActiveTab = (path) => {
-    if (path === '/dashboard') {
-      return location.pathname === '/dashboard';
-    }
-    return location.pathname.startsWith(path);
-  };
+  const isActive = (path) => location.pathname === path;
 
-  // Admin navigation items for reuse
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  if (!currentUser) {
+    return (
+      <div className="admin-container" style={{ textAlign: 'center', padding: '2rem' }}>
+        <h2>Access Denied</h2>
+        <p>Please log in to access the admin dashboard.</p>
+        <Link to="/login" className="btn btn-primary">Go to Login</Link>
+      </div>
+    );
+  }
+
   const adminNavItems = [
-    { path: '/dashboard', label: '🏡 Overview', ariaLabel: 'Dashboard Overview' },
-    { path: '/dashboard/animals', label: '🐄 Livestock', ariaLabel: 'Livestock Management' },
-    { path: '/dashboard/workers', label: '👨‍🌾 Staff', ariaLabel: 'Staff Management' },
-    { path: '/dashboard/gallery', label: '📸 Gallery', ariaLabel: 'Photo Gallery' },
-    { path: '/dashboard/reports', label: '📊 Reports', ariaLabel: 'Reports and Analytics' },
-    { path: '/dashboard/infrastructure', label: '🏗️ Assets', ariaLabel: 'Infrastructure and Assets' }
+    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/dashboard/animals', label: 'Animals', icon: '🐄' },
+    { path: '/dashboard/breeding', label: 'Breeding', icon: '🐣' },
+    { path: '/dashboard/workers', label: 'Workers', icon: '👥' },
+    { path: '/dashboard/inventory', label: 'Inventory', icon: '📦' },
+    { path: '/dashboard/infrastructure', label: 'Infrastructure', icon: '🏗️' },
+    { path: '/dashboard/reports', label: 'Reports', icon: '📈' },
+    { path: '/dashboard/gallery', label: 'Gallery', icon: '📸' },
+    { path: '/dashboard/users', label: 'Users', icon: '👤' },
+    { path: '/dashboard/account', label: 'Account', icon: '⚙️' }
   ];
 
   return (
-    <div className="admin-container">
-      {/* Skip Navigation Link for Accessibility */}
-      <a href="#main-content" className="skip-navigation sr-only-focusable">
-        Skip to main content
-      </a>
-      
-      {/* Admin Header - Fixed Layout */}
-      <header className="admin-header-fixed" role="banner">
+    <div className="admin-layout">
+      {/* Admin Header */}
+      <header className="admin-header">
         <div className="admin-header-content">
-          <div className="admin-logo-section">
-            <Link 
-              to="/dashboard" 
-              className="admin-logo-link"
-              aria-label="Adonai Farm Management - Go to Dashboard"
-            >
-              🌾 Adonai Farm Management
+          <div className="admin-logo">
+            <Link to="/dashboard" className="admin-brand">
+              <img
+                src="/images/logo.svg"
+                alt="Adonai Farm"
+                className="admin-logo-svg"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'inline-flex';
+                }}
+              />
+              <div className="logo-fallback" style={{ display: 'none' }}>
+                <span className="logo-icon">🌾</span>
+                <span className="brand-text">Adonai Farm</span>
+              </div>
             </Link>
           </div>
-          
+
           {/* Desktop Navigation */}
-          <nav className="admin-nav-tabs" role="navigation" aria-label="Admin Navigation">
-            {adminNavItems.map(item => (
+          <nav className="admin-nav desktop-nav">
+            {adminNavItems.slice(0, 6).map(item => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`admin-tab ${isActiveTab(item.path) ? 'active' : ''}`}
-                aria-current={isActiveTab(item.path) ? 'page' : undefined}
-                aria-label={item.ariaLabel}
+                className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
+                title={item.label}
               >
-                {item.label}
+                <span className="nav-icon">{item.icon}</span>
+                <span className="nav-label">{item.label}</span>
               </Link>
             ))}
           </nav>
 
-          {/* Mobile Menu Toggle - High Contrast Agricultural Theme */}
-          <button 
-            className="admin-mobile-menu-toggle"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle admin navigation menu"
-            aria-expanded={isMobileMenuOpen}
-            type="button"
-          >
-            {isMobileMenuOpen ? '✕' : '☰'}
-          </button>
-
-          <div className="admin-user-section" role="region" aria-label="User Account">
-            <div className="admin-user-info">
-              <span className="admin-user-name" aria-label="Current user">
-                {currentUser?.name || 'Admin'}
-              </span>
-              <span className="admin-user-role" aria-label="User role">
-                ({currentUser?.role || 'admin'})
-              </span>
+          {/* User Menu */}
+          <div className="admin-user-menu">
+            <div className="user-info">
+              <span className="user-name">👤 {currentUser.name}</span>
+              <span className="user-role">({currentUser.role || 'Admin'})</span>
             </div>
-            
-            <div className="admin-actions">
-              <Link 
-                to="/" 
-                className="btn-view-public"
-                aria-label="View public website"
-              >
-                🌐 View Site
+            <div className="user-actions">
+              <Link to="/" className="btn btn-outline btn-sm" title="View Public Site">
+                🌐 Public Site
               </Link>
-              <button 
-                onClick={handleLogout}
-                className="btn-logout"
-                aria-label="Logout from admin panel"
-                type="button"
-              >
-                Logout
+              <button onClick={handleLogout} className="btn btn-danger btn-sm" title="Logout">
+                🚪 Logout
               </button>
             </div>
           </div>
-        </div>
-      </header>
 
-      {/* Mobile Navigation Drawer */}
-      <nav className={`admin-mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} role="navigation" aria-label="Mobile Admin Navigation">
-        {adminNavItems.map(item => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`admin-mobile-item ${isActiveTab(item.path) ? 'active' : ''}`}
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-current={isActiveTab(item.path) ? 'page' : undefined}
-            aria-label={item.ariaLabel}
+          {/* Mobile Menu Toggle */}
+          <button
+            className="mobile-menu-toggle"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
           >
-            {item.label}
-          </Link>
-        ))}
-        
-        <div className="admin-mobile-actions">
-          <Link 
-            to="/" 
-            className="admin-mobile-btn btn-view-public"
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-label="View public website"
-          >
-            🌐 View Site
-          </Link>
-          <button 
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              handleLogout();
-            }}
-            className="admin-mobile-btn btn-logout"
-            aria-label="Logout from admin panel"
-            type="button"
-          >
-            🚪 Logout
+            {isMobileMenuOpen ? '✕' : '☰'}
           </button>
         </div>
-      </nav>
 
-      {/* Admin Content */}
-      <main className="admin-content" role="main" id="main-content">
+        {/* Mobile Navigation */}
+        <nav className={`admin-mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
+          {adminNavItems.map(item => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`mobile-nav-link ${isActive(item.path) ? 'active' : ''}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-label">{item.label}</span>
+            </Link>
+          ))}
+          <div className="mobile-user-actions">
+            <Link
+              to="/"
+              className="mobile-nav-link"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span className="nav-icon">🌐</span>
+              <span className="nav-label">Public Site</span>
+            </Link>
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="mobile-nav-link logout-btn"
+            >
+              <span className="nav-icon">🚪</span>
+              <span className="nav-label">Logout</span>
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="admin-main">
+        {/* Render the child component passed from App.jsx */}
         {children}
       </main>
+
+      {/* Admin Footer */}
+      <footer className="admin-footer">
+        <div className="admin-footer-content">
+          <p>&copy; 2025 Adonai Farm Management System</p>
+          <p>Built by <a href="mailto:triolinkl@gmail.com">TrioLink</a></p>
+        </div>
+      </footer>
     </div>
   );
-}
+};
+
+export default AdminLayout;

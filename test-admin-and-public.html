@@ -74,7 +74,7 @@
 
     <div class="test-section">
         <h2>📸 Public Homepage Image Loading Test</h2>
-        <div id="imageLoadingStatus" class="status info">Testing image loading from uploads directory...</div>
+        <div id="imageLoadingStatus" class="status info">Testing image loading from images directory...</div>
         
         <h3>Hero Images (Farm Operations)</h3>
         <div id="heroImages" class="image-grid"></div>
@@ -156,7 +156,7 @@
                 imageCard.className = 'image-card';
                 
                 const img = document.createElement('img');
-                const imageUrl = `/uploads/Adonai/${filename}`;
+                const imageUrl = `/images/Adonai/${filename}`;
                 
                 img.onload = function() {
                     loadedImages++;
@@ -222,8 +222,8 @@
         // Add some debugging info
         console.log('🔍 Admin & Public Test Started');
         console.log('Testing image URLs:', {
-            farmExample: '/uploads/Adonai/farm-1.jpg',
-            animalExample: '/uploads/Adonai/adonai1.jpg',
+            farmExample: '/images/Adonai/farm-1.jpg',
+            animalExample: '/images/Adonai/adonai1.jpg',
             fallback: '/images/hero-farm.jpg'
         });
         console.log('Base URL:', window.location.origin);

@@ -95,21 +95,22 @@ export default defineConfig({
     port: 3000,
     host: true,
     proxy: {
-      '/uploads': {
-        target: 'http://localhost:4000',
-        changeOrigin: true,
-        secure: false
-      },
-      '/api': {
-        target: 'http://localhost:4000',
-        changeOrigin: true,
-        secure: false
+      /*  '/images': {
+          target: 'http://localhost:4000',
+          changeOrigin: true,
+          secure: false
+        },
+        '/api': {
+          target: 'http://localhost:4000',
+          changeOrigin: true,
+          secure: false
+        }
+      }*/
+    },
+    // Performance optimizations
+      esbuild: {
+        // Remove console logs in production
+        drop: ['console', 'debugger']
       }
     }
-  },
-  // Performance optimizations
-  esbuild: {
-    // Remove console logs in production
-    drop: ['console', 'debugger']
-  }
-})
+  })

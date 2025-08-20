@@ -22,7 +22,7 @@ class FinalProductionTester {
   // Test Production Build
   testProductionBuild() {
     console.log('🏗️ Testing Production Build...');
-    
+
     const buildTests = {
       buildDirectoryExists: false,
       criticalFilesPresent: false,
@@ -53,16 +53,16 @@ class FinalProductionTester {
     }
 
     // Check images
-    if (fs.existsSync('netlify-build/uploads/Adonai') && 
-        fs.readdirSync('netlify-build/uploads/Adonai').length >= 20) {
+    if (fs.existsSync('netlify-build/images/Adonai') &&
+      fs.readdirSync('netlify-build/images/Adonai').length >= 20) {
       buildTests.imagesIncluded = true;
       console.log('  ✅ Farm images included (20+ images)');
     }
 
     // Check configuration
     const netlifyConfig = fs.readFileSync('netlify-build/netlify.toml', 'utf8');
-    if (netlifyConfig.includes('[[redirects]]') && 
-        netlifyConfig.includes('[[headers]]')) {
+    if (netlifyConfig.includes('[[redirects]]') &&
+      netlifyConfig.includes('[[headers]]')) {
       buildTests.configurationValid = true;
       console.log('  ✅ Netlify configuration valid');
     }
@@ -82,7 +82,7 @@ class FinalProductionTester {
   // Test Mobile Optimizations
   testMobileOptimizations() {
     console.log('\n📱 Testing Mobile Optimizations...');
-    
+
     const mobileTests = {
       darkThemeImplemented: false,
       touchTargetsOptimized: false,
@@ -93,39 +93,39 @@ class FinalProductionTester {
 
     // Check mobile dark theme
     const mobileCSS = fs.readFileSync('frontend/src/mobile-fix.css', 'utf8');
-    if (mobileCSS.includes('#1a1a1a') && 
-        mobileCSS.includes('brightness(0.7)')) {
+    if (mobileCSS.includes('#1a1a1a') &&
+      mobileCSS.includes('brightness(0.7)')) {
       mobileTests.darkThemeImplemented = true;
       console.log('  ✅ Mobile dark theme with brightness optimization');
     }
 
     // Check touch targets
     const touchCSS = fs.readFileSync('frontend/src/mobile-touch-optimization.css', 'utf8');
-    if (touchCSS.includes('min-height: 44px') && 
-        touchCSS.includes('touch-action: manipulation')) {
+    if (touchCSS.includes('min-height: 44px') &&
+      touchCSS.includes('touch-action: manipulation')) {
       mobileTests.touchTargetsOptimized = true;
       console.log('  ✅ Touch targets optimized (44px minimum)');
     }
 
     // Check performance optimizations
     const performanceCSS = fs.readFileSync('frontend/src/performance-optimized.css', 'utf8');
-    if (performanceCSS.includes('transform:translateZ(0)') && 
-        performanceCSS.includes('Critical CSS')) {
+    if (performanceCSS.includes('transform:translateZ(0)') &&
+      performanceCSS.includes('Critical CSS')) {
       mobileTests.performanceOptimized = true;
       console.log('  ✅ Performance optimizations implemented');
     }
 
     // Check accessibility
     const accessibilityCSS = fs.readFileSync('frontend/src/accessibility-compliance.css', 'utf8');
-    if (accessibilityCSS.includes('WCAG 2.1 AA') && 
-        accessibilityCSS.includes('*:focus')) {
+    if (accessibilityCSS.includes('WCAG 2.1 AA') &&
+      accessibilityCSS.includes('*:focus')) {
       mobileTests.accessibilityCompliant = true;
       console.log('  ✅ WCAG 2.1 AA accessibility compliance');
     }
 
     // Check battery optimizations
-    if (mobileCSS.includes('#1a1a1a') && 
-        performanceCSS.includes('prefers-reduced-motion')) {
+    if (mobileCSS.includes('#1a1a1a') &&
+      performanceCSS.includes('prefers-reduced-motion')) {
       mobileTests.batteryOptimized = true;
       console.log('  ✅ Battery usage optimizations');
     }
@@ -137,7 +137,7 @@ class FinalProductionTester {
   // Test Performance Metrics
   testPerformanceMetrics() {
     console.log('\n⚡ Testing Performance Metrics...');
-    
+
     const performanceTests = {
       cssOptimized: false,
       jsMinified: false,
@@ -163,7 +163,7 @@ class FinalProductionTester {
     }
 
     // Check image optimization
-    const imageCount = fs.readdirSync('netlify-build/uploads/Adonai').length;
+    const imageCount = fs.readdirSync('netlify-build/images/Adonai').length;
     if (imageCount >= 20) {
       performanceTests.imagesOptimized = true;
       console.log(`  ✅ Images optimized (${imageCount} images included)`);
@@ -171,15 +171,15 @@ class FinalProductionTester {
 
     // Check caching configuration
     const netlifyConfig = fs.readFileSync('netlify-build/netlify.toml', 'utf8');
-    if (netlifyConfig.includes('Cache-Control') && 
-        netlifyConfig.includes('max-age=31536000')) {
+    if (netlifyConfig.includes('Cache-Control') &&
+      netlifyConfig.includes('max-age=31536000')) {
       performanceTests.cachingConfigured = true;
       console.log('  ✅ Caching headers configured');
     }
 
     // Check compression
-    if (netlifyConfig.includes('gzip') || 
-        netlifyConfig.includes('Content-Encoding')) {
+    if (netlifyConfig.includes('gzip') ||
+      netlifyConfig.includes('Content-Encoding')) {
       performanceTests.compressionEnabled = true;
       console.log('  ✅ Compression configured');
     } else {
@@ -195,7 +195,7 @@ class FinalProductionTester {
   // Test Deployment Readiness
   testDeploymentReadiness() {
     console.log('\n🚀 Testing Deployment Readiness...');
-    
+
     const deploymentTests = {
       netlifyConfigured: false,
       mobileConfigured: false,
@@ -206,23 +206,23 @@ class FinalProductionTester {
 
     // Check Netlify configuration
     const netlifyConfig = fs.readFileSync('netlify-build/netlify.toml', 'utf8');
-    if (netlifyConfig.includes('[build]') && 
-        netlifyConfig.includes('[[redirects]]')) {
+    if (netlifyConfig.includes('[build]') &&
+      netlifyConfig.includes('[[redirects]]')) {
       deploymentTests.netlifyConfigured = true;
       console.log('  ✅ Netlify configuration complete');
     }
 
     // Check mobile configuration
     const mobileConfig = fs.readFileSync('netlify-build/mobile-config.js', 'utf8');
-    if (mobileConfig.includes('isMobile') && 
-        mobileConfig.includes('localStorage')) {
+    if (mobileConfig.includes('isMobile') &&
+      mobileConfig.includes('localStorage')) {
       deploymentTests.mobileConfigured = true;
       console.log('  ✅ Mobile configuration implemented');
     }
 
     // Check security headers
-    if (netlifyConfig.includes('Content-Security-Policy') && 
-        netlifyConfig.includes('X-Frame-Options')) {
+    if (netlifyConfig.includes('Content-Security-Policy') &&
+      netlifyConfig.includes('X-Frame-Options')) {
       deploymentTests.securityHeaders = true;
       console.log('  ✅ Security headers configured');
     }
@@ -235,8 +235,8 @@ class FinalProductionTester {
     }
 
     // Check offline support
-    if (fs.existsSync('netlify-build/sw.js') && 
-        fs.existsSync('netlify-build/manifest.json')) {
+    if (fs.existsSync('netlify-build/sw.js') &&
+      fs.existsSync('netlify-build/manifest.json')) {
       deploymentTests.offlineSupport = true;
       console.log('  ✅ Offline support (PWA) configured');
     }
@@ -248,7 +248,7 @@ class FinalProductionTester {
   // Generate Final Test Report
   generateFinalReport() {
     console.log('\n📊 Generating Final Test Report...');
-    
+
     const allTests = [
       ...Object.values(this.testResults.buildValidation),
       ...Object.values(this.testResults.mobileOptimization),
@@ -332,22 +332,22 @@ class FinalProductionTester {
   // Run all final tests
   async runFinalTests() {
     console.log('🚀 Starting Final Production Testing Suite\n');
-    
+
     try {
       // Run all test suites
       this.testProductionBuild();
       this.testMobileOptimizations();
       this.testPerformanceMetrics();
       this.testDeploymentReadiness();
-      
+
       // Generate final report
       const report = this.generateFinalReport();
-      
+
       console.log('\n🎉 Final production testing completed!');
       console.log('📱 All mobile admin UI fixes validated');
       console.log('⚡ Performance optimizations confirmed');
       console.log('🌐 Production build ready for deployment');
-      
+
       if (report.summary.deploymentApproved) {
         console.log('\n🚀 DEPLOYMENT APPROVED - Ready for Netlify!');
         console.log('\n📦 Deployment Package: adonai-farm-netlify.zip');
@@ -357,9 +357,9 @@ class FinalProductionTester {
       } else {
         console.log('\n⚠️  DEPLOYMENT PENDING - Address issues first');
       }
-      
+
       return report.summary.deploymentApproved;
-      
+
     } catch (error) {
       console.error('\n❌ Final production testing failed:', error.message);
       return false;
@@ -372,14 +372,14 @@ if (require.main === module) {
   async function main() {
     const tester = new FinalProductionTester();
     const approved = await tester.runFinalTests();
-    
+
     console.log('\n🏁 All testing and optimization complete!');
     console.log('✅ Mobile admin UI fixes fully implemented and tested');
     console.log('🚀 Production build ready for Netlify deployment');
-    
+
     process.exit(approved ? 0 : 1);
   }
-  
+
   main().catch(console.error);
 }
 
