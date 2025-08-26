@@ -74,3 +74,16 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Build artifacts and archives
+netlify-build/
+Complete-Deployment-Package/
+*.zip
+netlify-build/uploads/
+
+# Reports and generated artifacts
+*test-report.json
+production-validation-report.json
+mobile-performance-test-report.json
+cross-device-test-report.json
+final-production-test-report.json
