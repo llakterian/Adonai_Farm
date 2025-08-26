@@ -139,7 +139,7 @@ export const farmStats = {
   totalAnimals: mockAnimals.length,
   animalTypes: [...new Set(mockAnimals.map(a => a.type))].length,
   totalAcres: 250,
-  yearsInOperation: new Date().getFullYear() - 2018,
+  yearsInOperation: new Date().getFullYear() - 1990,
   dailyMilkProduction: mockProductionRecords.milk[0]?.totalLiters || 0,
   dailyEggProduction: mockProductionRecords.eggs[0]?.totalCount || 0,
   staff: mockWorkers.length

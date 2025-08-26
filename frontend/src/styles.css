@@ -11,6 +11,24 @@
   box-sizing: border-box;
 }
 
+/* Prevent horizontal overflow on all pages */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Ensure all containers respect viewport width */
+.container,
+.contact-grid,
+.contact-page,
+.public-main,
+main {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 :root {
   /* UNIFIED AGRICULTURAL COLOR PALETTE - Used across ALL pages */
   /* Primary Agricultural Colors */
@@ -191,22 +209,45 @@ h6 {
 }
 
 .public-logo .site-title {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: var(--forest-green);
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-md);
   transition: all 0.2s ease;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
+}
+
+.public-logo .logo-image {
+  height: 60px;
+  width: auto;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+
+.public-logo .site-title-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--forest-green);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.5px;
 }
 
 .public-logo .site-title:hover {
   color: var(--olive-green);
   background: var(--hover-green);
   transform: translateY(-1px);
+}
+
+.public-logo .site-title:hover .logo-image {
+  transform: scale(1.05);
+}
+
+.public-logo .site-title:hover .site-title-text {
+  color: var(--olive-green);
 }
 
 .public-logo .site-title:focus {
@@ -375,30 +416,132 @@ h6 {
    ============================================== */
 
 .public-footer {
-  background: var(--gradient-earth);
-  color: var(--cream);
-  margin-top: var(--space-xl);
-  padding: var(--space-lg) 0 var(--space-md);
-  position: relative;
-}
-
-.public-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--gradient-warm);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1d4ed8 100%);
+  color: #ffffff;
+  padding: 2rem 2rem 1rem;
+  text-align: left;
+  border-top: 4px solid #fbbf24;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .public-footer-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--space-lg);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  font-size: 0.9rem;
+}
+
+.public-footer-content p {
+  margin: 0;
+}
+
+.public-footer-content a {
+  color: var(--honey-gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.public-footer-content a:hover {
+  text-decoration: underline;
+}
+
+/* Enhanced footer styles */
+.footer-section {
+  margin-bottom: 1rem;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.footer-brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.footer-section h4 {
+  color: #fbbf24;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+  padding-bottom: 0.25rem;
+}
+
+.footer-section p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section li {
+  margin: 0.5rem 0;
+}
+
+.footer-section a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0;
+  display: inline-block;
+}
+
+.footer-section a:hover {
+  color: #fbbf24;
+  text-decoration: underline;
+  transform: translateX(4px);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 2rem;
+  padding-top: 1rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-bottom a {
+  color: #fbbf24;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-bottom a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile responsive footer styles */
+@media (max-width: 768px) {
+
+  .public-footer-content,
+  .admin-footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .footer-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-logo {
+    justify-content: center;
+  }
+
+  .footer-section a:hover {
+    transform: none;
+  }
 }
 
 .footer-section h3,
@@ -718,24 +861,48 @@ select.error {
   flex-shrink: 0;
 }
 
-.admin-logo-link {
+.admin-logo-link,
+.admin-brand {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--wheat-gold, #f4e4a6);
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   transition: all 0.2s ease;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.admin-logo-link:hover {
+.admin-logo-svg {
+  height: 50px;
+  width: auto;
+  transition: all 0.2s ease;
+}
+
+.admin-brand-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--wheat-gold, #f4e4a6);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.5px;
+}
+
+.admin-logo-link:hover,
+.admin-brand:hover {
   color: var(--admin-accent-hover);
   background: rgba(52, 152, 219, 0.1);
   transform: translateY(-1px);
+}
+
+.admin-brand:hover .admin-logo-svg {
+  transform: scale(1.05);
+}
+
+.admin-brand:hover .admin-brand-text {
+  color: var(--wheat-gold);
 }
 
 .admin-nav-tabs {
@@ -883,6 +1050,14 @@ select.error {
     padding: 1rem;
     gap: 1rem;
     min-height: auto;
+  }
+
+  .admin-logo-svg {
+    height: 40px;
+  }
+
+  .admin-brand-text {
+    font-size: 1.1rem;
   }
 
   .admin-logo-section {
@@ -1109,12 +1284,33 @@ select.error {
 }
 
 /* ==============================================
+   ADMIN CONTAINER
+   ============================================== */
+
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* ==============================================
    RESPONSIVE DESIGN
    ============================================== */
 
 @media (max-width: 768px) {
   .public-header-content {
     padding: var(--space-sm) var(--space-md);
+  }
+
+  .public-logo .logo-image {
+    height: 50px;
+  }
+
+  .public-logo .site-title-text {
+    font-size: 1.25rem;
   }
 
   .public-nav {
@@ -1134,9 +1330,15 @@ select.error {
   }
 
   .public-footer-content {
-    padding: 0 var(--space-md);
-    grid-template-columns: 1fr;
-    text-align: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    padding: 1rem;
+  }
+
+  .admin-container {
+    padding: 0 var(--space-sm);
+    max-width: 100%;
   }
 
   .social-links {
@@ -1365,6 +1567,15 @@ body.admin-dashboard {
 
 .admin-container .stat-label {
   color: var(--admin-text-secondary);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure breeding page text is visible */
+.page .stat-label {
+  color: #2d5016 !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
 }
 
 /* Admin animal cards with darker styling */
@@ -3535,6 +3746,8 @@ r Handling and Fallback Styles */
 
 .contact-page {
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Contact Hero Section */
@@ -3555,7 +3768,7 @@ r Handling and Fallback Styles */
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/images/adonai1.jpg') center/cover;
+  background: rgba(45, 80, 22, 0.1);
   opacity: 0.2;
   z-index: 1;
 }
@@ -3634,6 +3847,8 @@ r Handling and Fallback Styles */
 .contact-main {
   padding: var(--space-2xl) 0;
   background: var(--warm-white);
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .contact-grid {
@@ -3641,7 +3856,7 @@ r Handling and Fallback Styles */
   grid-template-columns: 1fr 1fr;
   gap: var(--space-xl);
   align-items: start;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-md);
 }
@@ -4040,10 +4255,43 @@ r Handling and Fallback Styles */
 }
 
 /* Responsive Design for Contact Page */
+@media (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    max-width: 800px;
+    padding: 0 var(--space-lg);
+  }
+}
+
 @media (max-width: 768px) {
   .contact-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    gap: var(--space-lg);
+    padding: 0 var(--space-md);
+    max-width: 100%;
+  }
+
+  .contact-form-section,
+  .contact-info-section {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .contact-form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .inquiry-types {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
   }
 
   .hero-stats {
@@ -4132,7 +4380,7 @@ r Handling and Fallback Styles */
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/images/adonai1.jpg') center/cover;
+  background: rgba(45, 80, 22, 0.1);
   z-index: 1;
 }
 
@@ -4810,7 +5058,7 @@ r Handling and Fallback Styles */
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/images/adonai1.jpg') center/cover;
+  background: rgba(45, 80, 22, 0.1);
   z-index: 1;
 }
 
@@ -5544,7 +5792,7 @@ r Handling and Fallback Styles */
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/images/adonai2.jpg') center/cover;
+  background: rgba(45, 80, 22, 0.1);
   z-index: 1;
 }
 
@@ -5794,6 +6042,32 @@ r Handling and Fallback Styles */
   font-size: var(--text-lg);
   font-weight: 700;
   color: var(--forest-green);
+}
+
+.price-value.contact-link {
+  text-decoration: none;
+  color: var(--forest-green);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.price-value.contact-link:hover {
+  color: var(--accent-gold);
+  text-decoration: underline;
+  transform: scale(1.05);
+}
+
+.modal-price .contact-link {
+  text-decoration: none;
+  color: var(--forest-green);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.modal-price .contact-link:hover {
+  color: var(--accent-gold);
+  text-decoration: underline;
+  transform: scale(1.05);
 }
 
 .service-features {
@@ -7170,7 +7444,7 @@ r Handling and Fallback Styles */
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/images/farm-3.jpg') center/cover;
+  background: rgba(45, 80, 22, 0.1);
   opacity: 0.2;
   z-index: 0;
 }

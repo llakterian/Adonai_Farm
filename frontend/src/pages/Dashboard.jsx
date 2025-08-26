@@ -4,8 +4,6 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { usePermissions, getDashboardContent } from '../utils/permissions.jsx';
 import { notificationSystem } from '../utils/notifications.js';
 import { Link } from 'react-router-dom';
-import ImageLoadingTest from '../components/ImageLoadingTest.jsx';
-import SecurityTest from '../components/SecurityTest.jsx';
 
 const COLORS = ['#2d5016', '#4a7c59', '#d4af37', '#8b4513', '#6b8e23', '#556b2f'];
 
@@ -19,8 +17,7 @@ export default function Dashboard() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [performanceMetrics, setPerformanceMetrics] = useState({});
   const [notifications, setNotifications] = useState([]);
-  const [showImageTest, setShowImageTest] = useState(false);
-  const [showSecurityTest, setShowSecurityTest] = useState(false);
+
   const { user, role, canAccess, isAdmin, isSupervisor, isWorker } = usePermissions();
 
   useEffect(() => {
@@ -328,7 +325,7 @@ export default function Dashboard() {
               <div className="stat-label">🚜 Asset Utilization</div>
             </div>
             <div className="stat-card" style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}>
-              <div className="stat-number">${(performanceMetrics.totalAssetValue || 0).toLocaleString()}</div>
+              <div className="stat-number">KSh {(performanceMetrics.totalAssetValue || 0).toLocaleString()}</div>
               <div className="stat-label">💰 Asset Value</div>
             </div>
           </div>
@@ -460,230 +457,6 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* Quick Navigation - Admin Only */}
-      {(isAdmin() || isSupervisor()) && (
-        <div className="card" style={{
-          background: 'linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%)',
-          color: 'white',
-          marginBottom: '2rem'
-        }}>
-          <h2 style={{ color: 'var(--accent-gold)', marginBottom: '1.5rem' }}>
-            🚀 Quick Actions
-          </h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1rem'
-          }}>
-            <Link
-              to="/dashboard/contact"
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '1rem',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '1.5rem' }}>📧</div>
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Contact Inquiries</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage customer messages</div>
-              </div>
-            </Link>
-            <Link
-              to="/dashboard/public-content"
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '1rem',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '1.5rem' }}>🌐</div>
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Public Website</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage public content</div>
-              </div>
-            </Link>
-            <Link
-              to="/dashboard/animals"
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '1rem',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '1.5rem' }}>🐄</div>
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Animal Management</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>View and manage livestock</div>
-              </div>
-            </Link>
-            <Link
-              to="/dashboard/workers"
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '1rem',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '1.5rem' }}>👥</div>
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Worker Management</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Manage staff and time</div>
-              </div>
-            </Link>
-            <Link
-              to="/dashboard/reports"
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '1rem',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '1.5rem' }}>📊</div>
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Reports & Analytics</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>View farm reports</div>
-              </div>
-            </Link>
-            <button
-              onClick={() => setShowImageTest(true)}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '1rem',
-                borderRadius: '8px',
-                border: 'none',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '1.5rem' }}>🔍</div>
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Image Loading Test</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Test deployment images</div>
-              </div>
-            </button>
-            <button
-              onClick={() => setShowSecurityTest(true)}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '1rem',
-                borderRadius: '8px',
-                border: 'none',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                transition: 'all 0.3s ease',
-                backdropFilter: 'blur(10px)',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.2)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255,255,255,0.1)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              <div style={{ fontSize: '1.5rem' }}>🔒</div>
-              <div>
-                <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>Security Test Suite</div>
-                <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Test security measures</div>
-              </div>
-            </button>
           </div>
         </div>
       )}
@@ -1199,15 +972,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Image Loading Test Modal */}
-      {showImageTest && (
-        <ImageLoadingTest onClose={() => setShowImageTest(false)} />
-      )}
 
-      {/* Security Test Modal */}
-      {showSecurityTest && (
-        <SecurityTest onClose={() => setShowSecurityTest(false)} />
-      )}
     </div>
   );
 }

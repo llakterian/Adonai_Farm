@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { getCurrentUser, logout } from '../auth.js';
 import { notificationSystem } from '../utils/notifications';
 import { startTransition } from 'react';
+import Footer from './Footer';
 
 const AdminLayout = ({ children }) => {
   const currentUser = getCurrentUser();
@@ -67,14 +68,15 @@ const AdminLayout = ({ children }) => {
           <div className="admin-logo">
             <Link to="/dashboard" className="admin-brand">
               <img
-                src="/images/logo.svg"
-                alt="Adonai Farm"
+                src="/images/adonai-logo-compact-new.svg"
+                alt="Adonai Farm Logo"
                 className="admin-logo-svg"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.nextSibling.style.display = 'inline-flex';
                 }}
               />
+              <span className="admin-brand-text">Adonai Farm</span>
               <div className="logo-fallback" style={{ display: 'none' }}>
                 <span className="logo-icon">🌾</span>
                 <span className="brand-text">Adonai Farm</span>
@@ -167,12 +169,7 @@ const AdminLayout = ({ children }) => {
       </main>
 
       {/* Admin Footer */}
-      <footer className="admin-footer">
-        <div className="admin-footer-content">
-          <p>&copy; 2025 Adonai Farm Management System</p>
-          <p>Built by <a href="mailto:triolinkl@gmail.com">TrioLink</a></p>
-        </div>
-      </footer>
+      <Footer isAdmin={true} />
     </div>
   );
 };

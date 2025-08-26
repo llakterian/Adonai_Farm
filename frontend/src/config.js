@@ -9,7 +9,7 @@ const isMobileTest = () => {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   const isFileProtocol = window.location.protocol === 'file:';
-  
+
   // Use localStorage if mobile, file protocol, or explicitly set
   return isMobile || isFileProtocol || localStorage.getItem('use-local-storage') === 'true';
 };
@@ -17,14 +17,14 @@ const isMobileTest = () => {
 const config = {
   // API Configuration
   API_BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:4000',
-  
+
   // Feature flags
   USE_LOCAL_STORAGE: isMobileTest(),
-  
+
   // App settings
   APP_NAME: 'Adonai Farm',
   APP_VERSION: '1.0.0',
-  
+
   // Contact information
   CONTACT_INFO: {
     phone: '+254 722 759 217',
@@ -35,15 +35,15 @@ const config = {
       lng: 35.2833
     }
   },
-  
+
   // Farm information
   FARM_INFO: {
     name: 'Adonai Farm',
-    established: '2020',
+    established: '1990s',
     location: 'Kericho, Kenya',
     specialties: [
       'Sustainable Livestock Management',
-      'Quality Breeding Programs', 
+      'Quality Breeding Programs',
       'Farm Tours & Education',
       'Premium Agricultural Products'
     ],
@@ -54,7 +54,7 @@ const config = {
       poultry: 'Chickens & Ducks'
     }
   },
-  
+
   // SEO Configuration
   SEO: {
     title: '🌾 Adonai Farm - Modern Livestock Farm in Kericho, Kenya',

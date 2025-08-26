@@ -4,7 +4,7 @@ import React from 'react';
 const farmInfo = {
     name: "Adonai Farm",
     tagline: "Sustainable Farming, Superior Quality",
-    logoUrl: "/images/logo.png", // Assuming a logo file exists
+    logoUrl: "/images/adonai-logo-new.svg", // Beautiful new farm logo
     address: "Chepsir, Kericho, Kenya",
     phone: "+254 722 759 217",
     email: "info@adonaifarm.co.ke",
@@ -103,8 +103,8 @@ const Brochure = () => {
                 </main>
             </div>
         </>
-        );
-    
-    };
-    
-    export default Brochure;
+    );
+
+};
+
+export default Brochure;

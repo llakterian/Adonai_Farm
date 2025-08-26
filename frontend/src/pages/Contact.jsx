@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SEOHead from '../components/SEOHead.jsx';
+import '../styles/contact.css';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -107,7 +108,12 @@ export default function Contact() {
         {/* Main Contact Content */}
         <section className="contact-main">
           <div className="container">
-            <div className="contact-grid">
+            <div className="contact-grid"
+              style={{
+                width: '100%',
+                maxWidth: '100%',
+                overflowX: 'hidden'
+              }}>
 
               {/* Contact Information Cards */}
               <div className="contact-info-section">
@@ -362,7 +368,12 @@ export default function Contact() {
         {/* Quick Contact Banner */}
         <section className="quick-contact-banner">
           <div className="container">
-            <div className="banner-content">
+            <div className="banner-content"
+              style={{
+                width: '100%',
+                maxWidth: '100%',
+                overflowX: 'hidden'
+              }}>
               <div className="banner-text">
                 <h3>🚀 Need Immediate Assistance?</h3>
                 <p>For urgent inquiries or same-day visits, give us a call directly!</p>

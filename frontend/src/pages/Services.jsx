@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SEOHead from '../components/SEOHead.jsx';
+import '../styles/services.css';
 
 export default function Services() {
   const [selectedService, setSelectedService] = useState(null);
@@ -34,7 +35,7 @@ export default function Services() {
       title: 'Professional Livestock Breeding',
       icon: '🐄',
       category: 'Breeding',
-      price: 'From KSh 15,000',
+      price: 'Contact us for pricing',
       description: 'Expert breeding services for dairy cattle, beef cattle, goats, and sheep with proven genetics.',
       features: [
         'Artificial insemination services',
@@ -57,7 +58,7 @@ export default function Services() {
       title: 'Educational Farm Tours',
       icon: '🚜',
       category: 'Education',
-      price: 'KSh 500 per person',
+      price: 'Contact us for pricing',
       description: 'Interactive educational tours showcasing modern farming practices and sustainable agriculture.',
       features: [
         'Guided tours of all farm facilities',
@@ -80,7 +81,7 @@ export default function Services() {
       title: 'Agricultural Consulting',
       icon: '📊',
       category: 'Consulting',
-      price: 'From KSh 5,000/day',
+      price: 'Contact us for pricing',
       description: 'Professional consulting services for farm setup, optimization, and digital transformation.',
       features: [
         'Farm setup and planning consultation',
@@ -126,7 +127,7 @@ export default function Services() {
       title: 'Farmer Training Programs',
       icon: '🎓',
       category: 'Education',
-      price: 'From KSh 2,000',
+      price: 'Contact us for pricing',
       description: 'Comprehensive training programs for modern farming techniques and digital farm management.',
       features: [
         'Digital farm management training',
@@ -260,7 +261,13 @@ export default function Services() {
 
                     <div className="service-price">
                       <span className="price-label">Starting from</span>
-                      <span className="price-value">{service.price}</span>
+                      {service.price === 'Contact us for pricing' ? (
+                        <a href="tel:+254722759217" className="price-value contact-link">
+                          {service.price}
+                        </a>
+                      ) : (
+                        <span className="price-value">{service.price}</span>
+                      )}
                     </div>
 
                     <div className="service-features">
@@ -386,7 +393,15 @@ export default function Services() {
                   <div className="modal-title-section">
                     <h2>{selectedService.title}</h2>
                     <p className="modal-category">{selectedService.category}</p>
-                    <div className="modal-price">{selectedService.price}</div>
+                    <div className="modal-price">
+                      {selectedService.price === 'Contact us for pricing' ? (
+                        <a href="tel:+254722759217" className="contact-link">
+                          {selectedService.price}
+                        </a>
+                      ) : (
+                        selectedService.price
+                      )}
+                    </div>
                   </div>
                 </div>
 

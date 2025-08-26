@@ -402,7 +402,7 @@ class PublicContentService {
       featuredAnimals: animals.filter(a => a.isFeatured).length,
       galleryImages: images.length,
       availableServices: services.length,
-      yearsInOperation: new Date().getFullYear() - 2018
+      yearsInOperation: new Date().getFullYear() - 1990
     };
   }
 

@@ -6,20 +6,30 @@
 
 :root {
   /* Enhanced Brown Colors with Better Contrast */
-  --brown-primary-fixed: #3d2914;         /* Dark brown - 12:1 contrast on white */
-  --brown-secondary-fixed: #5d4037;       /* Medium brown - 8:1 contrast on white */
-  --brown-light-fixed: #8d6e63;           /* Light brown - 4.5:1 contrast on white */
-  --brown-accent-fixed: #a0522d;          /* Sienna - 6:1 contrast on white */
-  
+  --brown-primary-fixed: #3d2914;
+  /* Dark brown - 12:1 contrast on white */
+  --brown-secondary-fixed: #5d4037;
+  /* Medium brown - 8:1 contrast on white */
+  --brown-light-fixed: #8d6e63;
+  /* Light brown - 4.5:1 contrast on white */
+  --brown-accent-fixed: #a0522d;
+  /* Sienna - 6:1 contrast on white */
+
   /* Text colors for brown backgrounds */
-  --text-on-brown-primary: #ffffff;       /* White text on dark brown - 12:1 contrast */
-  --text-on-brown-secondary: #ffffff;     /* White text on medium brown - 8:1 contrast */
-  --text-on-brown-light: #ffffff;         /* White text on light brown - 4.5:1 contrast */
-  --text-on-brown-accent: #ffffff;        /* White text on sienna - 6:1 contrast */
-  
+  --text-on-brown-primary: #ffffff;
+  /* White text on dark brown - 12:1 contrast */
+  --text-on-brown-secondary: #ffffff;
+  /* White text on medium brown - 8:1 contrast */
+  --text-on-brown-light: #ffffff;
+  /* White text on light brown - 4.5:1 contrast */
+  --text-on-brown-accent: #ffffff;
+  /* White text on sienna - 6:1 contrast */
+
   /* Alternative high-contrast text colors */
-  --text-alt-on-brown: #f5f5dc;          /* Beige text - alternative for variety */
-  --text-emphasis-on-brown: #ffd700;     /* Gold text for emphasis on brown */
+  --text-alt-on-brown: #f5f5dc;
+  /* Beige text - alternative for variety */
+  --text-emphasis-on-brown: #ffd700;
+  /* Gold text for emphasis on brown */
 }
 
 /* ==============================================
@@ -29,10 +39,34 @@
 .public-footer {
   background: var(--brown-primary-fixed) !important;
   color: var(--text-on-brown-primary) !important;
+  padding: 1rem 2rem !important;
+  text-align: center !important;
+  border-top: 3px solid var(--text-emphasis-on-brown) !important;
 }
 
 .public-footer-content {
   color: var(--text-on-brown-primary) !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  font-size: 0.9rem !important;
+}
+
+.public-footer-content p {
+  margin: 0 !important;
+}
+
+.public-footer-content a {
+  color: var(--text-emphasis-on-brown) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+}
+
+.public-footer-content a:hover {
+  text-decoration: underline !important;
 }
 
 .footer-section h3,
@@ -270,6 +304,7 @@
 
 /* High contrast mode support for brown elements */
 @media (prefers-contrast: high) {
+
   .public-footer,
   .card.brown-theme,
   .brown-card,
@@ -278,7 +313,7 @@
     border-width: 4px !important;
     font-weight: 700 !important;
   }
-  
+
   .footer-section a,
   .card.brown-theme a,
   .brown-card a {
@@ -304,27 +339,34 @@
 
 @media screen and (max-width: 768px) {
   .public-footer {
-    padding: var(--space-lg) var(--space-md) !important;
+    padding: 1rem !important;
   }
-  
+
+  .public-footer-content {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    font-size: 0.8rem !important;
+    padding: 1rem !important;
+  }
+
   .footer-section h3,
   .footer-section h4 {
     font-size: 1.1rem !important;
     margin-bottom: var(--space-sm) !important;
   }
-  
+
   .footer-section p,
   .footer-section li {
     font-size: 0.9rem !important;
     line-height: 1.5 !important;
   }
-  
+
   .card.brown-theme,
   .brown-card {
     padding: var(--space-md) !important;
     margin-bottom: var(--space-md) !important;
   }
-  
+
   .btn-brown,
   .btn.brown-theme {
     min-height: var(--touch-target-comfortable) !important;
@@ -338,6 +380,7 @@
    ============================================== */
 
 @media print {
+
   .public-footer,
   .card.brown-theme,
   .brown-card {
@@ -345,7 +388,7 @@
     color: black !important;
     border: 2px solid black !important;
   }
-  
+
   .footer-section h3,
   .footer-section h4,
   .card.brown-theme h1,
@@ -356,7 +399,7 @@
   .brown-card h3 {
     color: black !important;
   }
-  
+
   .footer-section a,
   .card.brown-theme a,
   .brown-card a {

@@ -31,7 +31,7 @@ export default function About() {
           <div className="hero-content">
             <div className="container">
               <div className="hero-text">
-                <span className="hero-badge">🌾 Est. 2020</span>
+                <span className="hero-badge">🌾 Est. 1990s</span>
                 <h1 className="hero-title">
                   The Story of <span className="highlight">Adonai Farm</span>
                 </h1>
@@ -45,7 +45,7 @@ export default function About() {
                     <span className="stat-label">Animals</span>
                   </div>
                   <div className="stat">
-                    <span className="stat-number">4+</span>
+                    <span className="stat-number">30+</span>
                     <span className="stat-label">Years Experience</span>
                   </div>
                   <div className="stat">
@@ -70,23 +70,23 @@ export default function About() {
               <div className="timeline-item">
                 <div className="timeline-marker">🌱</div>
                 <div className="timeline-content">
-                  <h3>2020 - The Beginning</h3>
-                  <p>Started with a vision to revolutionize livestock farming in Kericho County using modern technology while respecting traditional farming wisdom.</p>
+                  <h3>1990s - The Beginning</h3>
+                  <p>Started with a vision to revolutionize livestock farming in Kericho County using traditional farming wisdom and gradually incorporating modern techniques.</p>
                 </div>
               </div>
 
               <div className="timeline-item">
                 <div className="timeline-marker">🏗️</div>
                 <div className="timeline-content">
-                  <h3>2021 - Infrastructure Development</h3>
-                  <p>Built modern livestock facilities with climate control, advanced water systems, and digital monitoring infrastructure.</p>
+                  <h3>2000s - Infrastructure Development</h3>
+                  <p>Built modern livestock facilities with improved housing, advanced water systems, and better animal care infrastructure.</p>
                 </div>
               </div>
 
               <div className="timeline-item">
                 <div className="timeline-marker">🐄</div>
                 <div className="timeline-content">
-                  <h3>2022 - Livestock Expansion</h3>
+                  <h3>2010s - Livestock Expansion</h3>
                   <p>Expanded our herd with premium dairy cattle, goats, and sheep. Implemented comprehensive health monitoring and breeding programs.</p>
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function About() {
               <div className="timeline-item">
                 <div className="timeline-marker">💻</div>
                 <div className="timeline-content">
-                  <h3>2023 - Digital Innovation</h3>
+                  <h3>2020s - Digital Innovation</h3>
                   <p>Launched our comprehensive farm management system, enabling precise tracking, health monitoring, and production optimization.</p>
                 </div>
               </div>

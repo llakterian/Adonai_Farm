@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Premium gradient backgrounds -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d5016;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4a7c59;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6b8e23;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b8860b;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Animal silhouette gradient -->
+    <linearGradient id="animalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#f8f6f0;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow effects -->
+    <filter id="logoShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="30" cy="30" r="25" fill="url(#primaryGradient)" stroke="url(#goldGradient)" stroke-width="2" filter="url(#logoShadow)"/>
+  
+  <!-- Stylized farm animal -->
+  <g transform="translate(30, 30)" filter="url(#logoShadow)">
+    <!-- Main body -->
+    <ellipse cx="0" cy="1" rx="11" ry="7" fill="url(#animalGradient)" stroke="#2d5016" stroke-width="0.8"/>
+    
+    <!-- Head -->
+    <ellipse cx="-9" cy="-4" rx="4.5" ry="4" fill="url(#animalGradient)" stroke="#2d5016" stroke-width="0.8"/>
+    
+    <!-- Neck -->
+    <ellipse cx="-5" cy="-2" rx="3" ry="2.5" fill="url(#animalGradient)" stroke="#2d5016" stroke-width="0.6"/>
+    
+    <!-- Legs -->
+    <rect x="-7" y="7" width="1.5" height="5" fill="#2d5016" rx="0.5"/>
+    <rect x="-3" y="7" width="1.5" height="5" fill="#2d5016" rx="0.5"/>
+    <rect x="3" y="7" width="1.5" height="5" fill="#2d5016" rx="0.5"/>
+    <rect x="7" y="7" width="1.5" height="5" fill="#2d5016" rx="0.5"/>
+    
+    <!-- Markings -->
+    <ellipse cx="-2" cy="-1" rx="1.5" ry="1" fill="#2d5016" opacity="0.7"/>
+    <ellipse cx="4" cy="0" rx="1" ry="0.8" fill="#2d5016" opacity="0.7"/>
+    
+    <!-- Ears -->
+    <ellipse cx="-12" cy="-6" rx="1.2" ry="2" fill="#2d5016"/>
+    <ellipse cx="-6" cy="-7" rx="1.2" ry="2" fill="#2d5016"/>
+  </g>
+  
+  <!-- Farm name -->
+  <text x="65" y="25" font-family="'Playfair Display', 'Georgia', serif" font-size="18" font-weight="700" fill="url(#primaryGradient)">
+    ADONAI FARM
+  </text>
+  
+  <!-- Tagline -->
+  <text x="65" y="40" font-family="'Inter', 'Arial', sans-serif" font-size="8" font-weight="500" fill="#4a7c59" letter-spacing="0.8px" opacity="0.9">
+    PREMIUM LIVESTOCK EXCELLENCE
+  </text>
+  
+  <!-- Location -->
+  <text x="65" y="50" font-family="'Inter', 'Arial', sans-serif" font-size="7" font-weight="400" fill="#6b8e23" letter-spacing="0.3px" opacity="0.8">
+    KERICHO, KENYA
+  </text>
+</svg>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from '../auth.js';
 import { startTransition } from 'react';
+import Footer from './Footer';
 
 function PublicHeader() {
   const location = useLocation();
@@ -63,8 +64,7 @@ function PublicHeader() {
       <div className="public-header-content">
         <div className="public-logo">
           <Link to="/" aria-label="Adonai Farm - Home" className="site-title">
-            <img src="/images/logo.svg" alt="Adonai Farm Logo" style={{ height: 60, verticalAlign: 'middle' }} />
-            &nbsp;Adonai Farm
+            <img src="/images/adonai-logo-compact-new.svg" alt="Adonai Farm Logo" className="logo-image" />
           </Link>
         </div>
 
@@ -140,51 +140,7 @@ function PublicHeader() {
 }
 
 function PublicFooter() {
-  return (
-    <footer className="public-footer" role="contentinfo">
-      <div className="public-footer-content">
-        <section className="footer-section" aria-labelledby="farm-info">
-          <h3 id="farm-info">🌾 Adonai Farm</h3>
-          <p>Managing livestock with care, precision, and modern technology for sustainable farming excellence.</p>
-        </section>
-
-        <section className="footer-section" aria-labelledby="quick-links">
-          <h4 id="quick-links">Quick Links</h4>
-          <nav aria-label="Footer navigation">
-            <ul>
-              <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/animals">Our Animals</Link></li>
-              <li><Link to="/services">Services</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
-            </ul>
-          </nav>
-        </section>
-
-        <section className="footer-section" aria-labelledby="contact-info">
-          <h4 id="contact-info">Contact Info</h4>
-          <address>
-            <p>📧 <a href="mailto:info@adonaifarm.co.ke">info@adonaifarm.co.ke</a></p>
-            <p>📞 <a href="tel:+254722759217">+254 722 759 217</a></p>
-            <p>📍 Chepsir, Kericho, Kenya</p>
-          </address>
-        </section>
-
-        <section className="footer-section" aria-labelledby="social-media">
-          <h4 id="social-media">Follow Us</h4>
-          <div className="social-links">
-            <a href="#" aria-label="Follow us on Facebook">📘</a>
-            <a href="#" aria-label="Follow us on Instagram">📷</a>
-            <a href="#" aria-label="Follow us on Twitter">🐦</a>
-          </div>
-        </section>
-      </div>
-
-      <div className="footer-bottom">
-        <p>&copy; 2025 Adonai Farm. All rights reserved.</p>
-        <p>Built by <a href="mailto:triolinkl@gmail.com" className="triolink-credit">TrioLink</a> - Want a system like this? Contact us!</p>
-      </div>
-    </footer>
-  );
+  return <Footer isAdmin={false} />;
 }
 
 export default function PublicLayout() {

@@ -69,17 +69,17 @@ export default function Inventory() {
   function addInventoryItem(e) {
     e.preventDefault();
     if (!form.name.trim()) return;
-    
+
     const newItem = {
       id: Math.max(...inventory.map(i => i.id), 0) + 1,
       ...form,
       total_value: form.quantity * form.cost_per_unit
     };
-    
+
     const updatedInventory = [...inventory, newItem];
     setInventory(updatedInventory);
     localStorage.setItem('adonai_inventory', JSON.stringify(updatedInventory));
-    
+
     setForm({
       name: '',
       category: 'Feed',
@@ -101,11 +101,11 @@ export default function Inventory() {
   function saveEdit(e) {
     e.preventDefault();
     if (!editForm.name.trim()) return;
-    
-    const updatedInventory = inventory.map(item => 
+
+    const updatedInventory = inventory.map(item =>
       item.id === editingId ? { ...editForm, total_value: editForm.quantity * editForm.cost_per_unit } : item
     );
-    
+
     setInventory(updatedInventory);
     localStorage.setItem('adonai_inventory', JSON.stringify(updatedInventory));
     setEditingId(null);
@@ -127,7 +127,7 @@ export default function Inventory() {
   const getExpiringItems = () => {
     const today = new Date();
     const thirtyDaysFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-    
+
     return inventory.filter(item => {
       if (!item.expiry_date) return false;
       const expiryDate = new Date(item.expiry_date);
@@ -137,8 +137,8 @@ export default function Inventory() {
 
   const getLowStockItems = () => {
     return inventory.filter(item => {
-      const minStock = item.category === 'Medication' ? 5 : 
-                     item.category === 'Feed' ? 100 : 10;
+      const minStock = item.category === 'Medication' ? 5 :
+        item.category === 'Feed' ? 100 : 10;
       return item.quantity <= minStock;
     });
   };
@@ -158,9 +158,9 @@ export default function Inventory() {
   return (
     <div>
       <h1 className="page-title gradient-text">📦 Inventory Management</h1>
-      
+
       {/* Inventory Hero Section */}
-      <div className="card" style={{ 
+      <div className="card" style={{
         background: 'var(--gradient-primary)',
         color: 'white',
         textAlign: 'center',
@@ -170,12 +170,12 @@ export default function Inventory() {
           🏪 Farm Inventory & Supplies
         </h2>
         <p style={{ fontSize: '1.1rem', opacity: 0.9, marginBottom: '1.5rem' }}>
-          Managing {inventory.length} items worth ${totalValue.toLocaleString()}
+          Managing {inventory.length} items worth Ksh {totalValue.toLocaleString()}
         </p>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          gap: '2rem', 
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '2rem',
           flexWrap: 'wrap'
         }}>
           <div className="float" style={{ textAlign: 'center' }}>
@@ -195,7 +195,7 @@ export default function Inventory() {
 
       {/* Alerts */}
       {(expiringItems.length > 0 || lowStockItems.length > 0) && (
-        <div className="card" style={{ 
+        <div className="card" style={{
           background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
           color: 'white',
           marginBottom: '2rem'
@@ -231,7 +231,7 @@ export default function Inventory() {
           <div className="stat-label">Total Items</div>
         </div>
         <div className="stat-card">
-          <div className="stat-number">${totalValue.toLocaleString()}</div>
+          <div className="stat-number">Ksh {totalValue.toLocaleString()}</div>
           <div className="stat-label">Total Value</div>
         </div>
         <div className="stat-card">
@@ -263,9 +263,9 @@ export default function Inventory() {
               <div className="form-grid">
                 <div className="form-group">
                   <label>Item Name</label>
-                  <input 
-                    placeholder="Enter item name" 
-                    value={form.name} 
+                  <input
+                    placeholder="Enter item name"
+                    value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })}
                     required
                   />
@@ -283,10 +283,10 @@ export default function Inventory() {
                 </div>
                 <div className="form-group">
                   <label>Quantity</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     min="0"
-                    value={form.quantity} 
+                    value={form.quantity}
                     onChange={e => setForm({ ...form, quantity: parseInt(e.target.value) || 0 })}
                   />
                 </div>
@@ -303,44 +303,44 @@ export default function Inventory() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Cost per Unit ($)</label>
-                  <input 
-                    type="number" 
+                  <label>Cost per Unit (Ksh)</label>
+                  <input
+                    type="number"
                     min="0"
                     step="0.01"
-                    value={form.cost_per_unit} 
+                    value={form.cost_per_unit}
                     onChange={e => setForm({ ...form, cost_per_unit: parseFloat(e.target.value) || 0 })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Supplier</label>
-                  <input 
-                    placeholder="Supplier name" 
-                    value={form.supplier} 
+                  <input
+                    placeholder="Supplier name"
+                    value={form.supplier}
                     onChange={e => setForm({ ...form, supplier: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Expiry Date</label>
-                  <input 
-                    type="date" 
-                    value={form.expiry_date} 
+                  <input
+                    type="date"
+                    value={form.expiry_date}
                     onChange={e => setForm({ ...form, expiry_date: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Location</label>
-                  <input 
-                    placeholder="Storage location" 
-                    value={form.location} 
+                  <input
+                    placeholder="Storage location"
+                    value={form.location}
                     onChange={e => setForm({ ...form, location: e.target.value })}
                   />
                 </div>
                 <div className="form-group">
                   <label>Notes</label>
-                  <textarea 
-                    value={form.notes} 
-                    onChange={e => setForm({ ...form, notes: e.target.value })} 
+                  <textarea
+                    value={form.notes}
+                    onChange={e => setForm({ ...form, notes: e.target.value })}
                     placeholder="Additional notes..."
                     rows="3"
                   />
@@ -368,16 +368,16 @@ export default function Inventory() {
                 <div className="form-grid">
                   <div className="form-group">
                     <label>Name</label>
-                    <input 
-                      value={editForm.name} 
+                    <input
+                      value={editForm.name}
                       onChange={e => setEditForm({ ...editForm, name: e.target.value })}
                       required
                     />
                   </div>
                   <div className="form-group">
                     <label>Category</label>
-                    <select 
-                      value={editForm.category} 
+                    <select
+                      value={editForm.category}
                       onChange={e => setEditForm({ ...editForm, category: e.target.value })}
                     >
                       <option>Feed</option>
@@ -390,20 +390,20 @@ export default function Inventory() {
                   </div>
                   <div className="form-group">
                     <label>Quantity</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       min="0"
-                      value={editForm.quantity} 
+                      value={editForm.quantity}
                       onChange={e => setEditForm({ ...editForm, quantity: parseInt(e.target.value) || 0 })}
                     />
                   </div>
                   <div className="form-group">
                     <label>Cost per Unit</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       min="0"
                       step="0.01"
-                      value={editForm.cost_per_unit} 
+                      value={editForm.cost_per_unit}
                       onChange={e => setEditForm({ ...editForm, cost_per_unit: parseFloat(e.target.value) || 0 })}
                     />
                   </div>
@@ -430,7 +430,7 @@ export default function Inventory() {
                     {item.quantity <= (item.category === 'Medication' ? 5 : 10) ? '🔴' : '🟢'}
                   </div>
                 </div>
-                
+
                 <div className="animal-details">
                   <div className="animal-detail">
                     <strong>Quantity:</strong>
@@ -438,11 +438,11 @@ export default function Inventory() {
                   </div>
                   <div className="animal-detail">
                     <strong>Unit Cost:</strong>
-                    <span>${item.cost_per_unit}</span>
+                    <span>Ksh {item.cost_per_unit}</span>
                   </div>
                   <div className="animal-detail">
                     <strong>Total Value:</strong>
-                    <span>${(item.quantity * item.cost_per_unit).toLocaleString()}</span>
+                    <span>Ksh {(item.quantity * item.cost_per_unit).toLocaleString()}</span>
                   </div>
                   <div className="animal-detail">
                     <strong>Supplier:</strong>
@@ -468,15 +468,15 @@ export default function Inventory() {
 
                 <div className="animal-actions">
                   {canEdit('inventory') && (
-                    <button 
-                      className="btn btn-outline btn-small" 
+                    <button
+                      className="btn btn-outline btn-small"
                       onClick={() => startEdit(item)}
                     >
                       ✏️ Edit
                     </button>
                   )}
                   {canDelete('inventory') && (
-                    <button 
+                    <button
                       className="btn btn-danger btn-small"
                       onClick={() => setDeleteConfirm(item.id)}
                     >
@@ -499,13 +499,13 @@ export default function Inventory() {
               Are you sure you want to delete this inventory item? This action cannot be undone.
             </p>
             <div className="btn-group">
-              <button 
+              <button
                 className="btn btn-danger"
                 onClick={() => deleteItem(deleteConfirm)}
               >
                 🗑️ Delete Permanently
               </button>
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={() => setDeleteConfirm(null)}
               >

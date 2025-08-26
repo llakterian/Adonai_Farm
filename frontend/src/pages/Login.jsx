@@ -16,10 +16,10 @@ export default function Login() {
 
     try {
       console.log('Attempting login with username:', username);
-      
+
       // Use client-side authentication since Netlify functions aren't working
       const result = authenticateUser(username, password);
-      
+
       if (result.success) {
         console.log('Login successful:', result);
         // Use React Router navigation instead of window.location.href
@@ -46,8 +46,8 @@ export default function Login() {
       justifyContent: 'center',
       padding: '2rem'
     }}>
-      <div className="card" style={{ 
-        width: '100%', 
+      <div className="card" style={{
+        width: '100%',
         maxWidth: '400px',
         background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(10px)',
@@ -55,21 +55,21 @@ export default function Login() {
       }}>
         {/* Logo and Welcome */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ 
-            fontSize: '3rem', 
+          <div style={{
+            fontSize: '3rem',
             marginBottom: '0.5rem',
             color: 'var(--primary-green)'
           }}>
             🌾
           </div>
-          <h1 style={{ 
-            color: 'var(--primary-green)', 
+          <h1 style={{
+            color: 'var(--primary-green)',
             marginBottom: '0.5rem',
             fontSize: '2rem'
           }}>
             Adonai Farm
           </h1>
-          <p style={{ 
+          <p style={{
             color: 'var(--text-light)',
             fontSize: '1rem'
           }}>
@@ -81,9 +81,9 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>👤 Username</label>
-            <input 
+            <input
               type="text"
-              value={username} 
+              value={username}
               onChange={e => setUsername(e.target.value)}
               placeholder="Enter your username"
               required
@@ -93,9 +93,9 @@ export default function Login() {
 
           <div className="form-group">
             <label>🔒 Password</label>
-            <input 
-              type="password" 
-              value={password} 
+            <input
+              type="password"
+              value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
@@ -109,12 +109,12 @@ export default function Login() {
             </div>
           )}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="btn btn-primary"
             disabled={loading}
-            style={{ 
-              width: '100%', 
+            style={{
+              width: '100%',
               marginTop: '1rem',
               fontSize: '1.1rem',
               padding: '1rem'
@@ -135,22 +135,22 @@ export default function Login() {
         </form>
 
         {/* Demo Credentials */}
-        <div style={{ 
-          marginTop: '2rem', 
+        <div style={{
+          marginTop: '2rem',
           padding: '1rem',
           background: 'var(--cream)',
           borderRadius: '8px',
           border: '1px solid var(--accent-gold)'
         }}>
-          <h4 style={{ 
-            color: 'var(--primary-green)', 
+          <h4 style={{
+            color: 'var(--primary-green)',
             marginBottom: '0.5rem',
             fontSize: '0.9rem'
           }}>
             🔑 Demo Credentials
           </h4>
-          <div style={{ 
-            fontSize: '0.8rem', 
+          <div style={{
+            fontSize: '0.8rem',
             color: 'var(--text-light)',
             margin: 0
           }}>
@@ -167,13 +167,29 @@ export default function Login() {
         </div>
 
         {/* Footer */}
-        <div style={{ 
-          textAlign: 'center', 
+        <div style={{
+          textAlign: 'center',
           marginTop: '2rem',
           color: 'var(--text-light)',
           fontSize: '0.85rem'
         }}>
           <p>🌱 Sustainable farming through technology</p>
+          <p style={{
+            marginTop: '1rem',
+            fontSize: '0.75rem',
+            opacity: 0.8
+          }}>
+            Built by <a
+              href="mailto:triolinkl@gmail.com"
+              style={{
+                color: 'var(--accent-gold)',
+                textDecoration: 'none',
+                fontWeight: '600'
+              }}
+            >
+              TrioLink Ltd.
+            </a> - Want a website like this? Contact us!
+          </p>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ export const farmBusinessInfo = {
   name: "Adonai Farm",
   description: "Modern livestock farm in Kericho, Kenya specializing in sustainable farming, quality breeding, and premium agricultural products",
   url: "https://adonaifarm.co.ke",
-  logo: "/images/logo.png",
+  logo: "/images/adonai-logo-compact-new.svg",
   image: "/images/adonaixiii.jpg",
 
   // Business details
@@ -17,6 +17,7 @@ export const farmBusinessInfo = {
     addressLocality: "Kericho",
     addressRegion: "Kericho County",
     addressCountry: "Kenya",
+    
     postalCode: "20200"
   },
 
@@ -205,8 +206,11 @@ export const generateStructuredData = (pageType, pageData = {}) => {
                 "description": "Educational farm visits and tours",
                 "offers": {
                   "@type": "Offer",
-                  "price": "500",
-                  "priceCurrency": "KES"
+                  "availability": "https://schema.org/InStock",
+                  "priceSpecification": {
+                    "@type": "PriceSpecification",
+                    "priceCurrency": "KES"
+                  }
                 }
               }
             },
