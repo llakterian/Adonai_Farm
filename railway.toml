@@ -5,4 +5,4 @@ builder = "NIXPACKS"
 buildCommand = "npm run build"
 
 [deploy]
-startCommand = "cd backend && npm install && npm run migrate && npm start"
+startCommand = "npm start"
