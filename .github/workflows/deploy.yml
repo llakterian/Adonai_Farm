@@ -1,9 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Temporarily disabled - enable when Pages is configured
-  # push:
-  #   branches: [ main ]
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -31,8 +30,8 @@ jobs:
         run: |
           cd frontend
           npm install
-          # Inject backend URL for static build
-          if [ -n "${{ secrets.VITE_API_URL }}" ]; then echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env; fi
+          # Use Railway API URL for static build
+          echo "VITE_API_URL=https://adonaifarm-production.up.railway.app" > .env
           npm run build
           
       - name: Setup Pages
