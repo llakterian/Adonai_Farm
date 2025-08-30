@@ -330,7 +330,7 @@ export function generateCSP() {
     'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
     'img-src': ["'self'", 'data:', 'https:', 'blob:'],
     'font-src': ["'self'", 'https://fonts.gstatic.com'],
-    'connect-src': ["'self'", "http://localhost:4000", 'https:', 'wss:'],
+    'connect-src': ["'self'", 'https:', 'wss:'],
     'media-src': ["'self'"],
     'object-src': ["'none'"],
     'child-src': ["'none'"],
@@ -895,7 +895,7 @@ export class CSPHelper {
       "style-src 'self' 'unsafe-inline'", // Allow inline styles
       "img-src 'self' data: blob:",
       "font-src 'self'",
-      "connect-src 'self' http://localhost:4000", // Allow API connections
+      "connect-src 'self'", // Allow API connections
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'"

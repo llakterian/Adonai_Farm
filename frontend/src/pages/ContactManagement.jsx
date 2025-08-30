@@ -15,20 +15,20 @@ export default function ContactManagement() {
   const loadInquiries = async () => {
     try {
       setLoading(true);
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
       const token = localStorage.getItem('adonai_token');
-      
+
       const response = await fetch(`${backendUrl}/api/contact`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to load contact inquiries');
       }
-      
+
       const data = await response.json();
       setInquiries(data);
     } catch (err) {
@@ -41,9 +41,9 @@ export default function ContactManagement() {
 
   const updateInquiryStatus = async (id, status) => {
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
       const token = localStorage.getItem('adonai_token');
-      
+
       const response = await fetch(`${backendUrl}/api/contact/${id}`, {
         method: 'PUT',
         headers: {
@@ -52,19 +52,19 @@ export default function ContactManagement() {
         },
         body: JSON.stringify({ status })
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to update inquiry status');
       }
-      
+
       // Reload inquiries to get updated data
       await loadInquiries();
-      
+
       // Close modal if it was open
       if (selectedInquiry && selectedInquiry.id === id) {
         setSelectedInquiry(null);
       }
-      
+
     } catch (err) {
       console.error('Error updating inquiry status:', err);
       setError(err.message);
@@ -167,25 +167,25 @@ export default function ContactManagement() {
 
       {/* Filter Tabs */}
       <div className="filter-tabs">
-        <button 
+        <button
           className={filter === 'all' ? 'active' : ''}
           onClick={() => setFilter('all')}
         >
           All ({stats.total})
         </button>
-        <button 
+        <button
           className={filter === 'new' ? 'active' : ''}
           onClick={() => setFilter('new')}
         >
           New ({stats.new})
         </button>
-        <button 
+        <button
           className={filter === 'responded' ? 'active' : ''}
           onClick={() => setFilter('responded')}
         >
           Responded ({stats.responded})
         </button>
-        <button 
+        <button
           className={filter === 'closed' ? 'active' : ''}
           onClick={() => setFilter('closed')}
         >
@@ -199,7 +199,7 @@ export default function ContactManagement() {
           <div className="empty-state">
             <h3>No inquiries found</h3>
             <p>
-              {filter === 'all' 
+              {filter === 'all'
                 ? 'No contact inquiries have been submitted yet.'
                 : `No ${filter} inquiries found.`
               }
@@ -215,7 +215,7 @@ export default function ContactManagement() {
                   {inquiry.phone && <p className="inquiry-phone">{inquiry.phone}</p>}
                 </div>
                 <div className="inquiry-meta">
-                  <span 
+                  <span
                     className="status-badge"
                     style={{ backgroundColor: getStatusColor(inquiry.status) }}
                   >
@@ -229,26 +229,26 @@ export default function ContactManagement() {
                   </span>
                 </div>
               </div>
-              
+
               <div className="inquiry-content">
                 <h4>{inquiry.subject}</h4>
                 <p className="inquiry-message">
-                  {inquiry.message.length > 150 
+                  {inquiry.message.length > 150
                     ? `${inquiry.message.substring(0, 150)}...`
                     : inquiry.message
                   }
                 </p>
               </div>
-              
+
               <div className="inquiry-actions">
-                <button 
+                <button
                   onClick={() => setSelectedInquiry(inquiry)}
                   className="btn btn-outline"
                 >
                   View Details
                 </button>
                 {inquiry.status === 'new' && (
-                  <button 
+                  <button
                     onClick={() => updateInquiryStatus(inquiry.id, 'responded')}
                     className="btn btn-primary"
                   >
@@ -256,7 +256,7 @@ export default function ContactManagement() {
                   </button>
                 )}
                 {inquiry.status === 'responded' && (
-                  <button 
+                  <button
                     onClick={() => updateInquiryStatus(inquiry.id, 'closed')}
                     className="btn btn-success"
                   >
@@ -264,7 +264,7 @@ export default function ContactManagement() {
                   </button>
                 )}
                 {inquiry.status === 'closed' && (
-                  <button 
+                  <button
                     onClick={() => updateInquiryStatus(inquiry.id, 'new')}
                     className="btn btn-secondary"
                   >
@@ -283,14 +283,14 @@ export default function ContactManagement() {
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Inquiry Details</h2>
-              <button 
+              <button
                 onClick={() => setSelectedInquiry(null)}
                 className="modal-close"
               >
                 ×
               </button>
             </div>
-            
+
             <div className="modal-body">
               <div className="inquiry-details">
                 <div className="detail-row">
@@ -313,7 +313,7 @@ export default function ContactManagement() {
                 </div>
                 <div className="detail-row">
                   <label>Status:</label>
-                  <span 
+                  <span
                     className="status-badge"
                     style={{ backgroundColor: getStatusColor(selectedInquiry.status) }}
                   >
@@ -336,10 +336,10 @@ export default function ContactManagement() {
                 </div>
               </div>
             </div>
-            
+
             <div className="modal-actions">
               {selectedInquiry.status === 'new' && (
-                <button 
+                <button
                   onClick={() => updateInquiryStatus(selectedInquiry.id, 'responded')}
                   className="btn btn-primary"
                 >
@@ -347,7 +347,7 @@ export default function ContactManagement() {
                 </button>
               )}
               {selectedInquiry.status === 'responded' && (
-                <button 
+                <button
                   onClick={() => updateInquiryStatus(selectedInquiry.id, 'closed')}
                   className="btn btn-success"
                 >
@@ -355,14 +355,14 @@ export default function ContactManagement() {
                 </button>
               )}
               {selectedInquiry.status === 'closed' && (
-                <button 
+                <button
                   onClick={() => updateInquiryStatus(selectedInquiry.id, 'new')}
                   className="btn btn-secondary"
                 >
                   Reopen
                 </button>
               )}
-              <button 
+              <button
                 onClick={() => setSelectedInquiry(null)}
                 className="btn btn-outline"
               >

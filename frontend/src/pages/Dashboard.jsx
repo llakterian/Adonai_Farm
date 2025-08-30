@@ -906,7 +906,7 @@ export default function Dashboard() {
             {photos.slice(0, 6).map(photo => (
               <div key={photo.id} className="gallery-item">
                 <img
-                  src={`http://localhost:4000${photo.path}`}
+                  src={photo.path.startsWith('http') ? photo.path : `${window.location.origin}${photo.path}`}
                   alt={photo.filename}
                   style={{ width: '100%', height: '150px', objectFit: 'cover' }}
                 />

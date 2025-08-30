@@ -1,16 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { 
-  createSystemBackup, 
-  exportBackupFile, 
-  importBackupFile, 
-  restoreSystemData, 
+import {
+  createSystemBackup,
+  exportBackupFile,
+  importBackupFile,
+  restoreSystemData,
   validateBackupData,
   getStorageUsage,
-  cleanupStorageData 
+  cleanupStorageData
 } from '../utils/dataBackup.js';
-import { 
+import {
   performSystemHealthCheck,
   startPerformanceMonitoring,
   stopPerformanceMonitoring,
@@ -46,7 +46,7 @@ export default function Account() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    
+
     if (!currentPassword) {
       setMessage('Current password is required');
       setMessageType('error');
@@ -69,9 +69,9 @@ export default function Account() {
     setMessage(null);
 
     try {
-      const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+      const api = import.meta.env.VITE_API_URL || window.location.origin;
       const token = localStorage.getItem('adonai_token');
-      
+
       await axios.put(api + '/auth/update', {
         currentPassword,
         newUsername: newUsername || undefined,
@@ -82,19 +82,19 @@ export default function Account() {
 
       setMessage('Account updated successfully! Please sign in again with your new credentials.');
       setMessageType('success');
-      
+
       // Clear form
       setCurrentPassword('');
       setNewUsername('');
       setNewPassword('');
       setConfirmPassword('');
-      
+
       // Redirect to login after 2 seconds
       setTimeout(() => {
         localStorage.removeItem('adonai_token');
         navigate('/login', { replace: true });
       }, 2000);
-      
+
     } catch (error) {
       setMessage(error?.response?.data?.error || 'Update failed. Please try again.');
       setMessageType('error');
@@ -188,7 +188,7 @@ export default function Account() {
         setBackupMessage('System restored successfully! Please refresh the page.');
         setBackupMessageType('success');
         setImportedBackup(null);
-        
+
         // Refresh page after 2 seconds
         setTimeout(() => {
           window.location.reload();
@@ -305,17 +305,17 @@ export default function Account() {
         <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>
           🌾 Farm Account Overview
         </h2>
-        <div style={{ 
-          background: 'var(--soft-white)', 
-          padding: '1.5rem', 
+        <div style={{
+          background: 'var(--soft-white)',
+          padding: '1.5rem',
           borderRadius: '8px',
           marginBottom: '2rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-            <div style={{ 
-              width: '60px', 
-              height: '60px', 
-              background: 'var(--primary-green)', 
+            <div style={{
+              width: '60px',
+              height: '60px',
+              background: 'var(--primary-green)',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
@@ -334,9 +334,9 @@ export default function Account() {
               </p>
             </div>
           </div>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
             gap: '1rem',
             marginTop: '1rem'
           }}>
@@ -361,11 +361,11 @@ export default function Account() {
         <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>
           ✏️ Update Account Information
         </h2>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>🔒 Current Password *</label>
-            <input 
+            <input
               type="password"
               value={currentPassword}
               onChange={e => setCurrentPassword(e.target.value)}
@@ -381,7 +381,7 @@ export default function Account() {
           <div className="form-grid">
             <div className="form-group">
               <label>👤 New Username</label>
-              <input 
+              <input
                 type="text"
                 value={newUsername}
                 onChange={e => setNewUsername(e.target.value)}
@@ -391,7 +391,7 @@ export default function Account() {
             </div>
             <div className="form-group">
               <label>🔑 New Password</label>
-              <input 
+              <input
                 type="password"
                 value={newPassword}
                 onChange={e => setNewPassword(e.target.value)}
@@ -404,7 +404,7 @@ export default function Account() {
           {newPassword && (
             <div className="form-group">
               <label>🔑 Confirm New Password</label>
-              <input 
+              <input
                 type="password"
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
@@ -422,8 +422,8 @@ export default function Account() {
           )}
 
           <div className="btn-group">
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn btn-primary"
               disabled={loading}
             >
@@ -433,8 +433,8 @@ export default function Account() {
                 <>💾 Update Account</>
               )}
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="btn btn-outline"
               onClick={() => {
                 setCurrentPassword('');
@@ -457,7 +457,7 @@ export default function Account() {
           <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>
             💾 Data Backup & Restore
           </h2>
-          
+
           {backupMessage && (
             <div className={`message ${backupMessageType === 'error' ? 'message-error' : 'message-success'}`}>
               {backupMessageType === 'error' ? '❌' : '✅'} {backupMessage}
@@ -465,9 +465,9 @@ export default function Account() {
           )}
 
           {/* Backup Section */}
-          <div style={{ 
-            background: 'var(--soft-white)', 
-            padding: '1.5rem', 
+          <div style={{
+            background: 'var(--soft-white)',
+            padding: '1.5rem',
             borderRadius: '8px',
             marginBottom: '1.5rem'
           }}>
@@ -477,7 +477,7 @@ export default function Account() {
             <p style={{ color: 'var(--text-light)', marginBottom: '1rem' }}>
               Export all farm data including animals, workers, infrastructure, users, and gallery photos.
             </p>
-            <button 
+            <button
               className="btn btn-primary"
               onClick={handleCreateBackup}
               disabled={backupLoading}
@@ -491,9 +491,9 @@ export default function Account() {
           </div>
 
           {/* Restore Section */}
-          <div style={{ 
-            background: 'var(--soft-white)', 
-            padding: '1.5rem', 
+          <div style={{
+            background: 'var(--soft-white)',
+            padding: '1.5rem',
             borderRadius: '8px',
             marginBottom: '1.5rem'
           }}>
@@ -503,7 +503,7 @@ export default function Account() {
             <p style={{ color: 'var(--text-light)', marginBottom: '1rem' }}>
               Import and restore system data from a previously created backup file.
             </p>
-            
+
             <div className="btn-group" style={{ marginBottom: '1rem' }}>
               <input
                 type="file"
@@ -512,16 +512,16 @@ export default function Account() {
                 accept=".json"
                 style={{ display: 'none' }}
               />
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={backupLoading}
               >
                 📁 Select Backup File
               </button>
-              
+
               {importedBackup && (
-                <button 
+                <button
                   className="btn btn-primary"
                   onClick={handleRestoreBackup}
                   disabled={backupLoading}
@@ -536,9 +536,9 @@ export default function Account() {
             </div>
 
             {importedBackup && (
-              <div style={{ 
-                background: 'rgba(45, 80, 22, 0.1)', 
-                padding: '1rem', 
+              <div style={{
+                background: 'rgba(45, 80, 22, 0.1)',
+                padding: '1rem',
                 borderRadius: '6px',
                 border: '1px solid var(--primary-green)'
               }}>
@@ -546,8 +546,8 @@ export default function Account() {
                   Backup Ready for Restore
                 </h5>
                 <p style={{ color: 'var(--text-light)', fontSize: '0.9rem', margin: 0 }}>
-                  Created: {new Date(importedBackup.metadata?.created_at).toLocaleString()}<br/>
-                  Data Types: {importedBackup.metadata?.data_types?.join(', ') || 'Unknown'}<br/>
+                  Created: {new Date(importedBackup.metadata?.created_at).toLocaleString()}<br />
+                  Data Types: {importedBackup.metadata?.data_types?.join(', ') || 'Unknown'}<br />
                   Statistics: {JSON.stringify(importedBackup.metadata?.statistics || {})}
                 </p>
               </div>
@@ -555,9 +555,9 @@ export default function Account() {
           </div>
 
           {/* Storage Management */}
-          <div style={{ 
-            background: 'var(--soft-white)', 
-            padding: '1.5rem', 
+          <div style={{
+            background: 'var(--soft-white)',
+            padding: '1.5rem',
             borderRadius: '8px',
             marginBottom: '1.5rem'
           }}>
@@ -567,15 +567,15 @@ export default function Account() {
             <p style={{ color: 'var(--text-light)', marginBottom: '1rem' }}>
               Monitor storage usage and clean up orphaned or duplicate data.
             </p>
-            
+
             <div className="btn-group" style={{ marginBottom: '1rem' }}>
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={handleGetStorageUsage}
               >
                 📊 Check Storage Usage
               </button>
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={handleCleanupStorage}
               >
@@ -584,9 +584,9 @@ export default function Account() {
             </div>
 
             {storageUsage && (
-              <div style={{ 
-                background: 'rgba(45, 80, 22, 0.1)', 
-                padding: '1rem', 
+              <div style={{
+                background: 'rgba(45, 80, 22, 0.1)',
+                padding: '1rem',
                 borderRadius: '6px',
                 border: '1px solid var(--primary-green)'
               }}>
@@ -612,9 +612,9 @@ export default function Account() {
             )}
           </div>
 
-          <div style={{ 
-            background: 'rgba(255, 193, 7, 0.1)', 
-            padding: '1rem', 
+          <div style={{
+            background: 'rgba(255, 193, 7, 0.1)',
+            padding: '1rem',
             borderRadius: '6px',
             border: '1px solid var(--accent-gold)'
           }}>
@@ -639,9 +639,9 @@ export default function Account() {
           </h2>
 
           {/* Health Check Section */}
-          <div style={{ 
-            background: 'var(--soft-white)', 
-            padding: '1.5rem', 
+          <div style={{
+            background: 'var(--soft-white)',
+            padding: '1.5rem',
             borderRadius: '8px',
             marginBottom: '1.5rem'
           }}>
@@ -651,9 +651,9 @@ export default function Account() {
             <p style={{ color: 'var(--text-light)', marginBottom: '1rem' }}>
               Perform comprehensive system diagnostics including storage, data integrity, and performance checks.
             </p>
-            
+
             <div className="btn-group" style={{ marginBottom: '1rem' }}>
-              <button 
+              <button
                 className="btn btn-primary"
                 onClick={handleHealthCheck}
                 disabled={healthLoading}
@@ -664,7 +664,7 @@ export default function Account() {
                   <>🔍 Run Health Check</>
                 )}
               </button>
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={handleGetDiagnostics}
               >
@@ -673,36 +673,35 @@ export default function Account() {
             </div>
 
             {healthData && (
-              <div style={{ 
-                background: healthData.status === 'healthy' 
-                  ? 'rgba(45, 80, 22, 0.1)' 
-                  : healthData.status === 'warning' 
-                    ? 'rgba(255, 193, 7, 0.1)' 
-                    : 'rgba(220, 53, 69, 0.1)', 
-                padding: '1rem', 
+              <div style={{
+                background: healthData.status === 'healthy'
+                  ? 'rgba(45, 80, 22, 0.1)'
+                  : healthData.status === 'warning'
+                    ? 'rgba(255, 193, 7, 0.1)'
+                    : 'rgba(220, 53, 69, 0.1)',
+                padding: '1rem',
                 borderRadius: '6px',
-                border: `1px solid ${
-                  healthData.status === 'healthy' 
-                    ? 'var(--primary-green)' 
-                    : healthData.status === 'warning' 
-                      ? 'var(--accent-gold)' 
+                border: `1px solid ${healthData.status === 'healthy'
+                    ? 'var(--primary-green)'
+                    : healthData.status === 'warning'
+                      ? 'var(--accent-gold)'
                       : 'var(--danger-red)'
-                }`
+                  }`
               }}>
-                <h5 style={{ 
-                  color: healthData.status === 'healthy' 
-                    ? 'var(--primary-green)' 
-                    : healthData.status === 'warning' 
-                      ? 'var(--accent-gold)' 
-                      : 'var(--danger-red)', 
-                  marginBottom: '0.5rem' 
+                <h5 style={{
+                  color: healthData.status === 'healthy'
+                    ? 'var(--primary-green)'
+                    : healthData.status === 'warning'
+                      ? 'var(--accent-gold)'
+                      : 'var(--danger-red)',
+                  marginBottom: '0.5rem'
                 }}>
-                  {healthData.status === 'healthy' ? '✅' : healthData.status === 'warning' ? '⚠️' : '❌'} 
+                  {healthData.status === 'healthy' ? '✅' : healthData.status === 'warning' ? '⚠️' : '❌'}
                   System Status: {healthData.status.toUpperCase()}
                 </h5>
                 <div style={{ color: 'var(--text-light)', fontSize: '0.9rem' }}>
                   <p><strong>Last Check:</strong> {new Date(healthData.timestamp).toLocaleString()}</p>
-                  
+
                   {healthData.issues.length > 0 && (
                     <div style={{ marginTop: '0.5rem' }}>
                       <strong style={{ color: 'var(--danger-red)' }}>Issues:</strong>
@@ -713,7 +712,7 @@ export default function Account() {
                       </ul>
                     </div>
                   )}
-                  
+
                   {healthData.warnings.length > 0 && (
                     <div style={{ marginTop: '0.5rem' }}>
                       <strong style={{ color: 'var(--accent-gold)' }}>Warnings:</strong>
@@ -727,7 +726,7 @@ export default function Account() {
 
                   {healthData.storage && (
                     <div style={{ marginTop: '0.5rem' }}>
-                      <strong>Storage:</strong> {healthData.storage.totalSizeKB}KB used 
+                      <strong>Storage:</strong> {healthData.storage.totalSizeKB}KB used
                       ({healthData.storage.usagePercentage.toFixed(1)}% of quota)
                     </div>
                   )}
@@ -754,9 +753,9 @@ export default function Account() {
           </div>
 
           {/* Performance Monitoring Section */}
-          <div style={{ 
-            background: 'var(--soft-white)', 
-            padding: '1.5rem', 
+          <div style={{
+            background: 'var(--soft-white)',
+            padding: '1.5rem',
             borderRadius: '8px',
             marginBottom: '1.5rem'
           }}>
@@ -766,24 +765,24 @@ export default function Account() {
             <p style={{ color: 'var(--text-light)', marginBottom: '1rem' }}>
               Monitor system performance in real-time and track performance metrics over time.
             </p>
-            
+
             <div className="btn-group" style={{ marginBottom: '1rem' }}>
               {!monitoringActive ? (
-                <button 
+                <button
                   className="btn btn-primary"
                   onClick={handleStartMonitoring}
                 >
                   ▶️ Start Monitoring
                 </button>
               ) : (
-                <button 
+                <button
                   className="btn btn-danger"
                   onClick={handleStopMonitoring}
                 >
                   ⏹️ Stop Monitoring
                 </button>
               )}
-              <button 
+              <button
                 className="btn btn-outline"
                 onClick={handleGetPerformanceLog}
               >
@@ -792,9 +791,9 @@ export default function Account() {
             </div>
 
             {monitoringActive && (
-              <div style={{ 
-                background: 'rgba(45, 80, 22, 0.1)', 
-                padding: '0.75rem', 
+              <div style={{
+                background: 'rgba(45, 80, 22, 0.1)',
+                padding: '0.75rem',
                 borderRadius: '6px',
                 border: '1px solid var(--primary-green)',
                 marginBottom: '1rem'
@@ -806,34 +805,34 @@ export default function Account() {
             )}
 
             {performanceLog.length > 0 && (
-              <div style={{ 
-                background: 'rgba(45, 80, 22, 0.1)', 
-                padding: '1rem', 
+              <div style={{
+                background: 'rgba(45, 80, 22, 0.1)',
+                padding: '1rem',
                 borderRadius: '6px',
                 border: '1px solid var(--primary-green)'
               }}>
                 <h5 style={{ color: 'var(--primary-green)', marginBottom: '0.5rem' }}>
                   Performance Log ({performanceLog.length} entries)
                 </h5>
-                <div style={{ 
-                  maxHeight: '200px', 
+                <div style={{
+                  maxHeight: '200px',
                   overflowY: 'auto',
-                  color: 'var(--text-light)', 
-                  fontSize: '0.8rem' 
+                  color: 'var(--text-light)',
+                  fontSize: '0.8rem'
                 }}>
                   {performanceLog.slice(-10).reverse().map((entry, index) => (
-                    <div key={index} style={{ 
-                      padding: '0.25rem 0', 
-                      borderBottom: index < 9 ? '1px solid rgba(45, 80, 22, 0.1)' : 'none' 
+                    <div key={index} style={{
+                      padding: '0.25rem 0',
+                      borderBottom: index < 9 ? '1px solid rgba(45, 80, 22, 0.1)' : 'none'
                     }}>
-                      <strong>{new Date(entry.timestamp).toLocaleTimeString()}</strong> - 
-                      Status: <span style={{ 
-                        color: entry.status === 'healthy' ? 'var(--primary-green)' : 
-                              entry.status === 'warning' ? 'var(--accent-gold)' : 'var(--danger-red)' 
+                      <strong>{new Date(entry.timestamp).toLocaleTimeString()}</strong> -
+                      Status: <span style={{
+                        color: entry.status === 'healthy' ? 'var(--primary-green)' :
+                          entry.status === 'warning' ? 'var(--accent-gold)' : 'var(--danger-red)'
                       }}>
                         {entry.status}
-                      </span> - 
-                      Response: {entry.responseTime.toFixed(2)}ms - 
+                      </span> -
+                      Response: {entry.responseTime.toFixed(2)}ms -
                       Storage: {entry.storageUsage.toFixed(1)}%
                       {entry.issueCount > 0 && ` - Issues: ${entry.issueCount}`}
                       {entry.warningCount > 0 && ` - Warnings: ${entry.warningCount}`}
@@ -846,9 +845,9 @@ export default function Account() {
 
           {/* System Diagnostics Section */}
           {systemDiagnostics && (
-            <div style={{ 
-              background: 'var(--soft-white)', 
-              padding: '1.5rem', 
+            <div style={{
+              background: 'var(--soft-white)',
+              padding: '1.5rem',
               borderRadius: '8px',
               marginBottom: '1.5rem'
             }}>
@@ -858,32 +857,32 @@ export default function Account() {
               <div style={{ color: 'var(--text-light)', fontSize: '0.9rem' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                   <div>
-                    <strong>Overall Status:</strong><br/>
-                    <span style={{ 
-                      color: systemDiagnostics.overall.status === 'healthy' ? 'var(--primary-green)' : 
-                            systemDiagnostics.overall.status === 'warning' ? 'var(--accent-gold)' : 'var(--danger-red)' 
+                    <strong>Overall Status:</strong><br />
+                    <span style={{
+                      color: systemDiagnostics.overall.status === 'healthy' ? 'var(--primary-green)' :
+                        systemDiagnostics.overall.status === 'warning' ? 'var(--accent-gold)' : 'var(--danger-red)'
                     }}>
                       {systemDiagnostics.overall.status.toUpperCase()}
-                    </span><br/>
+                    </span><br />
                     Monitoring: {systemDiagnostics.overall.monitoringActive ? 'Active' : 'Inactive'}
                   </div>
                   <div>
-                    <strong>Storage:</strong><br/>
-                    Size: {systemDiagnostics.storage.totalSizeMB}MB<br/>
+                    <strong>Storage:</strong><br />
+                    Size: {systemDiagnostics.storage.totalSizeMB}MB<br />
                     Usage: {systemDiagnostics.storage.usagePercentage.toFixed(1)}%
                   </div>
                   <div>
-                    <strong>Performance:</strong><br/>
-                    Memory: {systemDiagnostics.performance.estimatedMemoryMB}MB<br/>
+                    <strong>Performance:</strong><br />
+                    Memory: {systemDiagnostics.performance.estimatedMemoryMB}MB<br />
                     Avg Response: {systemDiagnostics.performance.averageResponseTime.toFixed(2)}ms
                   </div>
                   <div>
-                    <strong>Browser:</strong><br/>
-                    Platform: {systemDiagnostics.browser.platform}<br/>
+                    <strong>Browser:</strong><br />
+                    Platform: {systemDiagnostics.browser.platform}<br />
                     Online: {systemDiagnostics.browser.online ? 'Yes' : 'No'}
                   </div>
                 </div>
-                
+
                 {systemDiagnostics.storage.itemCounts && (
                   <div style={{ marginTop: '1rem' }}>
                     <strong>Data Counts:</strong>
@@ -898,9 +897,9 @@ export default function Account() {
             </div>
           )}
 
-          <div style={{ 
-            background: 'rgba(23, 162, 184, 0.1)', 
-            padding: '1rem', 
+          <div style={{
+            background: 'rgba(23, 162, 184, 0.1)',
+            padding: '1rem',
             borderRadius: '6px',
             border: '1px solid #17a2b8'
           }}>
@@ -922,9 +921,9 @@ export default function Account() {
         <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary-green)' }}>
           🛡️ Security Information
         </h2>
-        <div style={{ 
-          background: 'var(--soft-white)', 
-          padding: '1.5rem', 
+        <div style={{
+          background: 'var(--soft-white)',
+          padding: '1.5rem',
           borderRadius: '8px',
           marginBottom: '1.5rem'
         }}>
@@ -938,9 +937,9 @@ export default function Account() {
             <li>Change your password regularly</li>
           </ul>
         </div>
-        
+
         <div className="btn-group">
-          <button 
+          <button
             className="btn btn-danger"
             onClick={handleLogout}
           >
