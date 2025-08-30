@@ -73,8 +73,18 @@ const app = express();
 const allowedOrigins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(',').map(s => s.trim())
     : ['http://localhost:3000', 'http://localhost:5173'];
-app.use(cors({ origin: allowedOrigins, credentials: true, optionsSuccessStatus: 200 }));
+
+// For Railway deployment, allow the same origin since we're serving frontend from backend
+const corsOptions = {
+    origin: process.env.NODE_ENV === 'production' ? true : allowedOrigins,
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 function authMiddleware(req, res, next) {
     const auth = req.headers.authorization;
@@ -322,6 +332,11 @@ app.get('/api/health', async (req, res) => {
     } catch (e) {
         res.status(500).json({ status: 'error', error: e.message });
     }
+});
+
+// Catch-all handler: send back React's index.html file for client-side routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 app.listen(PORT, () => console.log(`Postgres server listening on :${PORT}`));
