@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "type": "Dairy Cattle",
+    "name": "Bella Updated",
+    "dob": "2022-03-10",
+    "sex": "F",
+    "notes": "High yield cow - updated notes"
+  },
+  {
+    "id": 2,
+    "type": "Beef Cattle",
+    "name": "Max",
+    "dob": "2021-06-01",
+    "sex": "M",
+    "notes": "Great frame"
+  },
+  {
+    "id": 3,
+    "type": "Dairy Goat",
+    "name": "Luna",
+    "dob": "2023-01-15",
+    "sex": "F",
+    "notes": "Produces well"
+  },
+  {
+    "id": 5,
+    "type": "Dairy Cattle",
+    "name": "Bella Updated",
+    "dob": "2022-03-10",
+    "sex": "F",
+    "notes": "High yield cow - updated notes"
+  },
+  {
+    "id": 6,
+    "type": "Beef Cattle",
+    "name": "Max",
+    "dob": "2021-06-01",
+    "sex": "M",
+    "notes": "Great frame"
+  },
+  {
+    "id": 7,
+    "type": "Dairy Goat",
+    "name": "Luna",
+    "dob": "2023-01-15",
+    "sex": "F",
+    "notes": "Produces well"
+  }
+]

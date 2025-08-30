@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "John Kamau",
+    "employee_id": "EMP001",
+    "role": "Farm Worker",
+    "hourly_rate": 500,
+    "phone": "+254712345678"
+  },
+  {
+    "id": 2,
+    "name": "Mary Wanjiku",
+    "employee_id": "EMP002",
+    "role": "Milkman",
+    "hourly_rate": 600,
+    "phone": "+254723456789"
+  },
+  {
+    "id": 3,
+    "name": "Peter Mwangi",
+    "employee_id": "EMP003",
+    "role": "Driver",
+    "hourly_rate": 800,
+    "phone": "+254734567890"
+  },
+  {
+    "id": 4,
+    "name": "Grace Akinyi",
+    "employee_id": "EMP004",
+    "role": "Farm Worker",
+    "hourly_rate": 500,
+    "phone": "+254745678901"
+  },
+  {
+    "id": 5,
+    "name": "Samuel Kiprop",
+    "employee_id": "EMP005",
+    "role": "Supervisor",
+    "hourly_rate": 1200,
+    "phone": "+254756789012"
+  },
+  {
+    "id": 6,
+    "name": "Faith Njeri",
+    "employee_id": "EMP006",
+    "role": "Milkman",
+    "hourly_rate": 600,
+    "phone": "+254767890123"
+  },
+  {
+    "id": 7,
+    "name": "David Ochieng",
+    "employee_id": "EMP007",
+    "role": "Driver",
+    "hourly_rate": 800,
+    "phone": "+254778901234"
+  },
+  {
+    "id": 8,
+    "name": "Rose Wambui",
+    "employee_id": "EMP008",
+    "role": "Farm Worker",
+    "hourly_rate": 500,
+    "phone": "+254789012345"
+  }
+]

@@ -7,19 +7,20 @@ healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 
 [[services]]
-name = "backend"
+name = "adonai-backend"
 source = "backend"
 
 [services.build]
 buildCommand = "npm install"
-startCommand = "npm run migrate && npm start"
+startCommand = "node server.js"
 
 [services.variables]
 NODE_ENV = "production"
-JWT_SECRET = "adonai_farm_super_secure_secret_2024"
+JWT_SECRET = "adonai_farm_super_secure_secret_2024_production"
+DATABASE_URL = "${{Postgres.DATABASE_URL}}"
 
 [[services]]
-name = "frontend"
+name = "adonai-frontend"
 source = "frontend"
 
 [services.build]
@@ -27,4 +28,4 @@ buildCommand = "npm install && npm run build"
 startCommand = "npx serve -s dist -l $PORT"
 
 [services.variables]
-VITE_API_URL = "https://backend-production.railway.app"
+VITE_API_URL = "https://adonai-backend-production.up.railway.app"

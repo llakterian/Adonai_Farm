@@ -33,7 +33,8 @@ const EMAIL_CONFIG = {
 // Create email transporter
 let emailTransporter = null;
 if (EMAIL_CONFIG.auth.user && EMAIL_CONFIG.auth.pass) {
-  emailTransporter = nodemailer.createTransporter(EMAIL_CONFIG);
+  // Fix: use createTransport (not createTransporter)
+  emailTransporter = nodemailer.createTransport(EMAIL_CONFIG);
 
   // Verify email configuration
   emailTransporter.verify((error, success) => {
@@ -189,8 +190,11 @@ async function sendContactNotification(inquiry) {
 const app = express();
 
 // Enhanced CORS configuration for image serving
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map(s => s.trim())
+  : ['http://localhost:3000', 'http://localhost:5173'];
 app.use(cors({
-  origin: process.env.FRONTEND_URL || ['http://localhost:3000', 'http://localhost:5173'],
+  origin: allowedOrigins,
   credentials: true,
   optionsSuccessStatus: 200
 }));
