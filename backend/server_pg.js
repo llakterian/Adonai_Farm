@@ -83,8 +83,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+// Serve static frontend files from dist folder only
+const distPath = path.join(__dirname, '../frontend/dist');
+console.log('Serving static files from:', distPath);
+app.use(express.static(distPath, {
+    index: 'index.html',
+    maxAge: '1d'
+}));
 
 function authMiddleware(req, res, next) {
     const auth = req.headers.authorization;
@@ -336,7 +341,9 @@ app.get('/api/health', async (req, res) => {
 
 // Catch-all handler: send back React's index.html file for client-side routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    const indexPath = path.join(__dirname, '../frontend/dist/index.html');
+    console.log('Serving index.html from:', indexPath);
+    res.sendFile(indexPath);
 });
 
 app.listen(PORT, () => console.log(`Postgres server listening on :${PORT}`));
