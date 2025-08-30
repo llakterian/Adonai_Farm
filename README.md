@@ -1,228 +1,196 @@
 # 🌾 Adonai Farm Management System
 
-A comprehensive farm management system built with React, Node.js, and SQLite. Manage livestock, workers, time tracking, photo gallery, and generate reports - all with a beautiful, mobile-responsive interface.
+A complete farm management system built with React (Vite) and Node.js (Express) with SQLite. Manage livestock, workers, time tracking, a photo gallery, and reports in a mobile‑friendly UI.
 
-![Farm Management Dashboard](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
-![React](https://img.shields.io/badge/React-18.2.0-blue)
-![Node.js](https://img.shields.io/badge/Node.js-Express-green)
-![SQLite](https://img.shields.io/badge/Database-SQLite-lightblue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Node.js >= 18](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)
+![React 18](https://img.shields.io/badge/React-18.2.0-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+
+---
 
 ## ✨ Features
 
-### 🐄 Livestock Management
-- Add, edit, and delete animals
-- Track animal details (type, age, sex, notes)
-- Support for multiple animal types (cattle, goats, sheep, poultry)
-- Export data to CSV
+- **Livestock Management**: CRUD for animals, CSV export
+- **Worker Management & Time Tracking**: Staff profiles, clock in/out, payroll calculations
+- **Photo Gallery**: Upload and serve images
+- **Reports**: Animals CSV, payroll summaries (client-side)
+- **Mobile‑First UI**: Responsive, touch‑friendly
 
-### 👷 Worker Management & Time Tracking
-- Employee management with roles and hourly rates
-- **Clock in/out system** for workers
-- **Automatic salary calculation** based on hours worked
-- Real-time work status tracking
-- Payroll reports with date filtering
+---
 
-### 📸 Photo Gallery
-- Upload farm photos with drag-and-drop
-- Image validation and compression
-- Beautiful gallery with modal view
-- Farm showcase with pre-loaded images
+## 🧩 Tech Stack
 
-### 📊 Reports & Analytics
-- Animal statistics and insights
-- Worker payroll calculations
-- Time tracking reports
-- Export capabilities
+- **Frontend**: React 18, Vite, React Router, Axios, CSS
+- **Backend**: Node.js, Express, better-sqlite3, JWT, bcrypt, Multer
+- **DevOps**: Docker, Docker Compose, Netlify (static), Railway (recommended)
 
-### 📱 Mobile-First Design
-- Fully responsive on all devices
-- Touch-friendly interface
-- Mobile navigation menu
-- Optimized for farm workers using phones
+---
 
-## 🚀 Quick Start
+## 📁 Monorepo Structure
 
-### Option 1: Docker (Recommended)
-```bash
-# Clone the repository
-git clone https://github.com/Lakterian9/adonai_farm.git
-cd adonai_farm
-
-# Run with Docker
-./deploy.sh
+```
+Adonai_Farm/
+├─ frontend/           # React app (Vite)
+│  ├─ src/
+│  ├─ public/
+│  └─ Dockerfile
+├─ backend/            # Express API + SQLite
+│  ├─ index.js
+│  ├─ migrate_and_seed.js
+│  ├─ data/            # SQLite DB (persisted)
+│  ├─ images/          # Uploaded photos (persisted)
+│  └─ Dockerfile
+├─ docker-compose.yml  # Local containers
+├─ start-dev.sh        # Starts both dev servers
+└─ package.json        # Root scripts
 ```
 
-### Option 2: Manual Setup
-```bash
-# Backend setup
-cd backend
-npm install
-npm run migrate  # Initialize database
-npm start
+---
 
-# Frontend setup (in new terminal)
-cd frontend
-npm install
-npm run dev
+## 🚀 Quick Start (Local Development)
+
+### Prerequisites
+- Node.js >= 18
+- npm
+
+### One‑command setup
+1. Install deps for both apps
+   ```bash
+   npm run install-all
+   ```
+2. Start dev environment (backend + frontend)
+   ```bash
+   npm run dev
+   ```
+
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:4000
+
+Alternatively, you can use the helper script:
+```bash
+./start-dev.sh
 ```
 
-## 🌐 Live Demo
-
-**Demo Credentials:**
+### Default Admin (seeded)
 - Username: `admin`
 - Password: `adonai123`
 
-## 🏗️ Tech Stack
+> The backend seeds demo data on first run via `backend/migrate_and_seed.js`.
 
-### Frontend
-- **React 18** - Modern UI framework
-- **Vite** - Fast build tool
-- **React Router** - Client-side routing
-- **Axios** - HTTP client
-- **CSS3** - Custom responsive styling
-
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **SQLite** - Lightweight database
-- **JWT** - Authentication
-- **Multer** - File images
-- **bcrypt** - Password hashing
-
-### DevOps
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration
-- **Railway** - Deployment platform
-
-## 📁 Project Structure
-
-```
-adonai_farm/
-├── frontend/                 # React frontend
-│   ├── src/
-│   │   ├── pages/           # Page components
-│   │   ├── styles.css       # Global styles
-│   │   └── App.jsx          # Main app component
-│   ├── public/              # Static assets
-│   └── Dockerfile
-├── backend/                 # Node.js backend
-│   ├── index.js            # Main server file
-│   ├── migrate_and_seed.js # Database setup
-│   ├── data/               # SQLite database
-│   ├── images/            # Photo images
-│   └── Dockerfile
-├── docker-compose.yml      # Multi-container setup
-├── deploy.sh              # Quick deployment script
-└── README.md
-```
+---
 
 ## 🔧 Environment Variables
 
-### Backend
+Create a `.env` in `backend/` (optional but recommended):
 ```env
 JWT_SECRET=your_secure_jwt_secret
 PORT=4000
-NODE_ENV=production
+# Optional email notifications (contact form)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@example.com
+SMTP_PASS=your_app_password
+ADMIN_EMAIL=alerts@example.com
+# CORS
+FRONTEND_URL=http://localhost:5173
 ```
 
-### Frontend
+Frontend (if needed for builds):
 ```env
 VITE_API_URL=http://localhost:4000
 ```
 
-## 🚀 Deployment
+---
 
-### Railway.app (Recommended)
-1. Fork this repository
-2. Sign up at [railway.app](https://railway.app)
-3. Connect your GitHub repository
-4. Railway will auto-deploy both frontend and backend
-5. Set environment variables in Railway dashboard
+## 🐳 Run with Docker (Recommended for local demo)
 
-### DigitalOcean App Platform
-1. Connect repository to DigitalOcean
-2. Configure build settings:
-   - Backend: Node.js app
-   - Frontend: Static site
-3. Deploy with one click
-
-### Manual VPS Deployment
+Using Docker Compose from repo root:
 ```bash
-# On your server
-git clone https://github.com/Lakterian9/adonai_farm.git
-cd adonai_farm
-./deploy.sh
+docker-compose up --build
+# Or in background
+docker-compose up -d --build
 ```
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:4000
 
-## 📊 Database Schema
-
-### Tables
-- **users** - Authentication
-- **animals** - Livestock records
-- **workers** - Employee information
-- **time_entries** - Clock in/out records
-- **photos** - Gallery images
-
-## 🔐 Security Features
-
-- JWT-based authentication
-- Password hashing with bcrypt
-- Input validation and sanitization
-- CORS configuration
-- File upload restrictions
-
-## 🎯 API Endpoints
-
-### Authentication
-- `POST /auth/login` - User login
-- `PUT /auth/update` - Update credentials
-
-### Livestock
-- `GET /api/livestock` - Get all animals
-- `POST /api/livestock` - Add new animal
-- `PUT /api/livestock/:id` - Update animal
-- `DELETE /api/livestock/:id` - Delete animal
-
-### Workers
-- `GET /api/workers` - Get all workers
-- `POST /api/workers` - Add new worker
-- `PUT /api/workers/:id` - Update worker
-- `DELETE /api/workers/:id` - Delete worker
-
-### Time Tracking
-- `GET /api/time-entries` - Get time entries
-- `POST /api/time-entries/clock-in` - Clock in worker
-- `POST /api/time-entries/clock-out` - Clock out worker
-- `GET /api/reports/payroll` - Generate payroll report
-
-### Gallery
-- `GET /api/gallery` - Get all photos
-- `POST /api/gallery/upload` - Upload photo
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Built for Adonai Farm management needs
-- Designed with modern farming practices in mind
-- Mobile-first approach for field workers
-- Sustainable farming through technology
-
-## 📞 Support
-
-For support, email [your-email] or create an issue in this repository.
+Volumes persist DB and uploaded images.
 
 ---
 
-**Made with ❤️ for sustainable farming** 🌱
+## 📜 NPM Scripts
+
+Root `package.json`:
+- `npm run install-all` — Install backend and frontend deps
+- `npm run dev` — Start backend (nodemon) and keep running from backend script
+- `npm run build` — Build frontend
+- `npm start` — Install backend deps, run DB migrate/seed, then start backend
+
+Backend `package.json`:
+- `npm run migrate` — Run SQLite migrations and seed admin/demo data
+- `npm run dev` — Start API with nodemon
+
+Frontend `package.json`:
+- `npm run dev` — Vite dev server
+- `npm run build` — Production build
+
+---
+
+## 🔌 API Overview
+
+Base URL (dev): `http://localhost:4000`
+
+- **Auth**
+  - `POST /auth/login` — Login, returns JWT
+  - `PUT /auth/update` — Update username/password (Bearer token)
+
+- **Livestock** (Bearer token)
+  - `GET /api/livestock`
+  - `POST /api/livestock`
+  - `PUT /api/livestock/:id`
+  - `DELETE /api/livestock/:id`
+  - `GET /api/reports/animals.csv` — CSV export
+
+- **Workers** (Bearer token)
+  - `GET /api/workers`
+  - `POST /api/workers`
+  - `PUT /api/workers/:id`
+  - `DELETE /api/workers/:id`
+
+- **Time Tracking** (Bearer token)
+  - `GET /api/time-entries`
+  - `POST /api/time-entries/clock-in`
+  - `POST /api/time-entries/clock-out`
+
+- **Gallery** (Bearer token)
+  - `GET /api/gallery`
+  - `POST /api/gallery/upload` (multipart/form-data)
+
+Static images are served from: `GET /images/...`
+
+---
+
+## 🌐 Deployment
+
+### Railway (Recommended)
+- Connect the GitHub repo to Railway and deploy
+- Configure environment variables in Railway dashboard
+
+### Netlify (Static Frontend)
+- Build frontend (`npm run build`) and deploy the build output as needed
+- Optionally use `netlify/functions` for serverless endpoints
+
+### Docker (Self‑hosted)
+- Use `docker-compose.yml` as provided or adapt images for your infra
+
+---
+
+## 📄 License
+
+MIT
+
+---
+
+## 🧭 Repository
+
+GitHub: https://github.com/llakterian/Adonai_Farm
