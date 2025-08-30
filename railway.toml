@@ -1,31 +1,8 @@
 [build]
-builder = "nixpacks"
+builder = "NIXPACKS"
+
+[build.nixpacksConfig]
+buildCommand = "npm run build"
 
 [deploy]
-healthcheckPath = "/api/health"
-healthcheckTimeout = 300
-restartPolicyType = "ON_FAILURE"
-
-[[services]]
-name = "adonai-backend"
-source = "backend"
-
-[services.build]
-buildCommand = "npm install"
-startCommand = "node server.js"
-
-[services.variables]
-NODE_ENV = "production"
-JWT_SECRET = "adonai_farm_super_secure_secret_2024_production"
-DATABASE_URL = "${{Postgres.DATABASE_URL}}"
-
-[[services]]
-name = "adonai-frontend"
-source = "frontend"
-
-[services.build]
-buildCommand = "npm install && npm run build"
-startCommand = "npx serve -s dist -l $PORT"
-
-[services.variables]
-VITE_API_URL = "https://adonai-backend-production.up.railway.app"
+startCommand = "cd backend && npm install && npm run migrate && npm start"
