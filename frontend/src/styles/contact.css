@@ -89,17 +89,19 @@
 
 /* Main Contact Section */
 .contact-main {
-    padding: 4rem 0;
+    padding: clamp(2rem, 4vw, 4rem) 0;
     background: var(--warm-white);
 }
 
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    max-width: 1200px;
+    align-items: start;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    max-width: min(1100px, 100%);
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1rem;
+    overflow-x: hidden;
 }
 
 /* Contact Info Section */
@@ -280,7 +282,7 @@
 .contact-form-section {
     background: var(--cream);
     border-radius: var(--radius-xl);
-    padding: 2.5rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
     box-shadow: var(--shadow-large);
     border: 1px solid var(--sage-green);
 }
@@ -321,7 +323,19 @@
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    gap: clamp(0.75rem, 2.5vw, 1rem);
+}
+
+/* Prevent input overflow on tiny screens */
+@media (max-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        padding: 0 0.75rem;
+    }
 }
 
 .form-group {

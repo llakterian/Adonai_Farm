@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, startTransition } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ErrorBoundary, { PublicErrorBoundary } from './components/ErrorBoundary';
 import { PublicRoute, AuthenticatedPublicRoute } from './components/RouteProtection';
 import { initializeSecurity } from './utils/security.js';
@@ -19,18 +19,18 @@ const Brochure = React.lazy(() => import('./pages/Brochure'));
 // Lazy load auth pages
 const Login = React.lazy(() => import('./pages/Login'));
 
-// Lazy load admin components - these will only be loaded when needed
-const AdminLayout = React.lazy(() => import('./components/AdminLayout'));
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
-const Breeding = React.lazy(() => import('./pages/Breeding'));
-const Workers = React.lazy(() => import('./pages/Workers'));
-const Reports = React.lazy(() => import('./pages/Reports'));
-const Account = React.lazy(() => import('./pages/Account'));
-const Inventory = React.lazy(() => import('./pages/Inventory'));
-const Users = React.lazy(() => import('./pages/Users'));
-const Infrastructure = React.lazy(() => import('./pages/Infrastructure'));
-const ContactManagement = React.lazy(() => import('./pages/ContactManagement'));
-const PublicContentManagement = React.lazy(() => import('./pages/PublicContentManagement'));
+// Admin components (eagerly loaded for reliability)
+import AdminLayout from './components/AdminLayout';
+import Dashboard from './pages/Dashboard';
+import Breeding from './pages/Breeding';
+import Workers from './pages/Workers';
+import Reports from './pages/Reports';
+import Account from './pages/Account';
+import Inventory from './pages/Inventory';
+import Users from './pages/Users';
+import Infrastructure from './pages/Infrastructure';
+import ContactManagement from './pages/ContactManagement';
+import PublicContentManagement from './pages/PublicContentManagement';
 
 import { isAuthenticated, refreshSession, isSessionExpiringSoon, logSecurityEvent } from './auth.js';
 
@@ -60,14 +60,13 @@ const AdminLoadingSpinner = () => (
 function PrivateRoute({ children }) {
   const isAuthenticated = requireAuth();
   return isAuthenticated ? (
-    <Suspense fallback={<AdminLoadingSpinner />}>
-      <AdminLayout>{children}</AdminLayout>
-    </Suspense>
+    <AdminLayout>{children}</AdminLayout>
   ) : <Navigate to="/login" replace />;
 }
 
 export default function App() {
   const isAuthenticated = requireAuth();
+  const location = useLocation();
 
   // Initialize security system
   useEffect(() => {
@@ -108,99 +107,75 @@ export default function App() {
     }
   }, [isAuthenticated]);
 
-  // Example: If you have custom navigation handlers, wrap in startTransition
-  // (No direct navigation handler in this file, so no changes needed here)
-
+  // Wrap routes in Suspense so lazy pages don't trigger ErrorBoundary
   return (
-    <ErrorBoundary>
+    <ErrorBoundary key={location.pathname}>
       <div className="app">
         <main>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<PublicLayout />}>
-              <Route index element={<Homepage />} />
-              <Route path="about" element={<About />} />
-              <Route path="services" element={<Services />} />
-              <Route path="animals" element={<Animals />} />
-              <Route path="gallery" element={<Gallery />} />
-              <Route path="contact" element={<Contact />} />
-              <Route path="tasks" element={<TaskChecklist />} />
-              <Route path="brochure" element={<Brochure />} />
-            </Route>
+          <Suspense fallback={<PublicLoadingSpinner />}>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<PublicLayout />}>
+                <Route index element={<Homepage />} />
+                <Route path="about" element={<About />} />
+                <Route path="services" element={<Services />} />
+                <Route path="animals" element={<Animals />} />
+                <Route path="gallery" element={<Gallery />} />
+                <Route path="contact" element={<Contact />} />
+                <Route path="tasks" element={<TaskChecklist />} />
+                <Route path="brochure" element={<Brochure />} />
+              </Route>
 
-            {/* Admin Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<Login />} />
-            <Route path="/dashboard" element={
-              <ErrorBoundary>
+              {/* Admin Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={<Login />} />
+              <Route path="/dashboard" element={
                 <PrivateRoute><Dashboard /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/animals" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/animals" element={
                 <PrivateRoute><Animals /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/breeding" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/breeding" element={
                 <PrivateRoute><Breeding /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/workers" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/workers" element={
                 <PrivateRoute><Workers /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/reports" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/reports" element={
                 <PrivateRoute><Reports /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/account" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/account" element={
                 <PrivateRoute><Account /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/inventory" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/inventory" element={
                 <PrivateRoute><Inventory /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/users" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/users" element={
                 <PrivateRoute><Users /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/infrastructure" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/infrastructure" element={
                 <PrivateRoute><Infrastructure /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/gallery" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/gallery" element={
                 <PrivateRoute><Gallery /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/contact" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/contact" element={
                 <PrivateRoute><ContactManagement /></PrivateRoute>
-              </ErrorBoundary>
-            } />
-            <Route path="/dashboard/public-content" element={
-              <ErrorBoundary>
+              } />
+              <Route path="/dashboard/public-content" element={
                 <PrivateRoute><PublicContentManagement /></PrivateRoute>
-              </ErrorBoundary>
-            } />
+              } />
 
-            {/* 404 Not Found Route */}
-            <Route path="*" element={
-              <PublicErrorBoundary componentName="NotFound">
-                <Suspense fallback={<PublicLoadingSpinner />}>
-                  <NotFound />
-                </Suspense>
-              </PublicErrorBoundary>
-            } />
-          </Routes>
+              {/* 404 Not Found Route */}
+              <Route path="*" element={
+                <PublicErrorBoundary componentName="NotFound">
+                  <Suspense fallback={<PublicLoadingSpinner />}>
+                    <NotFound />
+                  </Suspense>
+                </PublicErrorBoundary>
+              } />
+            </Routes>
+          </Suspense>
         </main>
       </div>
     </ErrorBoundary>

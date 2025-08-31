@@ -10,7 +10,8 @@ const nodemailer = require('nodemailer');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 const { createDb } = require('./db/dbAdapter');
-require('dotenv').config();
+const envPath = path.join(__dirname, '.env');
+require('dotenv').config({ path: envPath, override: true });
 
 const db = createDb();
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret';
@@ -19,13 +20,14 @@ const PORT = process.env.PORT || 4000;
 // Email configuration (same as index.js with transporter fix)
 const EMAIL_CONFIG = {
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: process.env.SMTP_PORT || 587,
-    secure: false,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: String(process.env.SMTP_SECURE || '').toLowerCase() === 'true' || String(process.env.SMTP_PORT) === '465',
     auth: {
-        user: process.env.SMTP_USER || '',
-        pass: process.env.SMTP_PASS || ''
+        user: (process.env.SMTP_USER || '').trim(),
+        pass: (process.env.SMTP_PASS || '').trim()
     }
 };
+const SMTP_FROM = (process.env.SMTP_FROM || process.env.SMTP_USER || '').trim();
 
 let emailTransporter = null;
 if (EMAIL_CONFIG.auth.user && EMAIL_CONFIG.auth.pass) {
@@ -46,13 +48,13 @@ async function sendContactNotification(inquiry) {
     if (!emailTransporter) return false;
     try {
         const adminMailOptions = {
-            from: `"Adonai Farm Website" <${EMAIL_CONFIG.auth.user}>`,
+            from: `"Adonai Farm Website" <${SMTP_FROM}>`,
             to: process.env.ADMIN_EMAIL || EMAIL_CONFIG.auth.user,
             subject: `New Contact Inquiry: ${inquiry.subject}`,
             text: JSON.stringify(inquiry, null, 2)
         };
         const customerMailOptions = {
-            from: `"Adonai Farm" <${EMAIL_CONFIG.auth.user}>`,
+            from: `"Adonai Farm" <${SMTP_FROM}>`,
             to: inquiry.email,
             subject: `Thank you for contacting Adonai Farm - ${inquiry.subject}`,
             text: 'Thank you for your inquiry. We will get back to you soon.'

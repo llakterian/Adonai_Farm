@@ -327,7 +327,7 @@ export default function Account() {
             </div>
             <div>
               <h3 style={{ color: 'var(--primary-green)', marginBottom: '0.25rem' }}>
-                Farm Administrator
+                Admin
               </h3>
               <p style={{ color: 'var(--text-light)', margin: 0 }}>
                 Managing Adonai Farm operations
@@ -682,10 +682,10 @@ export default function Account() {
                 padding: '1rem',
                 borderRadius: '6px',
                 border: `1px solid ${healthData.status === 'healthy'
-                    ? 'var(--primary-green)'
-                    : healthData.status === 'warning'
-                      ? 'var(--accent-gold)'
-                      : 'var(--danger-red)'
+                  ? 'var(--primary-green)'
+                  : healthData.status === 'warning'
+                    ? 'var(--accent-gold)'
+                    : 'var(--danger-red)'
                   }`
               }}>
                 <h5 style={{

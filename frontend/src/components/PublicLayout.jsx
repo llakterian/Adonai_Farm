@@ -64,7 +64,7 @@ function PublicHeader() {
       <div className="public-header-content">
         <div className="public-logo">
           <Link to="/" aria-label="Adonai Farm - Home" className="site-title">
-            <img src="/images/adonai-logo-compact-new.svg" alt="Adonai Farm Logo" className="logo-image" />
+            <img src="/images/adonai-logo-compact-new.svg" alt="Adonai Logo" className="logo-image" />
           </Link>
         </div>
 

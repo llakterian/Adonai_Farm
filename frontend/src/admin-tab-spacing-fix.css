@@ -9,18 +9,22 @@
    ============================================== */
 
 .admin-nav-tabs {
-  display: flex !important;
+  display: none !important;
+  /* hidden by default, shown on tablet/mobile */
   gap: 0.5rem !important;
   flex: 1 !important;
   justify-content: center !important;
   align-items: center !important;
   flex-wrap: nowrap !important;
   overflow-x: auto !important;
+  /* allow horizontal scroll for tabs only */
   padding: 0.5rem !important;
   scrollbar-width: none !important;
   /* Firefox */
   -ms-overflow-style: none !important;
   /* IE/Edge */
+  -webkit-overflow-scrolling: touch !important;
+  /* smooth on mobile */
 }
 
 .admin-nav-tabs::-webkit-scrollbar {
@@ -132,28 +136,81 @@
 /* Tablet (769px - 1024px) - Very compact */
 @media (min-width: 769px) and (max-width: 1024px) {
   .admin-nav-tabs {
-    gap: 0.3rem !important;
-    justify-content: center !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 0.25rem !important;
     padding: 0.25rem !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
   }
 
   .admin-tab {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     padding: 0.35rem 0.6rem !important;
-    font-size: 0.7rem !important;
-    min-width: 65px !important;
-    max-width: 90px !important;
-    min-height: 32px !important;
-    flex-shrink: 0 !important;
+    font-size: 0.75rem !important;
+    min-width: 60px !important;
+    max-width: 96px !important;
+    min-height: 34px !important;
+    flex: 0 0 auto !important;
   }
 }
 
 /* Mobile (768px and below) */
 @media (max-width: 768px) {
 
-  /* Hide desktop tabs completely on mobile */
+  /* Mobile tabs: horizontal scroll strip */
   .admin-nav-tabs {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    /* keep inline-flex children on one line */
+    gap: 0.5rem !important;
+    padding: 0.25rem !important;
+    width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  /* Make each tab inline-flex and enable scroll-snap */
+  .admin-tab {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    scroll-snap-align: center !important;
+  }
+
+  .admin-nav-tabs::-webkit-scrollbar {
     display: none !important;
+  }
+
+  /* Ensure tabs stay on one line and are compact */
+  .admin-tab {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    padding: 0.35rem 0.6rem !important;
+    /* compact like native app tabs */
+    font-size: clamp(0.70rem, 2.5vw, 0.80rem) !important;
+    min-width: 56px !important;
+    max-width: 92px !important;
+    min-height: 34px !important;
+  }
+
+  /* Ultra-small screens: icon-only tabs (hide label to avoid wrapping) */
+  @media (max-width: 400px) {
+    .admin-nav-tabs .nav-label {
+      display: none !important;
+    }
+
+    .admin-nav-tabs .nav-icon {
+      margin-right: 0 !important;
+    }
   }
 
   /* Ensure mobile hamburger menu is visible */

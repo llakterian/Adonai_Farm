@@ -7,9 +7,9 @@ import React from 'react';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      hasError: false, 
-      error: null, 
+    this.state = {
+      hasError: false,
+      error: null,
       errorInfo: null,
       errorId: null
     };
@@ -17,16 +17,50 @@ class ErrorBoundary extends React.Component {
 
   static getDerivedStateFromError(error) {
     // Update state so the next render will show the fallback UI
-    return { 
+    return {
       hasError: true,
       errorId: Date.now().toString(36) + Math.random().toString(36).substr(2)
     };
   }
 
+  componentDidMount() {
+    // Reset error boundary on route change
+    this.unlisten = () => { };
+    try {
+      // React Router v6: listen via popstate and pushState hook
+      const reset = () => {
+        if (this.state.hasError) {
+          this.setState({ hasError: false, error: null, errorInfo: null, errorId: null });
+        }
+      };
+      window.addEventListener('popstate', reset);
+      // Monkey patch pushState/replaceState to detect SPA navigations
+      const wrap = (type) => {
+        const orig = history[type];
+        return function () {
+          const ret = orig.apply(this, arguments);
+          window.dispatchEvent(new Event('spa:navigation'));
+          return ret;
+        };
+      };
+      history.pushState = wrap('pushState');
+      history.replaceState = wrap('replaceState');
+      window.addEventListener('spa:navigation', reset);
+      this.unlisten = () => {
+        window.removeEventListener('popstate', reset);
+        window.removeEventListener('spa:navigation', reset);
+      };
+    } catch { }
+  }
+
+  componentWillUnmount() {
+    if (this.unlisten) this.unlisten();
+  }
+
   componentDidCatch(error, errorInfo) {
     // Log error details for debugging
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+
     this.setState({
       error: error,
       errorInfo: errorInfo
@@ -63,9 +97,9 @@ class ErrorBoundary extends React.Component {
   };
 
   handleRetry = () => {
-    this.setState({ 
-      hasError: false, 
-      error: null, 
+    this.setState({
+      hasError: false,
+      error: null,
       errorInfo: null,
       errorId: null
     });
@@ -78,11 +112,11 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       const { fallback: Fallback, showDetails = false } = this.props;
-      
+
       // Use custom fallback component if provided
       if (Fallback) {
         return (
-          <Fallback 
+          <Fallback
             error={this.state.error}
             errorInfo={this.state.errorInfo}
             onRetry={this.handleRetry}
@@ -98,15 +132,15 @@ class ErrorBoundary extends React.Component {
             <div className="error-icon">⚠️</div>
             <h2>Something went wrong</h2>
             <p>We're sorry, but something unexpected happened. Please try again.</p>
-            
+
             <div className="error-actions">
-              <button 
+              <button
                 onClick={this.handleRetry}
                 className="btn btn-primary"
               >
                 Try Again
               </button>
-              <button 
+              <button
                 onClick={this.handleReload}
                 className="btn btn-outline"
               >
@@ -147,10 +181,10 @@ export const PublicErrorBoundary = ({ children, componentName = 'Component' }) =
         <div className="error-icon">🌾</div>
         <h3>Oops! Something went wrong</h3>
         <p>
-          We're having trouble loading this part of our farm website. 
+          We're having trouble loading this part of our farm website.
           Don't worry - you can still browse other sections!
         </p>
-        
+
         <div className="error-actions">
           <button onClick={onRetry} className="btn btn-primary">
             Try Again
@@ -159,9 +193,9 @@ export const PublicErrorBoundary = ({ children, componentName = 'Component' }) =
             Go to Homepage
           </a>
         </div>
-        
+
         <p className="error-help">
-          If this problem persists, please <a href="/contact">contact us</a> and 
+          If this problem persists, please <a href="/contact">contact us</a> and
           we'll get it fixed right away.
         </p>
       </div>
@@ -185,16 +219,16 @@ export const GalleryErrorBoundary = ({ children }) => {
         <div className="error-icon">📷</div>
         <h3>Gallery Temporarily Unavailable</h3>
         <p>
-          We're having trouble loading our photo gallery right now. 
+          We're having trouble loading our photo gallery right now.
           Please try again in a moment.
         </p>
-        
+
         <div className="error-actions">
           <button onClick={onRetry} className="btn btn-primary">
             Reload Gallery
           </button>
         </div>
-        
+
         <div className="gallery-fallback-content">
           <p>In the meantime, here's what you can expect to see at Adonai Farm:</p>
           <ul>
@@ -227,22 +261,22 @@ export const ContactFormErrorBoundary = ({ children }) => {
         <p>
           Our contact form is temporarily unavailable, but you can still reach us directly!
         </p>
-        
+
         <div className="contact-alternatives">
           <div className="contact-method">
-            <strong>📞 Phone:</strong> 
+            <strong>📞 Phone:</strong>
             <a href="tel:+254722759217">+254 722 759 217</a>
           </div>
           <div className="contact-method">
-            <strong>📧 Email:</strong> 
+            <strong>📧 Email:</strong>
             <a href="mailto:info@adonaifarm.co.ke">info@adonaifarm.co.ke</a>
           </div>
           <div className="contact-method">
-            <strong>📍 Visit Us:</strong> 
+            <strong>📍 Visit Us:</strong>
             Chepsir, Kericho, Kenya
           </div>
         </div>
-        
+
         <div className="error-actions">
           <button onClick={onRetry} className="btn btn-primary">
             Try Contact Form Again

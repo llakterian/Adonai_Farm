@@ -223,14 +223,28 @@ class PerformanceMonitor {
     // Process metrics
     this.metrics.forEach((values, name) => {
       if (Array.isArray(values) && values.length > 0) {
-        const numericValues = values.map(v => typeof v === 'object' ? v.value : v);
-        report.metrics[name] = {
-          count: values.length,
-          average: numericValues.reduce((a, b) => a + b, 0) / numericValues.length,
-          min: Math.min(...numericValues),
-          max: Math.max(...numericValues),
-          latest: numericValues[numericValues.length - 1]
-        };
+        // Normalize possible object entries (e.g., { loadTime }, { value }) into numbers
+        const numericValues = values
+          .map(v => {
+            if (typeof v === 'number') return v;
+            if (v && typeof v === 'object') {
+              if (typeof v.value === 'number') return v.value;
+              if (typeof v.loadTime === 'number') return v.loadTime;
+            }
+            const n = Number(v);
+            return Number.isFinite(n) ? n : NaN;
+          })
+          .filter(n => Number.isFinite(n));
+
+        if (numericValues.length > 0) {
+          report.metrics[name] = {
+            count: numericValues.length,
+            average: numericValues.reduce((a, b) => a + b, 0) / numericValues.length,
+            min: Math.min(...numericValues),
+            max: Math.max(...numericValues),
+            latest: numericValues[numericValues.length - 1]
+          };
+        }
       }
     });
 
@@ -299,24 +313,39 @@ class PerformanceMonitor {
 
   /**
    * Log performance report to console
+   * Accepts either a full results object (from runPerformanceTest)
+   * or a direct report object (from getPerformanceReport)
    */
   logPerformanceReport(data) {
-    if (!data || !data.latest) {
-      console.warn("No latest performance data available.");
+    if (!data) {
+      console.warn("No performance data available.");
+      return;
+    }
+
+    // Normalize input to a report structure
+    const report = data.metrics && data.metrics.summary ? data.metrics
+      : (data.summary || data.metrics) ? data
+        : null;
+
+    if (!report || !report.metrics) {
+      console.warn("No performance metrics found in report.");
       return;
     }
 
     console.groupCollapsed('🚀 Performance Report');
-    console.log(`Score: ${data.score !== undefined ? `${data.score}/100` : 'N/A'}`);
+    const score = report.summary && typeof report.summary.score === 'number'
+      ? `${report.summary.score}/100`
+      : 'N/A';
+    console.log(`Score: ${score}`);
 
-    if (data.recommendations && data.recommendations.length > 0) {
+    if (report.summary && Array.isArray(report.summary.recommendations) && report.summary.recommendations.length > 0) {
       console.warn('⚠️ Recommendations');
-      data.recommendations.forEach(rec => console.warn(`  - ${rec}`));
+      report.summary.recommendations.forEach(rec => console.warn(`  - ${rec}`));
     }
 
     console.group('📊 Detailed Metrics');
-    if (data.metrics) {
-      Object.entries(data.metrics).forEach(([key, value]) => {
+    if (report.metrics) {
+      Object.entries(report.metrics).forEach(([key, value]) => {
         if (value && typeof value.average === 'number') {
           console.log(`${key}: ${value.average.toFixed(2)}ms`);
         }
@@ -325,9 +354,9 @@ class PerformanceMonitor {
     console.groupEnd();
 
     console.group('📈 Latest Performance Entries');
-    // Check if data.metrics exists and has properties before trying to access them
-    if (data.metrics && data.metrics['Total Load Time'] && data.metrics['Total Load Time'].latest !== undefined) {
-      console.log(`Total Load Time: ${data.metrics['Total Load Time'].latest.toFixed(2)}ms`);
+    const totalLoad = report.metrics && report.metrics['Total Load Time'];
+    if (totalLoad && totalLoad.latest !== undefined) {
+      console.log(`Total Load Time: ${Number(totalLoad.latest).toFixed(2)}ms`);
     } else {
       console.log('No performance entries recorded.');
     }

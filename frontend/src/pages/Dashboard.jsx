@@ -897,21 +897,31 @@ export default function Dashboard() {
       </div>
 
       {/* Farm Gallery Preview */}
-      {photos.length > 0 && (
+      {Array.isArray(photos) && photos.length > 0 && (
         <div className="card">
           <h3 style={{ color: 'var(--primary-green)', marginBottom: '1.5rem' }}>
             📸 Recent Farm Photos
           </h3>
           <div className="gallery-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
-            {photos.slice(0, 6).map(photo => (
-              <div key={photo.id} className="gallery-item">
-                <img
-                  src={photo.path.startsWith('http') ? photo.path : `${window.location.origin}${photo.path}`}
-                  alt={photo.filename}
-                  style={{ width: '100%', height: '150px', objectFit: 'cover' }}
-                />
-              </div>
-            ))}
+            {photos
+              .filter(p => p && (p.path || p.filename))
+              .slice(0, 6)
+              .map((photo, index) => {
+                const rawPath = photo?.path || '';
+                const computedSrc = rawPath
+                  ? (rawPath.startsWith('http') ? rawPath : `${window.location.origin}${rawPath}`)
+                  : `/images/${photo.filename}`;
+                return (
+                  <div key={photo.id || index} className="gallery-item">
+                    <img
+                      src={computedSrc}
+                      alt={photo.filename || 'Farm photo'}
+                      style={{ width: '100%', height: '150px', objectFit: 'cover' }}
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    />
+                  </div>
+                );
+              })}
           </div>
         </div>
       )}

@@ -11,10 +11,10 @@ const Footer = ({ isAdmin = false }) => {
                     <div className="footer-logo">
                         <img
                             src="/images/adonai-logo-compact-new.svg"
-                            alt="Adonai Farm"
+                            alt="Adonai"
                             style={{ height: 28, marginRight: '0.5rem', verticalAlign: 'middle' }}
                         />
-                        <span className="footer-brand">Adonai Farm</span>
+                        <span className="footer-brand">Adonai</span>
                     </div>
                     <p>Premium Livestock Excellence</p>
                     <p>Sustainable farming practices in Kericho, Kenya</p>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentUser, mockAnimals } from '../auth.js';
-import { realGalleryImages } from '../mockData.js';
+// realGalleryImages does not exist; gallery data comes from ImageService/PublicContentService
 import PublicContentService from '../services/PublicContentService.js';
 import ContentManagementTest from '../components/ContentManagementTest.jsx';
 

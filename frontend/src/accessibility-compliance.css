@@ -11,50 +11,81 @@
 
 :root {
   /* WCAG AA Compliant Color Variables (4.5:1 minimum contrast) */
-  --wcag-text-primary: #1a1a1a;           /* 15.3:1 contrast on white */
-  --wcag-text-secondary: #4a4a4a;         /* 9.7:1 contrast on white */
-  --wcag-text-light: #666666;             /* 6.3:1 contrast on white */
-  --wcag-bg-primary: #ffffff;             /* Base white background */
-  --wcag-bg-secondary: #f8f9fa;           /* Light gray background */
-  --wcag-bg-tertiary: #e9ecef;            /* Medium gray background */
-  
+  --wcag-text-primary: #1a1a1a;
+  /* 15.3:1 contrast on white */
+  --wcag-text-secondary: #4a4a4a;
+  /* 9.7:1 contrast on white */
+  --wcag-text-light: #666666;
+  /* 6.3:1 contrast on white */
+  --wcag-bg-primary: #ffffff;
+  /* Base white background */
+  --wcag-bg-secondary: #f8f9fa;
+  /* Light gray background */
+  --wcag-bg-tertiary: #e9ecef;
+  /* Medium gray background */
+
   /* WCAG AA Compliant Interactive Colors */
-  --wcag-link-primary: #0056b3;           /* 7.0:1 contrast on white */
-  --wcag-link-hover: #003d82;             /* 9.7:1 contrast on white */
-  --wcag-link-visited: #6f42c1;           /* 5.9:1 contrast on white */
-  --wcag-focus-color: #0066cc;            /* 6.1:1 contrast on white */
-  --wcag-focus-outline: #004499;          /* 8.2:1 contrast on white */
-  
+  --wcag-link-primary: #0056b3;
+  /* 7.0:1 contrast on white */
+  --wcag-link-hover: #003d82;
+  /* 9.7:1 contrast on white */
+  --wcag-link-visited: #6f42c1;
+  /* 5.9:1 contrast on white */
+  --wcag-focus-color: #0066cc;
+  /* 6.1:1 contrast on white */
+  --wcag-focus-outline: #004499;
+  /* 8.2:1 contrast on white */
+
   /* WCAG AA Compliant Status Colors */
-  --wcag-success: #155724;                /* 9.4:1 contrast on white */
-  --wcag-success-bg: #d4edda;             /* Background for success */
-  --wcag-warning: #856404;                /* 5.4:1 contrast on white */
-  --wcag-warning-bg: #fff3cd;             /* Background for warning */
-  --wcag-error: #721c24;                  /* 10.7:1 contrast on white */
-  --wcag-error-bg: #f8d7da;               /* Background for error */
-  --wcag-info: #0c5460;                   /* 7.8:1 contrast on white */
-  --wcag-info-bg: #d1ecf1;                /* Background for info */
-  
+  --wcag-success: #155724;
+  /* 9.4:1 contrast on white */
+  --wcag-success-bg: #d4edda;
+  /* Background for success */
+  --wcag-warning: #856404;
+  /* 5.4:1 contrast on white */
+  --wcag-warning-bg: #fff3cd;
+  /* Background for warning */
+  --wcag-error: #721c24;
+  /* 10.7:1 contrast on white */
+  --wcag-error-bg: #f8d7da;
+  /* Background for error */
+  --wcag-info: #0c5460;
+  /* 7.8:1 contrast on white */
+  --wcag-info-bg: #d1ecf1;
+  /* Background for info */
+
   /* Mobile Dark Theme - WCAG AA Compliant */
-  --mobile-wcag-bg-primary: #121212;      /* Dark background */
-  --mobile-wcag-bg-secondary: #1e1e1e;    /* Darker card background */
-  --mobile-wcag-text-primary: #ffffff;    /* 21:1 contrast on dark */
-  --mobile-wcag-text-secondary: #e0e0e0;  /* 15.8:1 contrast on dark */
-  --mobile-wcag-accent: #64b5f6;          /* 4.6:1 contrast on dark */
-  --mobile-wcag-border: #424242;          /* Border color for dark theme */
-  
+  --mobile-wcag-bg-primary: #121212;
+  /* Dark background */
+  --mobile-wcag-bg-secondary: #1e1e1e;
+  /* Darker card background */
+  --mobile-wcag-text-primary: #ffffff;
+  /* 21:1 contrast on dark */
+  --mobile-wcag-text-secondary: #e0e0e0;
+  /* 15.8:1 contrast on dark */
+  --mobile-wcag-accent: #64b5f6;
+  /* 4.6:1 contrast on dark */
+  --mobile-wcag-border: #424242;
+  /* Border color for dark theme */
+
   /* Admin Theme - WCAG AA Compliant */
-  --admin-wcag-bg: #263238;               /* Dark admin background */
-  --admin-wcag-card: #37474f;             /* Admin card background */
-  --admin-wcag-text: #ffffff;             /* 21:1 contrast */
-  --admin-wcag-text-secondary: #cfd8dc;   /* 16.1:1 contrast */
-  --admin-wcag-accent: #42a5f5;           /* 4.8:1 contrast on dark */
-  --admin-wcag-border: #546e7a;           /* Border color */
-  
+  --admin-wcag-bg: #263238;
+  /* Dark admin background */
+  --admin-wcag-card: #37474f;
+  /* Admin card background */
+  --admin-wcag-text: #ffffff;
+  /* 21:1 contrast */
+  --admin-wcag-text-secondary: #cfd8dc;
+  /* 16.1:1 contrast */
+  --admin-wcag-accent: #42a5f5;
+  /* 4.8:1 contrast on dark */
+  --admin-wcag-border: #546e7a;
+  /* Border color */
+
   /* Focus and Interaction States */
   --wcag-focus-ring: 0 0 0 3px rgba(0, 102, 204, 0.5);
   --wcag-focus-ring-dark: 0 0 0 3px rgba(100, 181, 246, 0.5);
-  
+
   /* Touch Target Sizes (44px minimum) */
   --touch-target-min: 44px;
   --touch-target-comfortable: 48px;
@@ -251,7 +282,7 @@ textarea,
 }
 
 /* Touch target spacing to prevent accidental activation */
-.touch-targets-container > * {
+.touch-targets-container>* {
   margin: 4px !important;
 }
 
@@ -273,18 +304,18 @@ textarea,
     --wcag-bg-secondary: #ffffff !important;
     --wcag-link-primary: #0000ff !important;
     --wcag-focus-outline: #ff0000 !important;
-    
+
     /* Mobile high contrast */
     --mobile-wcag-bg-primary: #000000 !important;
     --mobile-wcag-text-primary: #ffffff !important;
     --mobile-wcag-accent: #00ffff !important;
-    
+
     /* Admin high contrast */
     --admin-wcag-bg: #000000 !important;
     --admin-wcag-text: #ffffff !important;
     --admin-wcag-accent: #00ffff !important;
   }
-  
+
   /* Enhanced borders for high contrast */
   .card,
   .btn,
@@ -294,7 +325,7 @@ textarea,
   .admin-tab {
     border: 3px solid currentColor !important;
   }
-  
+
   /* Remove background images and gradients */
   * {
     background-image: none !important;
@@ -302,7 +333,7 @@ textarea,
     box-shadow: none !important;
     text-shadow: none !important;
   }
-  
+
   /* Enhanced focus indicators */
   *:focus {
     outline: 4px solid #ff0000 !important;
@@ -318,6 +349,7 @@ textarea,
    ============================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -326,7 +358,7 @@ textarea,
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   /* Remove transform animations */
   .card:hover,
   .btn:hover,
@@ -334,7 +366,7 @@ textarea,
   .stat-card:hover {
     transform: none !important;
   }
-  
+
   /* Keep essential focus transitions but make them instant */
   *:focus {
     transition: outline 0.01ms, box-shadow 0.01ms !important;
@@ -347,6 +379,7 @@ textarea,
    ============================================== */
 
 @media screen and (max-width: 768px) {
+
   /* Enhanced touch targets for mobile */
   button,
   a,
@@ -357,54 +390,55 @@ textarea,
   .admin-tab {
     min-height: var(--touch-target-comfortable) !important;
     padding: 12px 16px !important;
-    font-size: 16px !important; /* Prevents zoom on iOS */
+    font-size: 16px !important;
+    /* Prevents zoom on iOS */
   }
-  
+
   /* Larger spacing between interactive elements */
   .admin-nav-tabs .admin-tab {
     margin: 4px !important;
   }
-  
-  .admin-actions > * {
+
+  .admin-actions>* {
     margin: 4px !important;
   }
-  
+
   /* Enhanced focus indicators for mobile */
   *:focus {
     outline-width: 3px !important;
     outline-offset: 3px !important;
   }
-  
+
   /* Prevent horizontal scrolling */
   body {
     overflow-x: hidden !important;
   }
-  
+
   /* Optimize text size for mobile readability */
   body {
     font-size: 16px !important;
     line-height: 1.5 !important;
   }
-  
+
   /* Enhanced contrast for mobile */
   .mobile-dark-theme {
     background: var(--mobile-wcag-bg-primary) !important;
     color: var(--mobile-wcag-text-primary) !important;
   }
-  
+
   .mobile-dark-theme .card,
   .mobile-dark-theme .admin-container .card {
     background: var(--mobile-wcag-bg-secondary) !important;
     color: var(--mobile-wcag-text-primary) !important;
     border: 1px solid var(--mobile-wcag-border) !important;
   }
-  
+
   .mobile-dark-theme .admin-tab {
     background: var(--mobile-wcag-bg-secondary) !important;
     color: var(--mobile-wcag-text-primary) !important;
     border: 2px solid var(--mobile-wcag-border) !important;
   }
-  
+
   .mobile-dark-theme .admin-tab.active,
   .mobile-dark-theme .admin-tab:hover {
     background: var(--mobile-wcag-accent) !important;
@@ -614,32 +648,60 @@ nav a.active::before {
 
 /* Base font size scaling */
 html {
-  font-size: 16px; /* Base 16px for accessibility */
+  font-size: 16px;
+  /* Base 16px for accessibility */
 }
 
 /* Responsive font scaling that respects user preferences */
 @media screen and (max-width: 768px) {
   html {
-    font-size: 16px; /* Maintain 16px minimum for mobile accessibility */
+    font-size: 16px;
+    /* Maintain 16px minimum for mobile accessibility */
   }
-  
+
   body {
-    font-size: 1rem; /* 16px */
+    font-size: 1rem;
+    /* 16px */
     line-height: 1.5;
   }
-  
-  h1 { font-size: 2rem; } /* 32px */
-  h2 { font-size: 1.75rem; } /* 28px */
-  h3 { font-size: 1.5rem; } /* 24px */
-  h4 { font-size: 1.25rem; } /* 20px */
-  h5 { font-size: 1.125rem; } /* 18px */
-  h6 { font-size: 1rem; } /* 16px */
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  /* 32px */
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  /* 28px */
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  /* 24px */
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  /* 20px */
+  h5 {
+    font-size: 1.125rem;
+  }
+
+  /* 18px */
+  h6 {
+    font-size: 1rem;
+  }
+
+  /* 16px */
 }
 
 /* Respect user's font size preferences */
 @media screen and (min-width: 769px) {
   html {
-    font-size: 1rem; /* Respect browser default */
+    font-size: 1rem;
+    /* Respect browser default */
   }
 }
 
@@ -671,7 +733,7 @@ html {
     animation: none;
     border-top-color: var(--wcag-link-primary);
   }
-  
+
   .loading-spinner::after {
     content: "Loading...";
     position: absolute;
@@ -682,8 +744,13 @@ html {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==============================================
@@ -692,6 +759,7 @@ html {
    ============================================== */
 
 @media print {
+
   /* Remove interactive elements that don't work in print */
   .btn,
   .admin-nav-tabs,
@@ -699,21 +767,21 @@ html {
   .loading-spinner {
     display: none !important;
   }
-  
+
   /* Ensure text is black on white for print */
   * {
     background: white !important;
     color: black !important;
     box-shadow: none !important;
   }
-  
+
   /* Show URLs for links */
   a[href]::after {
     content: " (" attr(href) ")";
     font-size: 0.8em;
     color: #666;
   }
-  
+
   /* Page breaks */
   .card,
   .animal-card,
@@ -721,9 +789,14 @@ html {
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  
+
   /* Ensure headings stay with content */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     break-after: avoid;
     page-break-after: avoid;
   }
@@ -746,38 +819,30 @@ html {
 }
 
 .hero-indicators .indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.3);
+  width: 20px;
+  height: 4px;
+  border-radius: 2px;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: var(--touch-target-min);
-  min-height: var(--touch-target-min);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.2s ease;
+  min-width: 20px;
+  min-height: 4px;
+  display: block;
   position: relative;
 }
 
 .hero-indicators .indicator::before {
-  content: '';
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
+  display: none;
 }
 
-.hero-indicators .indicator.active::before {
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+.hero-indicators .indicator.active {
+  background: #ffffff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
 }
 
-.hero-indicators .indicator:hover::before {
+.hero-indicators .indicator:hover {
   background: rgba(255, 255, 255, 0.8);
-  transform: scale(1.2);
 }
 
 .hero-indicators .indicator:focus {
@@ -833,19 +898,14 @@ html {
     bottom: 1rem;
     gap: 0.5rem;
   }
-  
+
   .hero-indicators .indicator {
-    width: 10px;
-    height: 10px;
-    min-width: var(--touch-target-comfortable);
-    min-height: var(--touch-target-comfortable);
+    width: 16px;
+    height: 4px;
+    min-width: 16px;
+    min-height: 4px;
   }
-  
-  .hero-indicators .indicator::before {
-    width: 10px;
-    height: 10px;
-  }
-  
+
   .hero-content {
     padding: 2rem 0;
     min-height: 50vh;
@@ -878,13 +938,14 @@ html {
 
 /* iOS specific enhancements */
 @supports (-webkit-touch-callout: none) {
+
   /* Prevent zoom on input focus */
   input,
   select,
   textarea {
     font-size: 16px !important;
   }
-  
+
   /* Improve touch scrolling */
   .admin-container,
   .card,
@@ -895,6 +956,7 @@ html {
 
 /* Android specific enhancements */
 @media screen and (-webkit-min-device-pixel-ratio: 1) {
+
   /* Improve text rendering on Android */
   body {
     text-rendering: optimizeLegibility;
@@ -904,13 +966,14 @@ html {
 
 /* Windows high contrast mode */
 @media screen and (-ms-high-contrast: active) {
+
   /* Ensure visibility in Windows high contrast mode */
   .btn,
   .card,
   .admin-tab {
     border: 2px solid windowText !important;
   }
-  
+
   *:focus {
     outline: 2px solid highlight !important;
   }

@@ -5,7 +5,7 @@ import { getCurrentUser, getUserRole, canAccess, USER_ROLES } from '../auth.js';
 export function withPermission(Component, requiredFeature) {
   return function ProtectedComponent(props) {
     const hasAccess = canAccess(requiredFeature);
-    
+
     if (!hasAccess) {
       return (
         <div className="access-denied">
@@ -18,7 +18,7 @@ export function withPermission(Component, requiredFeature) {
         </div>
       );
     }
-    
+
     return <Component {...props} />;
   };
 }
@@ -27,7 +27,7 @@ export function withPermission(Component, requiredFeature) {
 export function usePermissions() {
   const currentUser = getCurrentUser();
   const userRole = getUserRole();
-  
+
   return {
     user: currentUser,
     role: userRole,
@@ -47,7 +47,7 @@ export function usePermissions() {
         reports: [USER_ROLES.ADMIN, USER_ROLES.SUPERVISOR],
         gallery: [USER_ROLES.ADMIN, USER_ROLES.SUPERVISOR]
       };
-      
+
       return editPermissions[feature]?.includes(userRole) || false;
     },
     canDelete: (feature) => {
@@ -59,7 +59,7 @@ export function usePermissions() {
         users: [USER_ROLES.ADMIN],
         gallery: [USER_ROLES.ADMIN, USER_ROLES.SUPERVISOR]
       };
-      
+
       return deletePermissions[feature]?.includes(userRole) || false;
     }
   };
@@ -68,15 +68,15 @@ export function usePermissions() {
 // Component for conditionally rendering content based on permissions
 export function PermissionGate({ feature, role, fallback = null, children }) {
   const { canAccess: hasAccess, hasRole } = usePermissions();
-  
+
   let hasPermission = false;
-  
+
   if (feature) {
     hasPermission = hasAccess(feature);
   } else if (role) {
     hasPermission = hasRole(role);
   }
-  
+
   return hasPermission ? children : fallback;
 }
 
@@ -87,7 +87,7 @@ export function getRoleDisplayName(role) {
     [USER_ROLES.SUPERVISOR]: 'Supervisor',
     [USER_ROLES.WORKER]: 'Worker'
   };
-  
+
   return roleNames[role] || role;
 }
 
@@ -95,7 +95,7 @@ export function getRoleDisplayName(role) {
 export function getDashboardContent(role) {
   const dashboardContent = {
     [USER_ROLES.ADMIN]: {
-      title: 'Farm Administrator Dashboard',
+      title: 'Admin Dashboard',
       description: 'Complete farm management overview',
       features: ['animals', 'workers', 'infrastructure', 'reports', 'users', 'gallery'],
       metrics: ['total_animals', 'active_workers', 'infrastructure_items', 'monthly_reports', 'system_users']
@@ -113,6 +113,6 @@ export function getDashboardContent(role) {
       metrics: ['hours_worked', 'tasks_completed', 'animals_assigned']
     }
   };
-  
+
   return dashboardContent[role] || dashboardContent[USER_ROLES.WORKER];
 }

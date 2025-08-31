@@ -11,6 +11,9 @@ backend/data/
 .env
 .env.local
 .env.production
+backend/.env
+backend/.env.local
+backend/.env.production
 
 # Logs
 *.log

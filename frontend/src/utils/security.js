@@ -350,12 +350,14 @@ export function generateCSP() {
  * Initialize security headers and monitoring
  */
 export function initializeSecurity() {
-  // Set up CSP if not already set
-  if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
-    const cspMeta = document.createElement('meta');
-    cspMeta.httpEquiv = 'Content-Security-Policy';
-    cspMeta.content = generateCSP();
-    document.head.appendChild(cspMeta);
+  // Only inject CSP in production to avoid breaking Vite dev (HMR, ws, eval)
+  if (import.meta.env.PROD) {
+    if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+      const cspMeta = document.createElement('meta');
+      cspMeta.httpEquiv = 'Content-Security-Policy';
+      cspMeta.content = generateCSP();
+      document.head.appendChild(cspMeta);
+    }
   }
 
   // Monitor for suspicious activity

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { searchManager, globalSearch, getSearchSuggestions, getFilterPresets, saveFilterPreset } from '../utils/search.js';
 
-const SearchComponent = ({ 
-  dataType = 'global', 
-  onResults, 
-  placeholder = 'Search...', 
+const SearchComponent = ({
+  dataType = 'global',
+  onResults,
+  placeholder = 'Search...',
   showFilters = true,
   showPresets = true,
   className = ''
@@ -19,7 +19,7 @@ const SearchComponent = ({
   const [showSavePreset, setShowSavePreset] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
-  
+
   const searchInputRef = useRef(null);
   const suggestionsRef = useRef(null);
 
@@ -58,10 +58,10 @@ const SearchComponent = ({
     if (!searchQuery.trim() && Object.keys(filters).length === 0) return;
 
     setIsSearching(true);
-    
+
     try {
       let results;
-      
+
       if (dataType === 'global') {
         results = globalSearch(searchQuery, filters);
       } else {
@@ -104,13 +104,13 @@ const SearchComponent = ({
 
   const handleFilterChange = (filterKey, value) => {
     const newFilters = { ...filters };
-    
+
     if (value === '' || value === null || (Array.isArray(value) && value.length === 0)) {
       delete newFilters[filterKey];
     } else {
       newFilters[filterKey] = value;
     }
-    
+
     setFilters(newFilters);
   };
 
@@ -122,7 +122,7 @@ const SearchComponent = ({
 
   const handlePresetSave = () => {
     if (!presetName.trim()) return;
-    
+
     const preset = saveFilterPreset(presetName, dataType, filters, query);
     setSavedPresets([...savedPresets, preset]);
     setPresetName('');
@@ -140,7 +140,7 @@ const SearchComponent = ({
 
   const exportResults = () => {
     if (!searchResults) return;
-    
+
     if (dataType === 'global') {
       // Export all results as separate files
       Object.keys(searchResults).forEach(type => {
@@ -176,8 +176,8 @@ const SearchComponent = ({
     <div className="search-filters">
       <div className="filter-group">
         <label>Species</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.species || []}
           onChange={(e) => handleFilterChange('species', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -189,11 +189,11 @@ const SearchComponent = ({
           <option value="Horse">Horse</option>
         </select>
       </div>
-      
+
       <div className="filter-group">
         <label>Health Status</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.healthStatus || []}
           onChange={(e) => handleFilterChange('healthStatus', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -204,36 +204,36 @@ const SearchComponent = ({
           <option value="Quarantine">Quarantine</option>
         </select>
       </div>
-      
+
       <div className="filter-group">
         <label>Age Range (years)</label>
         <div className="range-inputs">
-          <input 
-            type="number" 
+          <input
+            type="number"
             placeholder="Min"
             value={filters.ageRange?.min || ''}
             onChange={(e) => handleFilterChange('ageRange', { ...filters.ageRange, min: parseInt(e.target.value) || 0 })}
           />
-          <input 
-            type="number" 
+          <input
+            type="number"
             placeholder="Max"
             value={filters.ageRange?.max || ''}
             onChange={(e) => handleFilterChange('ageRange', { ...filters.ageRange, max: parseInt(e.target.value) || 100 })}
           />
         </div>
       </div>
-      
+
       <div className="filter-group">
         <label>Weight Range (kg)</label>
         <div className="range-inputs">
-          <input 
-            type="number" 
+          <input
+            type="number"
             placeholder="Min"
             value={filters.weightRange?.min || ''}
             onChange={(e) => handleFilterChange('weightRange', { ...filters.weightRange, min: parseFloat(e.target.value) || 0 })}
           />
-          <input 
-            type="number" 
+          <input
+            type="number"
             placeholder="Max"
             value={filters.weightRange?.max || ''}
             onChange={(e) => handleFilterChange('weightRange', { ...filters.weightRange, max: parseFloat(e.target.value) || 1000 })}
@@ -247,8 +247,8 @@ const SearchComponent = ({
     <div className="search-filters">
       <div className="filter-group">
         <label>Role</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.role || []}
           onChange={(e) => handleFilterChange('role', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -259,11 +259,11 @@ const SearchComponent = ({
           <option value="Veterinarian">Veterinarian</option>
         </select>
       </div>
-      
+
       <div className="filter-group">
         <label>Department</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.department || []}
           onChange={(e) => handleFilterChange('department', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -273,11 +273,11 @@ const SearchComponent = ({
           <option value="Administration">Administration</option>
         </select>
       </div>
-      
+
       <div className="filter-group">
         <label>Status</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.status || []}
           onChange={(e) => handleFilterChange('status', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -293,8 +293,8 @@ const SearchComponent = ({
     <div className="search-filters">
       <div className="filter-group">
         <label>Category</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.category || []}
           onChange={(e) => handleFilterChange('category', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -303,11 +303,11 @@ const SearchComponent = ({
           <option value="equipment">Equipment</option>
         </select>
       </div>
-      
+
       <div className="filter-group">
         <label>Status</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.status || []}
           onChange={(e) => handleFilterChange('status', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -316,18 +316,18 @@ const SearchComponent = ({
           <option value="Retired">Retired</option>
         </select>
       </div>
-      
+
       <div className="filter-group">
         <label>Value Range ($)</label>
         <div className="range-inputs">
-          <input 
-            type="number" 
+          <input
+            type="number"
             placeholder="Min"
             value={filters.valueRange?.min || ''}
             onChange={(e) => handleFilterChange('valueRange', { ...filters.valueRange, min: parseFloat(e.target.value) || 0 })}
           />
-          <input 
-            type="number" 
+          <input
+            type="number"
             placeholder="Max"
             value={filters.valueRange?.max || ''}
             onChange={(e) => handleFilterChange('valueRange', { ...filters.valueRange, max: parseFloat(e.target.value) || 1000000 })}
@@ -341,8 +341,8 @@ const SearchComponent = ({
     <div className="search-filters">
       <div className="filter-group">
         <label>Role</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.role || []}
           onChange={(e) => handleFilterChange('role', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -351,11 +351,11 @@ const SearchComponent = ({
           <option value="worker">Worker</option>
         </select>
       </div>
-      
+
       <div className="filter-group">
         <label>Status</label>
-        <select 
-          multiple 
+        <select
+          multiple
           value={filters.status || []}
           onChange={(e) => handleFilterChange('status', Array.from(e.target.selectedOptions, option => option.value))}
         >
@@ -372,32 +372,32 @@ const SearchComponent = ({
         <label>Search In</label>
         <div className="checkbox-group">
           <label>
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={filters.includeAnimals !== false}
               onChange={(e) => handleFilterChange('includeAnimals', e.target.checked)}
             />
             Animals
           </label>
           <label>
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={filters.includeWorkers !== false}
               onChange={(e) => handleFilterChange('includeWorkers', e.target.checked)}
             />
             Workers
           </label>
           <label>
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={filters.includeInfrastructure !== false}
               onChange={(e) => handleFilterChange('includeInfrastructure', e.target.checked)}
             />
             Infrastructure
           </label>
           <label>
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={filters.includeUsers !== false}
               onChange={(e) => handleFilterChange('includeUsers', e.target.checked)}
             />
@@ -422,7 +422,7 @@ const SearchComponent = ({
             placeholder={placeholder}
             className="search-input"
           />
-          
+
           {/* Search Suggestions */}
           {showSuggestions && suggestions.length > 0 && (
             <div ref={suggestionsRef} className="search-suggestions">
@@ -441,27 +441,27 @@ const SearchComponent = ({
             </div>
           )}
         </div>
-        
+
         <div className="search-actions">
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => handleSearch()}
             disabled={isSearching}
           >
             {isSearching ? '🔍 Searching...' : '🔍 Search'}
           </button>
-          
+
           {showFilters && (
-            <button 
+            <button
               className="btn btn-outline"
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
             >
               🔧 Filters
             </button>
           )}
-          
+
           {(query || Object.keys(filters).length > 0) && (
-            <button 
+            <button
               className="btn btn-outline"
               onClick={clearSearch}
             >
@@ -512,7 +512,7 @@ const SearchComponent = ({
               </button>
             </div>
           ) : (
-            <button 
+            <button
               className="btn btn-outline btn-small"
               onClick={() => setShowSavePreset(true)}
             >
@@ -528,7 +528,7 @@ const SearchComponent = ({
           <div className="results-info">
             {dataType === 'global' ? (
               <span>
-                Found {searchResults.total} results: 
+                Found {searchResults.total} results:
                 {searchResults.animals.length > 0 && ` ${searchResults.animals.length} animals`}
                 {searchResults.workers.length > 0 && ` ${searchResults.workers.length} workers`}
                 {searchResults.infrastructure.length > 0 && ` ${searchResults.infrastructure.length} infrastructure`}
@@ -538,7 +538,7 @@ const SearchComponent = ({
               <span>Found {Array.isArray(searchResults) ? searchResults.length : 0} results</span>
             )}
           </div>
-          
+
           {searchResults && (
             <button className="btn btn-outline btn-small" onClick={exportResults}>
               📊 Export Results
@@ -547,7 +547,7 @@ const SearchComponent = ({
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .search-component {
           margin-bottom: 2rem;
         }

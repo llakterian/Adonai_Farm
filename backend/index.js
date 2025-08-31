@@ -7,7 +7,8 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+const envPath = path.join(__dirname, '.env');
+require('dotenv').config({ path: envPath, override: true });
 
 const DB_DIR = path.join(__dirname, 'data');
 if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR);
@@ -22,13 +23,17 @@ const PORT = process.env.PORT || 4000;
 // Email configuration
 const EMAIL_CONFIG = {
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: process.env.SMTP_PORT || 587,
-  secure: false, // true for 465, false for other ports
+  port: Number(process.env.SMTP_PORT || 587),
+  // If SECURE=true or port is 465, enable TLS; else use STARTTLS
+  secure: String(process.env.SMTP_SECURE || '').toLowerCase() === 'true' || String(process.env.SMTP_PORT) === '465',
   auth: {
-    user: process.env.SMTP_USER || '', // Your email
-    pass: process.env.SMTP_PASS || ''  // Your email password or app password
+    user: (process.env.SMTP_USER || '').trim(),
+    pass: (process.env.SMTP_PASS || '').trim()
   }
 };
+
+// Default from address
+const SMTP_FROM = (process.env.SMTP_FROM || process.env.SMTP_USER || '').trim();
 
 // Create email transporter
 let emailTransporter = null;
@@ -68,7 +73,7 @@ async function sendContactNotification(inquiry) {
 
     // Email to admin
     const adminMailOptions = {
-      from: `"Adonai Farm Website" <${EMAIL_CONFIG.auth.user}>`,
+      from: `"Adonai Farm Website" <${SMTP_FROM}>`,
       to: process.env.ADMIN_EMAIL || EMAIL_CONFIG.auth.user,
       subject: `New Contact Inquiry: ${inquiry.subject}`,
       html: `
@@ -118,7 +123,7 @@ async function sendContactNotification(inquiry) {
 
     // Auto-reply to customer
     const customerMailOptions = {
-      from: `"Adonai Farm" <${EMAIL_CONFIG.auth.user}>`,
+      from: `"Adonai Farm" <${SMTP_FROM}>`,
       to: inquiry.email,
       subject: `Thank you for contacting Adonai Farm - ${inquiry.subject}`,
       html: `
@@ -337,7 +342,8 @@ const upload = multer({ storage });
 app.post('/api/gallery/upload', authMiddleware, upload.single('photo'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
   const url = '/images/' + req.file.filename;
-  db.prepare('INSERT INTO photos (filename, path, uploaded_at) VALUES (?, ?, datetime("now"))').run(req.file.originalname, url);
+  // Use proper SQLite string literal for current timestamp
+  db.prepare("INSERT INTO photos (filename, path, uploaded_at) VALUES (?, ?, datetime('now'))").run(req.file.originalname, url);
   res.json({ url, filename: req.file.originalname });
 });
 

@@ -412,7 +412,8 @@
     background: var(--cream, #f8f6f0);
     min-height: calc(100vh - 120px);
     max-width: 100%;
-    overflow-x: auto;
+    overflow-x: hidden;
+    /* eliminate horizontal scroll */
 }
 
 /* ==============================================
@@ -420,12 +421,15 @@
    ============================================== */
 
 .admin-footer {
-    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%);
-    color: #ffffff;
-    padding: 2rem 2rem 1rem;
+    background: var(--primary-green, #2d5016);
+    color: var(--cream, #f8f6f0);
+    padding: 1.25rem 1.5rem;
+    /* reduced height */
     text-align: left;
-    border-top: 4px solid #fbbf24;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    border-top: 3px solid var(--accent-gold, #d4af37);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    overflow-x: hidden;
+    /* prevent spill */
 }
 
 .admin-footer-content {
@@ -481,6 +485,8 @@
         max-width: 1600px;
         margin: 0 auto;
         padding: 2rem 3rem;
+        overflow-x: hidden;
+        /* prevent horizontal scroll on desktop */
     }
 
     .admin-footer-content {
@@ -500,6 +506,8 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
+        overflow-x: hidden;
+        /* prevent horizontal scroll on laptop */
     }
 }
 
@@ -574,104 +582,158 @@
         display: none;
     }
 
-    /* Hide Desktop User Section on Mobile */
-    .admin-user-menu {
-        display: none;
-    }
-
-    /* Show Mobile Menu Toggle */
-    .mobile-menu-toggle {
-        display: flex;
-    }
-
-    /* Mobile Logo */
-    .admin-brand {
-        font-size: 1.2rem;
-    }
-
-    .brand-text {
-        display: none;
-    }
-
-    .admin-logo-svg {
-        height: 36px;
-    }
-
-    /* Mobile Main Content */
-    .admin-main {
-        padding: 1rem;
-        max-width: 100%;
-        margin: 0;
-        min-height: calc(100vh - 160px);
-    }
-
-    /* Mobile Footer */
-    .admin-footer-content {
-        flex-direction: column;
+    /* Show compact horizontal tabs on mobile */
+    .admin-nav-tabs {
+        display: flex !important;
+        justify-content: flex-start;
         gap: 0.5rem;
-        font-size: 0.8rem;
-        padding: 1rem;
-    }
-}
-
-/* Mobile (480px - 767px) */
-@media screen and (max-width: 767px) {
-    .admin-header-content {
-        padding: 0.5rem 0.75rem;
+        padding: 0.25rem 0.5rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        /* snap scrolling like mobile apps */
     }
 
-    .admin-brand {
-        font-size: 1.1rem;
+    .admin-tab {
+        flex: 0 0 auto;
     }
 
-    .logo-icon {
-        font-size: 1.4rem;
+    /* Strong visibility control to prevent duplicate navs */
+    @media (max-width: 1024px) {
+        .admin-nav.desktop-nav.compact {
+            display: none !important;
+        }
+
+        .admin-nav-tabs {
+            display: flex !important;
+        }
     }
 
-    .admin-logo-svg {
-        height: 32px;
+    @media (min-width: 1025px) {
+        .admin-nav.desktop-nav.compact {
+            display: grid !important;
+        }
+
+        .admin-nav-tabs {
+            display: none !important;
+        }
     }
 
-    .admin-main {
-        padding: 0.75rem;
+    /* Force horizontal tabs on mobile/tablet */
+    @media (max-width: 768px) {
+        .admin-nav-tabs {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+        }
+
+        .admin-tab {
+            display: inline-flex !important;
+            flex: 0 0 auto !important;
+        }
+
+        /* Hide Desktop User Section on Mobile */
+        .admin-user-menu {
+            display: none;
+        }
+
+        /* Show Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: flex;
+        }
+
+        /* Mobile Logo */
+        .admin-brand {
+            font-size: 1.2rem;
+        }
+
+        .brand-text {
+            display: none;
+        }
+
+        .admin-logo-svg {
+            height: 36px;
+        }
+
+        /* Mobile Main Content */
+        .admin-main {
+            padding: 1rem;
+            max-width: 100%;
+            margin: 0;
+            min-height: calc(100vh - 160px);
+        }
+
+        /* Mobile Footer */
+        .admin-footer-content {
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            padding: 1rem;
+        }
     }
 
-    .mobile-menu-toggle {
-        min-width: 44px;
-        min-height: 44px;
-        padding: 10px;
-        font-size: 1.3rem;
-    }
-}
+    /* Mobile (480px - 767px) */
+    @media screen and (max-width: 767px) {
+        .admin-header-content {
+            padding: 0.5rem 0.75rem;
+        }
 
-/* Small Mobile (320px - 479px) */
-@media screen and (max-width: 479px) {
-    .admin-header-content {
-        padding: 0.5rem;
+        .admin-brand {
+            font-size: 1.1rem;
+        }
+
+        .logo-icon {
+            font-size: 1.4rem;
+        }
+
+        .admin-logo-svg {
+            height: 32px;
+        }
+
+        .admin-main {
+            padding: 0.75rem;
+        }
+
+        .mobile-menu-toggle {
+            min-width: 44px;
+            min-height: 44px;
+            padding: 10px;
+            font-size: 1.3rem;
+        }
     }
 
-    .admin-brand {
-        font-size: 1rem;
+    /* Small Mobile (320px - 479px) */
+    @media screen and (max-width: 479px) {
+        .admin-header-content {
+            padding: 0.5rem;
+        }
+
+        .admin-brand {
+            font-size: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 1.2rem;
+        }
+
+        .admin-logo-svg {
+            height: 28px;
+        }
+
+        .admin-main {
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-toggle {
+            min-width: 40px;
+            min-height: 40px;
+            padding: 8px;
+            font-size: 1.2rem;
+        }
     }
 
-    .logo-icon {
-        font-size: 1.2rem;
-    }
-
-    .admin-logo-svg {
-        height: 28px;
-    }
-
-    .admin-main {
-        padding: 0.5rem;
-    }
-
-    .mobile-menu-toggle {
-        min-width: 40px;
-        min-height: 40px;
-        padding: 8px;
-        font-size: 1.2rem;
-    }
 }
 
 /* ==============================================

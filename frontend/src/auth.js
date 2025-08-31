@@ -19,7 +19,7 @@ const defaultUsers = [
     username: 'admin',
     password: 'adonai123',
     role: USER_ROLES.ADMIN,
-    name: 'Farm Administrator',
+    name: 'Admin',
     email: 'admin@adonaifarm.com',
     active: true,
     created_at: '2025-01-01'

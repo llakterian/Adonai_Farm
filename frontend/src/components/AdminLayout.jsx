@@ -69,7 +69,7 @@ const AdminLayout = ({ children }) => {
             <Link to="/dashboard" className="admin-brand">
               <img
                 src="/images/adonai-logo-compact-new.svg"
-                alt="Adonai Farm Logo"
+                alt="Adonai Logo"
                 className="admin-logo-svg"
                 onError={(e) => {
                   e.target.style.display = 'none';
@@ -85,16 +85,20 @@ const AdminLayout = ({ children }) => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="admin-nav desktop-nav">
-            {adminNavItems.slice(0, 6).map(item => (
+          <nav className="admin-nav desktop-nav compact">
+            {adminNavItems.map(item => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
+                className={`nav-link compact ${isActive(item.path) ? 'active' : ''}`}
                 title={item.label}
               >
-                <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
+                <span className="nav-icon" aria-hidden>
+                  {item.icon}
+                </span>
+                <span className="nav-label" aria-label={item.label}>
+                  {item.label}
+                </span>
               </Link>
             ))}
           </nav>
@@ -103,14 +107,14 @@ const AdminLayout = ({ children }) => {
           <div className="admin-user-menu">
             <div className="user-info">
               <span className="user-name">👤 {currentUser.name}</span>
-              <span className="user-role">({currentUser.role || 'Admin'})</span>
+              <span className="user-role">({currentUser.role === 'admin' ? 'Admin' : currentUser.role})</span>
             </div>
             <div className="user-actions">
               <Link to="/" className="btn btn-outline btn-sm" title="View Public Site">
                 🌐 Public Site
               </Link>
-              <button onClick={handleLogout} className="btn btn-danger btn-sm" title="Logout">
-                🚪 Logout
+              <button onClick={handleLogout} className="btn btn-logout btn-sm" title="Logout">
+                Logout
               </button>
             </div>
           </div>
@@ -126,39 +130,20 @@ const AdminLayout = ({ children }) => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        <nav className={`admin-mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
+        {/* Mobile/Tablet Horizontal Tab Bar */}
+        <nav className="admin-nav-tabs" aria-label="Admin sections">
           {adminNavItems.map(item => (
             <Link
               key={item.path}
               to={item.path}
-              className={`mobile-nav-link ${isActive(item.path) ? 'active' : ''}`}
-              onClick={() => setIsMobileMenuOpen(false)}
+              className={`admin-tab ${isActive(item.path) ? 'active' : ''}`}
+              title={item.label}
+              aria-current={isActive(item.path) ? 'page' : undefined}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon" aria-hidden>{item.icon}</span>
               <span className="nav-label">{item.label}</span>
             </Link>
           ))}
-          <div className="mobile-user-actions">
-            <Link
-              to="/"
-              className="mobile-nav-link"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <span className="nav-icon">🌐</span>
-              <span className="nav-label">Public Site</span>
-            </Link>
-            <button
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                handleLogout();
-              }}
-              className="mobile-nav-link logout-btn"
-            >
-              <span className="nav-icon">🚪</span>
-              <span className="nav-label">Logout</span>
-            </button>
-          </div>
         </nav>
       </header>
 
