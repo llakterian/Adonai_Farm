@@ -1,11 +1,6 @@
 [build]
-  publish = "."
-  functions = ".netlify/functions"
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+  publish = "frontend/dist"
+  command = "npm ci && npm run build"
 
 [[redirects]]
   from = "/*"
@@ -15,8 +10,8 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    # More robust Content Security Policy
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' http://localhost:4000 https: wss:; media-src 'self'; object-src 'none'; child-src 'none'; worker-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; manifest-src 'self'"
+    # Content Security Policy: allow calls to HTTPS APIs (Railway)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https: wss:; media-src 'self'; object-src 'none'; child-src 'none'; worker-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; manifest-src 'self'"
     # XSS Protection
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
