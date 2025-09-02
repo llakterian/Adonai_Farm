@@ -44,10 +44,10 @@ const optionalVars = {
 
 function validateEnvironment() {
     console.log('🔍 Validating environment variables...');
-    
+
     let hasErrors = false;
     const warnings = [];
-    
+
     // Check required variables
     for (const [key, config] of Object.entries(requiredVars)) {
         if (!process.env[key]) {
@@ -63,7 +63,7 @@ function validateEnvironment() {
             console.log(`✅ ${key}: Set`);
         }
     }
-    
+
     // Check optional variables
     for (const [key, config] of Object.entries(optionalVars)) {
         if (!process.env[key]) {
@@ -77,13 +77,13 @@ function validateEnvironment() {
             console.log(`✅ ${key}: Set`);
         }
     }
-    
+
     // Display warnings for missing optional variables
     if (warnings.length > 0) {
         console.log('\n⚠️  Optional environment variables not set:');
         warnings.forEach(warning => console.log(`   ${warning}`));
     }
-    
+
     // Database mode detection
     if (process.env.DATABASE_URL) {
         console.log('\n🐘 Database mode: PostgreSQL (Production)');
@@ -91,12 +91,12 @@ function validateEnvironment() {
     } else {
         console.log('\n🗃️  Database mode: SQLite (Development)');
     }
-    
+
     if (hasErrors) {
         console.error('\n❌ Environment validation failed. Please set required variables.');
         process.exit(1);
     }
-    
+
     console.log('\n✅ Environment validation passed');
     return true;
 }

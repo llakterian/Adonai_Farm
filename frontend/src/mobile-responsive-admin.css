@@ -1,0 +1,694 @@
+/* ==============================================
+   MOBILE-RESPONSIVE ADMIN INTERFACE
+   Touch-friendly, accessible mobile design
+   ============================================== */
+
+/* ==============================================
+   MOBILE-FIRST RESPONSIVE BREAKPOINTS
+   ============================================== */
+
+:root {
+  /* Mobile breakpoints */
+  --mobile-xs: 320px;
+  --mobile-sm: 480px;
+  --tablet: 768px;
+  --desktop: 1024px;
+  --desktop-lg: 1440px;
+  
+  /* Touch target sizes */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+  --touch-target-large: 56px;
+  
+  /* Mobile spacing adjustments */
+  --mobile-space-xs: 0.25rem;
+  --mobile-space-sm: 0.5rem;
+  --mobile-space-md: 0.75rem;
+  --mobile-space-lg: 1rem;
+  --mobile-space-xl: 1.5rem;
+}
+
+/* ==============================================
+   MOBILE ADMIN HEADER - OPTIMIZED LAYOUT
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .admin-header-fixed,
+  .admin-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: var(--z-sticky, 1020) !important;
+    background: var(--gradient-primary, linear-gradient(135deg, #2d5016 0%, #4a7c59 100%)) !important;
+    border-bottom: 3px solid var(--harvest-gold, #d4af37) !important;
+    box-shadow: var(--shadow-lg, 0 10px 15px rgba(45, 80, 22, 0.1)) !important;
+  }
+  
+  .admin-header-content {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: var(--mobile-space-md, 0.75rem) var(--mobile-space-lg, 1rem) !important;
+    gap: var(--mobile-space-md, 0.75rem) !important;
+    min-height: auto !important;
+    align-items: stretch !important;
+  }
+  
+  /* Logo section - centered on mobile */
+  .admin-logo-section {
+    order: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  .admin-logo-link,
+  .admin-brand {
+    font-size: var(--text-lg, 1.125rem) !important;
+    padding: var(--mobile-space-sm, 0.5rem) var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .admin-logo-svg {
+    height: 36px !important;
+  }
+  
+  .admin-brand-text,
+  .brand-text {
+    font-size: var(--text-base, 1rem) !important;
+  }
+  
+  /* Navigation tabs - horizontal scroll on mobile */
+  .admin-nav-tabs {
+    order: 2 !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    gap: var(--mobile-space-sm, 0.5rem) !important;
+    padding: var(--mobile-space-sm, 0.5rem) 0 !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE/Edge */
+  }
+  
+  .admin-nav-tabs::-webkit-scrollbar {
+    display: none !important; /* Chrome/Safari */
+  }
+  
+  .admin-tab {
+    flex: 0 0 auto !important;
+    min-width: 100px !important;
+    padding: var(--mobile-space-md, 0.75rem) var(--mobile-space-lg, 1rem) !important;
+    font-size: var(--text-sm, 0.875rem) !important;
+    min-height: var(--touch-target-min, 44px) !important;
+    scroll-snap-align: start !important;
+    white-space: nowrap !important;
+    border-radius: var(--radius-lg, 0.75rem) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: var(--wheat-gold, #f4e4a6) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--mobile-space-sm, 0.5rem) !important;
+    transition: all var(--transition-normal, 250ms ease-in-out) !important;
+  }
+  
+  .admin-tab:hover,
+  .admin-tab.active {
+    background: var(--harvest-gold, #d4af37) !important;
+    color: var(--farm-primary, #2d5016) !important;
+    border-color: var(--harvest-gold, #d4af37) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(212, 175, 55, 0.4)) !important;
+    font-weight: var(--weight-bold, 700) !important;
+  }
+  
+  /* Hide desktop navigation on mobile */
+  .admin-nav.desktop-nav,
+  .admin-nav.desktop-nav.compact {
+    display: none !important;
+  }
+  
+  /* Hide desktop user section on mobile */
+  .admin-user-section,
+  .admin-user-menu {
+    display: none !important;
+  }
+}
+
+/* ==============================================
+   TABLET SPECIFIC ADJUSTMENTS (768px - 1024px)
+   ============================================== */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .admin-header-content {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: var(--mobile-space-lg, 1rem) var(--mobile-space-xl, 1.5rem) !important;
+  }
+  
+  .admin-logo-section {
+    order: 0 !important;
+    justify-content: flex-start !important;
+  }
+  
+  .admin-nav-tabs {
+    order: 1 !important;
+    flex: 1 !important;
+    justify-content: center !important;
+    max-width: 60% !important;
+  }
+  
+  .admin-tab {
+    min-width: 120px !important;
+    font-size: var(--text-base, 1rem) !important;
+  }
+  
+  /* Show simplified user section on tablet */
+  .admin-user-section,
+  .admin-user-menu {
+    display: flex !important;
+    order: 2 !important;
+  }
+  
+  .admin-user-info,
+  .user-info {
+    display: none !important; /* Hide text, keep buttons */
+  }
+}
+
+/* ==============================================
+   MOBILE ADMIN MAIN CONTENT
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .admin-main {
+    padding: var(--mobile-space-lg, 1rem) !important;
+    background: var(--cream-white, #f8f6f0) !important;
+    min-height: calc(100vh - 120px) !important;
+  }
+  
+  /* Page titles - smaller on mobile */
+  .page-title {
+    font-size: var(--text-2xl, 1.5rem) !important;
+    margin-bottom: var(--mobile-space-xl, 1.5rem) !important;
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-main {
+    padding: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .page-title {
+    font-size: var(--text-xl, 1.25rem) !important;
+    margin-bottom: var(--mobile-space-lg, 1rem) !important;
+  }
+}
+
+/* ==============================================
+   MOBILE CARD LAYOUTS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .admin-main .card,
+  .card {
+    padding: var(--mobile-space-lg, 1rem) !important;
+    margin-bottom: var(--mobile-space-lg, 1rem) !important;
+    border-radius: var(--radius-lg, 0.75rem) !important;
+  }
+  
+  .card-header {
+    padding-bottom: var(--mobile-space-md, 0.75rem) !important;
+    margin-bottom: var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .card-title,
+  .card-header h2,
+  .card-header h3 {
+    font-size: var(--text-lg, 1.125rem) !important;
+    margin-bottom: var(--mobile-space-sm, 0.5rem) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-main .card,
+  .card {
+    padding: var(--mobile-space-md, 0.75rem) !important;
+    margin-bottom: var(--mobile-space-md, 0.75rem) !important;
+  }
+}
+
+/* ==============================================
+   MOBILE STATS GRID
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+    gap: var(--mobile-space-lg, 1rem) !important;
+    margin-bottom: var(--mobile-space-xl, 1.5rem) !important;
+  }
+  
+  .admin-main .stat-card,
+  .stat-card {
+    padding: var(--mobile-space-lg, 1rem) !important;
+    text-align: center !important;
+  }
+  
+  .admin-main .stat-number,
+  .stat-number {
+    font-size: var(--text-3xl, 1.875rem) !important;
+    margin-bottom: var(--mobile-space-sm, 0.5rem) !important;
+  }
+  
+  .admin-main .stat-label,
+  .stat-label {
+    font-size: var(--text-xs, 0.75rem) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .admin-main .stat-card,
+  .stat-card {
+    padding: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .admin-main .stat-number,
+  .stat-number {
+    font-size: var(--text-2xl, 1.5rem) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ==============================================
+   MOBILE ANIMAL/WORKER CARDS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .animals-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .admin-main .animal-card,
+  .animal-card {
+    padding: var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .admin-main .animal-name,
+  .animal-name {
+    font-size: var(--text-lg, 1.125rem) !important;
+  }
+  
+  .animal-actions {
+    flex-direction: column !important;
+    gap: var(--mobile-space-sm, 0.5rem) !important;
+  }
+  
+  .animal-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .animals-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .admin-main .animal-card,
+  .animal-card {
+    padding: var(--mobile-space-md, 0.75rem) !important;
+  }
+}
+
+/* ==============================================
+   MOBILE FORM LAYOUTS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .admin-main .form-actions,
+  .form-actions {
+    flex-direction: column !important;
+    gap: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .admin-main .btn,
+  .form-actions .btn {
+    width: 100% !important;
+    min-height: var(--touch-target-comfortable, 48px) !important;
+    justify-content: center !important;
+    font-size: var(--text-base, 1rem) !important;
+    padding: var(--mobile-space-md, 0.75rem) var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .admin-main input,
+  .admin-main select,
+  .admin-main textarea {
+    min-height: var(--touch-target-min, 44px) !important;
+    font-size: 16px !important; /* Prevent zoom on iOS */
+    padding: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .admin-main label {
+    font-size: var(--text-base, 1rem) !important;
+    margin-bottom: var(--mobile-space-md, 0.75rem) !important;
+  }
+}
+
+/* ==============================================
+   MOBILE TABLE LAYOUTS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .admin-main table {
+    font-size: var(--text-sm, 0.875rem) !important;
+  }
+  
+  .admin-main table th,
+  .admin-main table td {
+    padding: var(--mobile-space-md, 0.75rem) var(--mobile-space-sm, 0.5rem) !important;
+  }
+  
+  .admin-main table th {
+    font-size: var(--text-xs, 0.75rem) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Convert tables to card layout on small screens */
+  .admin-main table,
+  .admin-main thead,
+  .admin-main tbody,
+  .admin-main th,
+  .admin-main td,
+  .admin-main tr {
+    display: block !important;
+  }
+  
+  .admin-main thead tr {
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+  }
+  
+  .admin-main tr {
+    background: var(--pearl-white, #f5f2ed) !important;
+    border: 2px solid var(--farm-light, #9caf88) !important;
+    border-radius: var(--radius-lg, 0.75rem) !important;
+    padding: var(--mobile-space-lg, 1rem) !important;
+    margin-bottom: var(--mobile-space-lg, 1rem) !important;
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(45, 80, 22, 0.1)) !important;
+  }
+  
+  .admin-main td {
+    border: none !important;
+    padding: var(--mobile-space-sm, 0.5rem) 0 !important;
+    position: relative !important;
+    padding-left: 50% !important;
+    text-align: left !important;
+  }
+  
+  .admin-main td:before {
+    content: attr(data-label) ": " !important;
+    position: absolute !important;
+    left: 0 !important;
+    width: 45% !important;
+    padding-right: var(--mobile-space-sm, 0.5rem) !important;
+    white-space: nowrap !important;
+    font-weight: var(--weight-semibold, 600) !important;
+    color: var(--farm-primary, #2d5016) !important;
+  }
+}
+
+/* ==============================================
+   MOBILE GALLERY LAYOUTS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .admin-gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+    gap: var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .gallery-item-info {
+    padding: var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .gallery-item-info h4 {
+    font-size: var(--text-base, 1rem) !important;
+  }
+  
+  .gallery-caption {
+    font-size: var(--text-sm, 0.875rem) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+    gap: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .gallery-image-container {
+    height: 150px !important;
+  }
+  
+  .gallery-item-info {
+    padding: var(--mobile-space-md, 0.75rem) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-gallery-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .gallery-image-container {
+    height: 200px !important;
+  }
+}
+
+/* ==============================================
+   MOBILE NAVIGATION ENHANCEMENTS
+   ============================================== */
+
+/* Add scroll indicators for horizontal navigation */
+@media (max-width: 1024px) {
+  .admin-nav-tabs {
+    position: relative !important;
+  }
+  
+  .admin-nav-tabs::before,
+  .admin-nav-tabs::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 20px !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
+  
+  .admin-nav-tabs::before {
+    left: 0 !important;
+    background: linear-gradient(to right, var(--farm-primary, #2d5016), transparent) !important;
+  }
+  
+  .admin-nav-tabs::after {
+    right: 0 !important;
+    background: linear-gradient(to left, var(--farm-primary, #2d5016), transparent) !important;
+  }
+}
+
+/* ==============================================
+   TOUCH INTERACTION IMPROVEMENTS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  /* Larger touch targets */
+  .admin-tab,
+  .admin-main .btn,
+  .nav-link {
+    min-height: var(--touch-target-comfortable, 48px) !important;
+    min-width: var(--touch-target-comfortable, 48px) !important;
+  }
+  
+  /* Improved hover states for touch */
+  .admin-tab:active,
+  .admin-main .btn:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s ease !important;
+  }
+  
+  /* Better spacing for touch interaction */
+  .admin-main .card:not(:last-child) {
+    margin-bottom: var(--mobile-space-xl, 1.5rem) !important;
+  }
+  
+  /* Improved form field spacing */
+  .admin-main .form-group {
+    margin-bottom: var(--mobile-space-xl, 1.5rem) !important;
+  }
+}
+
+/* ==============================================
+   MOBILE MODAL & OVERLAY ADJUSTMENTS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .modal {
+    margin: var(--mobile-space-lg, 1rem) !important;
+    max-width: calc(100vw - 2rem) !important;
+    max-height: calc(100vh - 2rem) !important;
+  }
+  
+  .modal-header {
+    padding: var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .modal-body {
+    padding: var(--mobile-space-lg, 1rem) !important;
+    max-height: calc(100vh - 200px) !important;
+    overflow-y: auto !important;
+  }
+  
+  .modal-footer {
+    padding: var(--mobile-space-lg, 1rem) !important;
+    flex-direction: column !important;
+    gap: var(--mobile-space-md, 0.75rem) !important;
+  }
+  
+  .modal-footer .btn {
+    width: 100% !important;
+  }
+}
+
+/* ==============================================
+   MOBILE ACCESSIBILITY ENHANCEMENTS
+   ============================================== */
+
+@media (max-width: 1024px) {
+  /* Larger focus indicators on mobile */
+  .admin-main *:focus,
+  .admin-tab:focus,
+  .nav-link:focus {
+    outline: 3px solid var(--focus-blue, #4169e1) !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Better contrast for mobile viewing */
+  .admin-main .card,
+  .card {
+    border-width: 2px !important;
+  }
+  
+  /* Improved text sizing for mobile readability */
+  .admin-main p,
+  .admin-main li {
+    font-size: var(--text-base, 1rem) !important;
+    line-height: var(--leading-relaxed, 1.75) !important;
+  }
+}
+
+/* ==============================================
+   LANDSCAPE MOBILE ADJUSTMENTS
+   ============================================== */
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  .admin-header-content {
+    flex-direction: row !important;
+    padding: var(--mobile-space-sm, 0.5rem) var(--mobile-space-lg, 1rem) !important;
+  }
+  
+  .admin-logo-section {
+    order: 0 !important;
+  }
+  
+  .admin-nav-tabs {
+    order: 1 !important;
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+  
+  .admin-main {
+    padding: var(--mobile-space-md, 0.75rem) !important;
+  }
+}
+
+/* ==============================================
+   VERY SMALL SCREENS (320px and below)
+   ============================================== */
+
+@media (max-width: 320px) {
+  .admin-header-content {
+    padding: var(--mobile-space-sm, 0.5rem) !important;
+  }
+  
+  .admin-logo-link,
+  .admin-brand {
+    font-size: var(--text-base, 1rem) !important;
+  }
+  
+  .admin-logo-svg {
+    height: 28px !important;
+  }
+  
+  .admin-tab {
+    min-width: 80px !important;
+    padding: var(--mobile-space-sm, 0.5rem) var(--mobile-space-md, 0.75rem) !important;
+    font-size: var(--text-xs, 0.75rem) !important;
+  }
+  
+  .admin-main {
+    padding: var(--mobile-space-sm, 0.5rem) !important;
+  }
+  
+  .admin-main .card,
+  .card {
+    padding: var(--mobile-space-sm, 0.5rem) !important;
+  }
+  
+  .page-title {
+    font-size: var(--text-lg, 1.125rem) !important;
+  }
+}
+
+/* ==============================================
+   PRINT STYLES FOR MOBILE
+   ============================================== */
+
+@media print {
+  .admin-header,
+  .admin-header-fixed,
+  .admin-nav-tabs,
+  .admin-tab {
+    display: none !important;
+  }
+  
+  .admin-main {
+    padding: 0 !important;
+    background: white !important;
+  }
+  
+  .admin-main .card,
+  .card {
+    break-inside: avoid !important;
+    border: 1px solid black !important;
+    box-shadow: none !important;
+  }
+}

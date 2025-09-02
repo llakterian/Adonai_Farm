@@ -3,16 +3,14 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
-import './styles.css';
-import './mobile-fix.css';
-import './mobile-touch-optimization.css';
-import './agricultural-theme.css';
-import './accessibility-compliance.css';
-import './unified-agricultural-theme.css';
-import './brown-contrast-fix.css';
-import './admin-header-fix.css';
-import './admin-tab-spacing-fix.css';
-import './admin-layout.css';
+// Import CSS in proper order - base to specific
+import './unified-agricultural-theme.css';     // Base theme system (highest priority)
+import './admin-theme-fix.css';               // Admin visibility fixes
+import './accessible-forms.css';              // Form accessibility
+import './mobile-responsive-admin.css';       // Mobile responsiveness
+import './styles.css';                        // Legacy styles (lower priority)
+import './admin-layout.css';                  // Admin layout (override legacy)
+import './agricultural-theme.css';            // Enhanced theme (final overrides)
 import './utils/mobileTouch.js';
 import './utils/progressiveEnhancement.js';
 import './utils/performanceTesting.js';
