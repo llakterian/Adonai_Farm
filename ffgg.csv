@@ -1,132 +1,50 @@
- npm run railway:build         
+./railway-deploy-simple.sh
+🚂 Railway Simple Deployment
+============================
+✅ Authenticated as: Logged in as Llakterian (llakterian@gmail.com) 👋
+✅ Connected to Railway project
+📊 Current project status:
+Project: talented-fascination
+Environment: production
+Service: None
+🚀 Deployment attempt 1 of 3...
+> Select a service adonai-farm-frontend
+  Indexed                                                                                            
+  Compressed [====================] 100%                                                             
+error sending request for url (https://backboard.railway.com/project/1b5a6161-dce7-4426-8001-de783dccb1d4/environment/d4d9e4d9-9299-4961-99ae-0d1301e5be99/up?serviceId=78bbf99d-23d3-48a3-aabd-2782d827b2d1)
 
-> adonai-farm-management@1.0.0 railway:build
-> echo 'Starting Railway build process...' && npm run railway:install && npm run railway:build-frontend
+Caused by:
+    operation timed out
+❌ Deployment attempt 1 failed
+⏳ Waiting 5 seconds before retry...
+🚀 Deployment attempt 2 of 3...
+> Select a service adonai-farm-backend
+  Indexed                                                                                            
+  Compressed [====================] 100%                                                             
+error sending request for url (https://backboard.railway.com/project/1b5a6161-dce7-4426-8001-de783dccb1d4/environment/d4d9e4d9-9299-4961-99ae-0d1301e5be99/up?serviceId=9f3be47c-0330-45be-a74f-2ea0d6dd62f4)
 
-Starting Railway build process...
+Caused by:
+    operation timed out
+❌ Deployment attempt 2 failed
+⏳ Waiting 10 seconds before retry...
+🚀 Deployment attempt 3 of 3...
+> Select a service adonai-farm-backend
+  Indexed                                                                                            
+  Compressed [====================] 100%                                                             
+error sending request for url (https://backboard.railway.com/project/1b5a6161-dce7-4426-8001-de783dccb1d4/environment/d4d9e4d9-9299-4961-99ae-0d1301e5be99/up?serviceId=9f3be47c-0330-45be-a74f-2ea0d6dd62f4)
 
-> adonai-farm-management@1.0.0 railway:install
-> echo 'Installing backend dependencies...' && cd backend && npm ci --only=production && echo 'Installing frontend dependencies...' && cd ../frontend && npm ci
+Caused by:
+    operation timed out
+❌ Deployment attempt 3 failed
+❌ All deployment attempts failed
 
-Installing backend dependencies...
-npm warn config only Use `--omit=dev` to omit dev dependencies from the install.
-npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
-npm warn deprecated npmlog@5.0.1: This package is no longer supported.
-npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
-npm warn deprecated are-we-there-yet@2.0.0: This package is no longer supported.
-npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
-npm warn deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
-npm warn deprecated
-npm warn deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
-npm warn deprecated multer@1.4.5-lts.2: Multer 1.x is impacted by a number of vulnerabilities, which have been patched in 2.x. You should upgrade to the latest 2.x version.
-npm warn deprecated gauge@3.0.2: This package is no longer supported.
+❌ Deployment failed after multiple attempts
 
-added 208 packages, and audited 209 packages in 8s
-
-27 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-Installing frontend dependencies...
-
-added 161 packages, and audited 162 packages in 9s
-
-16 packages are looking for funding
-  run `npm fund` for details
-
-1 high severity vulnerability
-
-To address all issues, run:
-  npm audit fix
-
-Run `npm audit` for details.
-
-> adonai-farm-management@1.0.0 railway:build-frontend
-> echo 'Building frontend...' && cd frontend && npm run build && echo 'Frontend build complete'
-
-Building frontend...
-
-> adonai-frontend@0.1.0 build
-> vite build
-
-The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
-vite v6.3.5 building for production...
-✓ 771 modules transformed.
-transforming (774) src/utils/sitemap.js[esbuild css minify]
-▲ [WARNING] Expected "}" to go with "{" [css-syntax-error]
-
-    <stdin>:13317:1:
-      13317 │ }
-            │  ^
-            ╵  }
-
-  The unbalanced "{" is here:
-
-    <stdin>:6908:15:
-      6908 │ .progress-text {
-           ╵                ^
-
-
-dist/index.html                      2.77 kB │ gzip:   1.11 kB
-dist/css/public-BHc5-YfV.css        18.88 kB │ gzip:   3.72 kB
-dist/css/index-DrtbsPsl.css        209.68 kB │ gzip:  29.22 kB
-dist/js/Brochure-By3yJqyK.js         1.93 kB │ gzip:   0.87 kB
-dist/js/Login-CQxbQEps.js            3.42 kB │ gzip:   1.38 kB
-dist/js/TaskChecklist-CSbCrCVb.js    3.69 kB │ gzip:   1.77 kB
-dist/js/NotFound-Behpnf77.js         6.15 kB │ gzip:   2.08 kB
-dist/js/Animals-DRmCYk7R.js         12.03 kB │ gzip:   3.30 kB
-dist/js/chunk-DWiyKcXY.js           18.67 kB │ gzip:   6.40 kB
-dist/js/index-BNIDXgKs.js           27.42 kB │ gzip:   8.96 kB
-dist/js/chunk-BNEsFnvT.js          117.22 kB │ gzip:  30.49 kB
-dist/js/chunk-qtMtGttW.js          160.19 kB │ gzip:  52.31 kB
-dist/js/chunk-CYDViK74.js          732.26 kB │ gzip: 180.27 kB
-✓ built in 24.70s
-Frontend build complete
-                                                                                                     
-┌──(micro3㉿micro3)-[~/Documents/Proj/Adonai]
-└─$ npm run validate:env
-npm error Missing script: "validate:env"
-npm error
-npm error To see a list of scripts, run:
-npm error   npm run
-npm error A complete log of this run can be found in: /home/micro3/.npm/_logs/2025-09-02T17_07_21_808Z-debug-0.log
-                                                                                                     
-┌──(micro3㉿micro3)-[~/Documents/Proj/Adonai]
-└─$ ./railway-deploy-complete.sh
-
-🌾 Adonai Farm - Railway Deployment (Optimized)
-==================================================
-🔍 Validating environment...
-🔍 Validating environment variables...
-✅ NODE_ENV: Set
-✅ PORT: Set
-✅ JWT_SECRET: Set
-✅ DATABASE_URL: Set
-✅ FRONTEND_URL: Set
-✅ SMTP_HOST: Set
-✅ SMTP_PORT: Set
-⚠️  SMTP_SECURE: Using default value "false"
-
-🐘 Database mode: PostgreSQL (Production)
-   Connection: postgresql://neondb_owner:***@ep-little-brook-ab90jz5e-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require
-
-✅ Environment validation passed
-✅ Environment validation successful
-🔧 Checking Railway CLI...
-🔐 Checking Railway authentication...
-❌ Not logged in to Railway
-Please run: railway login
-                                                                                                     
-┌──(micro3㉿micro3)-[~/Documents/Proj/Adonai]
-└─$ railway logs --follow
-error: unexpected argument '--follow' found
-
-  tip: to pass '--follow' as a value, use '-- --follow'
-
-Usage: railway logs [OPTIONS] [DEPLOYMENT_ID]
-
-For more information, try '--help'.
-
+🔧 Troubleshooting options:
+1. Check network connection
+2. Try again later (Railway servers might be busy)
+3. Use Railway dashboard: https://railway.app/dashboard
+4. Check Railway status: https://status.railway.app/
                                                                                                      
 ┌──(micro3㉿micro3)-[~/Documents/Proj/Adonai]
 └─$ 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 🚂 Complete Railway Deployment Script
+# Complete Railway Deployment Script for Adon
 # Optimized build process for Railway deployment
 
 set -e  # Exit on any error

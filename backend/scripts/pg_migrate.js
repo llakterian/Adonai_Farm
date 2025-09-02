@@ -1,5 +1,12 @@
 // Create tables in Postgres matching the SQLite schema, with a few additions for photos
-require('dotenv').config();
+// Only load .env file if not in Railway environment
+if (!process.env.RAILWAY_ENVIRONMENT) {
+    require('dotenv').config();
+    console.log('[migrate] Loaded local .env file');
+} else {
+    console.log('[migrate] Running in Railway environment, using Railway variables');
+}
+
 const { createDb } = require('../db/dbAdapter');
 
 // Migration steps configuration - database agnostic

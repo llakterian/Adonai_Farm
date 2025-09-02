@@ -1,7 +1,14 @@
 // Entrypoint that selects the appropriate server based on env
 const path = require('path');
-const envPath = path.join(__dirname, '.env');
-require('dotenv').config({ path: envPath, override: true });
+
+// Only load .env file if not in Railway environment
+if (!process.env.RAILWAY_ENVIRONMENT) {
+    const envPath = path.join(__dirname, '.env');
+    require('dotenv').config({ path: envPath, override: true });
+    console.log('[server] Loaded local .env file');
+} else {
+    console.log('[server] Running in Railway environment, using Railway variables');
+}
 
 // Validate environment variables for Railway deployment
 try {
