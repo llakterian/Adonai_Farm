@@ -27,11 +27,11 @@ jobs:
           node-version: '18'
           
       - name: Install and Build
+        env:
+          VITE_API_URL: ${{ vars.PUBLISHED_API_URL }}
         run: |
           cd frontend
-          npm install
-          # Use custom domain for backend API over HTTPS
-          echo "VITE_API_URL=https://api.adonaifarm.co.ke" > .env
+          npm ci
           npm run build
           
       - name: Setup Pages
