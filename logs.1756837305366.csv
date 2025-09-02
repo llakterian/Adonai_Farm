@@ -1,0 +1,125 @@
+message,timestamp
+,2025-09-02T18:24:07.327036194Z
+[35m[Region: europe-west4][0m,2025-09-02T18:24:10.094487582Z
+[35m=========================,2025-09-02T18:24:10.104415018Z
+Using Detected Dockerfile,2025-09-02T18:24:10.104465642Z
+=========================,2025-09-02T18:24:10.104470044Z
+[0m,2025-09-02T18:24:10.104473344Z
+context: xm66-nSSt,2025-09-02T18:24:10.104490570Z
+[internal] load build definition from Dockerfile,2025-09-02T18:24:10.292668003Z
+[internal] load build definition from Dockerfile,2025-09-02T18:24:10.292724058Z
+[internal] load build definition from Dockerfile,2025-09-02T18:24:10.292746030Z
+[internal] load build definition from Dockerfile,2025-09-02T18:24:10.304466993Z
+[internal] load metadata for docker.io/library/node:18-alpine,2025-09-02T18:24:10.306848282Z
+[internal] load metadata for docker.io/library/node:18-alpine,2025-09-02T18:24:10.686805926Z
+[internal] load .dockerignore,2025-09-02T18:24:10.686881032Z
+[internal] load .dockerignore,2025-09-02T18:24:10.687274359Z
+[internal] load .dockerignore,2025-09-02T18:24:10.687346541Z
+[internal] load .dockerignore,2025-09-02T18:24:10.698938242Z
+[frontend-build 3/6] COPY frontend/package*.json ./,2025-09-02T18:24:10.704728292Z
+[frontend-build 2/6] WORKDIR /app/frontend,2025-09-02T18:24:10.704796897Z
+[stage-2 4/7] COPY --from=backend-build /app/backend ./backend,2025-09-02T18:24:10.704807187Z
+[backend-build 6/6] RUN npm run migrate,2025-09-02T18:24:10.704814542Z
+[backend-build 5/6] COPY backend/ ./,2025-09-02T18:24:10.704821389Z
+[frontend-build 1/6] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e,2025-09-02T18:24:10.704834404Z
+[backend-build 3/6] COPY backend/package*.json ./,2025-09-02T18:24:10.704840834Z
+[internal] load build context,2025-09-02T18:24:10.704848393Z
+[backend-build 2/6] WORKDIR /app/backend,2025-09-02T18:24:10.704854228Z
+[stage-2 3/7] WORKDIR /app,2025-09-02T18:24:10.704860743Z
+[stage-2 2/7] RUN apk add --no-cache sqlite,2025-09-02T18:24:10.704870029Z
+[frontend-build 4/6] RUN npm install,2025-09-02T18:24:10.704875975Z
+[backend-build 4/6] RUN npm install --production,2025-09-02T18:24:10.704881941Z
+[frontend-build 6/6] RUN npm run build,2025-09-02T18:24:10.704896381Z
+[frontend-build 5/6] COPY frontend/ ./,2025-09-02T18:24:10.704902917Z
+[stage-2 7/7] RUN echo '#!/bin/sh' > start.sh &&     echo 'cd /app/backend && npm start &' >> start.sh &&     echo 'cd /app && serve -s frontend/dist -l 3000' >> start.sh &&     chmod +x start.sh,2025-09-02T18:24:10.704937103Z
+[stage-2 6/7] RUN npm install -g serve,2025-09-02T18:24:10.704947479Z
+[stage-2 5/7] COPY --from=frontend-build /app/frontend/dist ./frontend/dist,2025-09-02T18:24:10.704954461Z
+[frontend-build 1/6] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e,2025-09-02T18:24:10.704979228Z
+[internal] load build context,2025-09-02T18:24:10.704989758Z
+[internal] load build context,2025-09-02T18:24:10.705006961Z
+[frontend-build 1/6] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e,2025-09-02T18:24:10.712778862Z
+[internal] load build context,2025-09-02T18:24:10.713627972Z
+[internal] load build context,2025-09-02T18:24:10.976030197Z
+[backend-build 2/6] WORKDIR /app/backend,2025-09-02T18:24:10.980152371Z
+[backend-build 3/6] COPY backend/package*.json ./,2025-09-02T18:24:10.980194324Z
+[backend-build 4/6] RUN npm install --production,2025-09-02T18:24:10.980204459Z
+[backend-build 5/6] COPY backend/ ./,2025-09-02T18:24:10.980235486Z
+[backend-build 5/6] COPY backend/ ./,2025-09-02T18:24:11.098291443Z
+[backend-build 6/6] RUN npm run migrate,2025-09-02T18:24:11.099150296Z
+"
+> adonai-backend@0.1.0 migrate
+> node migrate_and_seed.js
+
+",2025-09-02T18:24:11.448066685Z
+"Seeded admin user (admin/adonai123)
+",2025-09-02T18:24:11.704469521Z
+"Seeded demo animals
+",2025-09-02T18:24:11.714200806Z
+"Seeded demo workers
+Migration + seeding complete.
+",2025-09-02T18:24:11.732054005Z
+[backend-build 6/6] RUN npm run migrate,2025-09-02T18:24:11.790247095Z
+[stage-2 2/7] RUN apk add --no-cache sqlite,2025-09-02T18:24:13.408095430Z
+[stage-2 3/7] WORKDIR /app,2025-09-02T18:24:13.408150736Z
+[frontend-build 2/6] WORKDIR /app/frontend,2025-09-02T18:24:13.408172205Z
+[frontend-build 3/6] COPY frontend/package*.json ./,2025-09-02T18:24:13.408183286Z
+[frontend-build 4/6] RUN npm install,2025-09-02T18:24:13.408190983Z
+[frontend-build 5/6] COPY frontend/ ./,2025-09-02T18:24:13.408199242Z
+[frontend-build 6/6] RUN npm run build,2025-09-02T18:24:13.408207008Z
+[frontend-build 6/6] RUN npm run build,2025-09-02T18:24:13.408226938Z
+[stage-2 4/7] COPY --from=backend-build /app/backend ./backend,2025-09-02T18:24:13.408263452Z
+[stage-2 4/7] COPY --from=backend-build /app/backend ./backend,2025-09-02T18:24:13.975679921Z
+[stage-2 5/7] COPY --from=frontend-build /app/frontend/dist ./frontend/dist,2025-09-02T18:24:13.976997717Z
+[stage-2 5/7] COPY --from=frontend-build /app/frontend/dist ./frontend/dist,2025-09-02T18:24:14.087891156Z
+[stage-2 6/7] RUN npm install -g serve,2025-09-02T18:24:14.090428788Z
+"
+added 88 packages in 3s
+
+24 packages are looking for funding
+",2025-09-02T18:24:17.4354253Z
+"  run `npm fund` for details
+",2025-09-02T18:24:17.43544878Z
+"npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.5.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.5.2
+npm notice To update run: npm install -g npm@11.5.2
+npm notice
+",2025-09-02T18:24:17.437385779Z
+[stage-2 6/7] RUN npm install -g serve,2025-09-02T18:24:17.550113801Z
+[stage-2 7/7] RUN echo '#!/bin/sh' > start.sh &&     echo 'cd /app/backend && npm start &' >> start.sh &&     echo 'cd /app && serve -s frontend/dist -l 3000' >> start.sh &&     chmod +x start.sh,2025-09-02T18:24:17.552178570Z
+[stage-2 7/7] RUN echo '#!/bin/sh' > start.sh &&     echo 'cd /app/backend && npm start &' >> start.sh &&     echo 'cd /app && serve -s frontend/dist -l 3000' >> start.sh &&     chmod +x start.sh,2025-09-02T18:24:17.659068585Z
+exporting to docker image format,2025-09-02T18:24:17.661619340Z
+exporting to image,2025-09-02T18:24:17.661667780Z
+[auth] sharing credentials for production-europe-west4-drams3a.railway-registry.com,2025-09-02T18:24:19.677856569Z
+[auth] sharing credentials for production-europe-west4-drams3a.railway-registry.com,2025-09-02T18:24:19.677916268Z
+importing to docker,2025-09-02T18:24:19.732540714Z
+[frontend-build 1/6] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e,2025-09-02T18:24:19.943533223Z
+[frontend-build 1/6] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e,2025-09-02T18:24:19.943593453Z
+importing to docker,2025-09-02T18:24:22.764935710Z
+exporting to image,2025-09-02T18:24:33.376917875Z
+[92mBuild time: 23.45 seconds[0m,2025-09-02T18:24:33.550801819Z
+,2025-09-02T18:24:51.566444880Z
+[35m====================,2025-09-02T18:24:51.566496551Z
+Starting Healthcheck,2025-09-02T18:24:51.566505438Z
+====================,2025-09-02T18:24:51.566509756Z
+[0m,2025-09-02T18:24:51.566518564Z
+[37mPath: /api/health[0m,2025-09-02T18:24:51.566522625Z
+[37mRetry window: 5m0s[0m,2025-09-02T18:24:51.566527396Z
+,2025-09-02T18:24:51.566531871Z
+[93mAttempt #1 failed with service unavailable. Continuing to retry for 4m57s[0m,2025-09-02T18:24:54.206672046Z
+[93mAttempt #2 failed with service unavailable. Continuing to retry for 4m53s[0m,2025-09-02T18:24:58.683816874Z
+[93mAttempt #3 failed with service unavailable. Continuing to retry for 4m50s[0m,2025-09-02T18:25:01.165567424Z
+[93mAttempt #4 failed with service unavailable. Continuing to retry for 4m46s[0m,2025-09-02T18:25:05.590580660Z
+[93mAttempt #5 failed with service unavailable. Continuing to retry for 4m37s[0m,2025-09-02T18:25:14.016246040Z
+[93mAttempt #6 failed with service unavailable. Continuing to retry for 4m21s[0m,2025-09-02T18:25:30.441968573Z
+[93mAttempt #7 failed with service unavailable. Continuing to retry for 3m50s[0m,2025-09-02T18:26:00.872376573Z
+[93mAttempt #8 failed with service unavailable. Continuing to retry for 3m20s[0m,2025-09-02T18:26:31.300090574Z
+[93mAttempt #9 failed with service unavailable. Continuing to retry for 2m50s[0m,2025-09-02T18:27:01.726781629Z
+[93mAttempt #10 failed with service unavailable. Continuing to retry for 2m19s[0m,2025-09-02T18:27:32.153302835Z
+[93mAttempt #11 failed with service unavailable. Continuing to retry for 1m49s[0m,2025-09-02T18:28:02.585169072Z
+[93mAttempt #12 failed with service unavailable. Continuing to retry for 1m18s[0m,2025-09-02T18:28:33.012220660Z
+[93mAttempt #13 failed with service unavailable. Continuing to retry for 48s[0m,2025-09-02T18:29:03.456893092Z
+[93mAttempt #14 failed with service unavailable. Continuing to retry for 17s[0m,2025-09-02T18:29:33.902152766Z
+,2025-09-02T18:29:34.248876466Z
+[91m1/1 replicas never became healthy![0m,2025-09-02T18:29:34.248910328Z
+[91mHealthcheck failed![0m,2025-09-02T18:29:34.248915362Z

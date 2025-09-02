@@ -1,17 +1,16 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "npm run railway:build",
+    "builder": "DOCKERFILE",
     "watchPatterns": [
       "backend/**/*",
       "frontend/**/*",
       "package.json",
-      "railway.json"
+      "railway.json",
+      "Dockerfile"
     ]
   },
   "deploy": {
-    "startCommand": "npm run railway:start",
     "numReplicas": 1,
     "sleepApplication": false,
     "restartPolicyType": "ON_FAILURE",
