@@ -30,8 +30,8 @@ jobs:
         run: |
           cd frontend
           npm install
-          # Use Railway API URL for static build
-          echo "VITE_API_URL=https://adonaifarm-production.up.railway.app" > .env
+          # Use custom domain for backend API over HTTPS
+          echo "VITE_API_URL=https://api.adonaifarm.co.ke" > .env
           npm run build
           
       - name: Setup Pages
