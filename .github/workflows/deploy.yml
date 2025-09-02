@@ -31,6 +31,11 @@ jobs:
           VITE_API_URL: ${{ vars.PUBLISHED_API_URL }}
         run: |
           cd frontend
+          # Fallback to Railway backend URL if repo variable is not set
+          if [ -z "$VITE_API_URL" ]; then
+            VITE_API_URL="https://adonai-farm-backend-production-31e7.up.railway.app"
+          fi
+          echo "VITE_API_URL=$VITE_API_URL" > .env
           npm ci
           npm run build
           
