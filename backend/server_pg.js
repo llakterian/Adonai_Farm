@@ -332,13 +332,112 @@ app.get('/api/reports/payroll', authMiddleware, async (req, res) => {
     res.json(rows);
 });
 
+// Comprehensive health check endpoint
 app.get('/api/health', async (req, res) => {
+    const healthCheck = {
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        database: {
+            type: process.env.DATABASE_URL ? 'postgresql' : 'sqlite',
+            status: 'unknown',
+            connection: false,
+            tables: [],
+            error: null
+        },
+        server: {
+            uptime: process.uptime(),
+            memory: process.memoryUsage(),
+            version: process.version,
+            port: PORT
+        },
+        environment: {
+            nodeEnv: process.env.NODE_ENV || 'development',
+            hasJwtSecret: !!process.env.JWT_SECRET,
+            hasEmailConfig: !!(process.env.SMTP_USER && process.env.SMTP_PASS),
+            hasDatabaseUrl: !!process.env.DATABASE_URL
+        }
+    };
+
     try {
-        await db.prepare('SELECT 1 as ok').get();
-        res.json({ status: 'ok' });
-    } catch (e) {
-        res.status(500).json({ status: 'error', error: e.message });
+        // Test database connectivity
+        const testResult = await db.prepare('SELECT 1 as test').get();
+        if (testResult && testResult.test === 1) {
+            healthCheck.database.connection = true;
+            healthCheck.database.status = 'connected';
+
+            // Test table existence
+            try {
+                let tables;
+                if (process.env.DATABASE_URL) {
+                    // PostgreSQL query for tables
+                    const tableResult = await db.query(`
+                        SELECT table_name as name 
+                        FROM information_schema.tables 
+                        WHERE table_schema = 'public' 
+                        ORDER BY table_name
+                    `);
+                    tables = tableResult.rows;
+                } else {
+                    // SQLite query for tables
+                    const tableResult = await db.prepare(`
+                        SELECT name FROM sqlite_master 
+                        WHERE type='table' AND name NOT LIKE 'sqlite_%'
+                        ORDER BY name
+                    `).all();
+                    tables = tableResult;
+                }
+                
+                healthCheck.database.tables = tables.map(t => t.name);
+
+                // Test basic operations on key tables
+                const requiredTables = ['users', 'animals', 'workers', 'photos'];
+                const missingTables = requiredTables.filter(table => 
+                    !healthCheck.database.tables.includes(table)
+                );
+
+                if (missingTables.length > 0) {
+                    healthCheck.database.status = 'missing_tables';
+                    healthCheck.database.error = `Missing required tables: ${missingTables.join(', ')}`;
+                    healthCheck.status = 'degraded';
+                } else {
+                    // Test read operations on key tables
+                    try {
+                        const userCount = await db.prepare('SELECT COUNT(*) as count FROM users').get();
+                        const animalCount = await db.prepare('SELECT COUNT(*) as count FROM animals').get();
+                        
+                        healthCheck.database.counts = {
+                            users: userCount.count,
+                            animals: animalCount.count
+                        };
+                        
+                        healthCheck.database.status = 'healthy';
+                    } catch (countError) {
+                        healthCheck.database.status = 'read_error';
+                        healthCheck.database.error = `Error reading from tables: ${countError.message}`;
+                        healthCheck.status = 'degraded';
+                    }
+                }
+            } catch (tableError) {
+                healthCheck.database.status = 'table_check_failed';
+                healthCheck.database.error = `Error checking tables: ${tableError.message}`;
+                healthCheck.status = 'degraded';
+            }
+        } else {
+            healthCheck.database.status = 'connection_failed';
+            healthCheck.database.error = 'Database test query returned unexpected result';
+            healthCheck.status = 'error';
+        }
+    } catch (dbError) {
+        healthCheck.database.status = 'error';
+        healthCheck.database.error = dbError.message;
+        healthCheck.status = 'error';
     }
+
+    // Set appropriate HTTP status code
+    const statusCode = healthCheck.status === 'ok' ? 200 : 
+                      healthCheck.status === 'degraded' ? 200 : 500;
+
+    res.status(statusCode).json(healthCheck);
 });
 
 // Catch-all handler: send back React's index.html file for client-side routing

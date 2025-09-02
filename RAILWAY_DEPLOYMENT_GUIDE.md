@@ -1,192 +1,182 @@
-# 🚂 Railway Deployment Guide for Adonai Farm Management System
+# 🚂 Railway Deployment Guide (Optimized)
 
-## 🎯 Overview
-Deploy your Adonai Farm Management System to Railway with custom domain `adonaifarm.co.ke`
+## Overview
 
-## 📋 Prerequisites
-- Railway account (free tier available)
-- GitHub repository
-- Domain `adonaifarm.co.ke` with DNS access
-- Neon Postgres database (already set up)
+This guide covers the optimized Railway deployment process for the Adonai Farm Management System with improved build process, environment variable handling, and error recovery.
 
-## 🚀 Step-by-Step Deployment
+## Prerequisites
 
-### 1. **Prepare Repository**
-```bash
-# Ensure all files are committed
-git add .
-git commit -m "Prepare for Railway deployment with Postgres"
-git push origin main
-```
+1. **GitHub Repository**: Your code must be in a GitHub repository
+2. **Railway Account**: Sign up at [railway.app](https://railway.app)
+3. **Railway CLI** (optional): `npm install -g @railway/cli`
 
-### 2. **Deploy to Railway**
+## Quick Deployment (Recommended)
 
-#### Option A: Railway CLI (Recommended)
-```bash
-# Install Railway CLI
-npm install -g @railway/cli
-
-# Login to Railway
-railway login
-
-# Initialize project
-railway init
-
-# Deploy
-railway up
-```
-
-#### Option B: Railway Dashboard
-1. Go to [railway.app](https://railway.app)
-2. Click "Deploy from GitHub repo"
-3. Connect your GitHub account
-4. Select your Adonai repository
-5. Railway will auto-detect your configuration
-
-### 3. **Configure Environment Variables**
-
-In Railway Dashboard, set these variables for your backend service:
-
-```env
-NODE_ENV=production
-JWT_SECRET=adonai_farm_super_secure_secret_2024_production
-DATABASE_URL=postgresql://neondb_owner:npg_Mx84qTlYGiSB@ep-little-brook-ab90jz5e-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require
-PORT=4000
-```
-
-### 4. **Configure Custom Domain**
-
-#### A. In Railway Dashboard:
-1. Go to your frontend service
-2. Click "Settings" → "Domains"
-3. Click "Custom Domain"
-4. Enter: `adonaifarm.co.ke`
-5. Railway will provide DNS records
-
-#### B. Configure DNS (at your domain registrar):
-Add these DNS records for `adonaifarm.co.ke`:
-
-```dns
-Type: CNAME
-Name: @
-Value: [railway-provided-domain].up.railway.app
-
-Type: CNAME  
-Name: www
-Value: [railway-provided-domain].up.railway.app
-```
-
-### 5. **Update Frontend API URL**
-
-Update your frontend to use the custom domain:
-
-```javascript
-// In frontend/src/config.js
-const API_BASE_URL = 'https://api.adonaifarm.co.ke';
-```
-
-### 6. **SSL Certificate**
-Railway automatically provides SSL certificates for custom domains.
-
-## 🔧 Configuration Files
-
-### railway.toml (Already configured)
-```toml
-[build]
-builder = "nixpacks"
-
-[deploy]
-healthcheckPath = "/api/health"
-healthcheckTimeout = 300
-restartPolicyType = "ON_FAILURE"
-
-[[services]]
-name = "adonai-backend"
-source = "backend"
-
-[services.build]
-buildCommand = "npm install"
-startCommand = "node server.js"
-
-[services.variables]
-NODE_ENV = "production"
-JWT_SECRET = "adonai_farm_super_secure_secret_2024_production"
-DATABASE_URL = "${{Postgres.DATABASE_URL}}"
-
-[[services]]
-name = "adonai-frontend"
-source = "frontend"
-
-[services.build]
-buildCommand = "npm install && npm run build"
-startCommand = "npx serve -s dist -l $PORT"
-
-[services.variables]
-VITE_API_URL = "https://adonai-backend-production.up.railway.app"
-```
-
-## 🌐 Domain Configuration Options
-
-### Option 1: Subdomain Setup
-- Frontend: `adonaifarm.co.ke`
-- Backend API: `api.adonaifarm.co.ke`
-
-### Option 2: Single Domain (Recommended)
-- Everything: `adonaifarm.co.ke`
-- API routes: `adonaifarm.co.ke/api/*`
-
-## ✅ Post-Deployment Checklist
-
-1. **Test Health Check**: `https://adonaifarm.co.ke/api/health`
-2. **Test Login**: Use admin/adonai123
-3. **Test API Endpoints**: Livestock, Workers, etc.
-4. **Test File Uploads**: Photo gallery functionality
-5. **Test Mobile Responsiveness**
-6. **Verify SSL Certificate**
-
-## 🔍 Monitoring & Logs
+### Option 1: Automated Script
 
 ```bash
-# View logs
-railway logs
-
-# Check service status
-railway status
-
-# Open deployed app
-railway open
+# Run the optimized deployment script
+./railway-deploy-complete.sh
 ```
 
-## 💰 Cost Estimate
-- **Railway Free Tier**: $0/month
-  - 500 hours of usage
-  - 1GB RAM
-  - 1GB storage
-  - Custom domains included
+### Option 2: Manual Railway Dashboard
 
-## 🆘 Troubleshooting
+1. **Create Railway Project**
+   - Go to [railway.app/dashboard](https://railway.app/dashboard)
+   - Click "New Project"
+   - Select "Deploy from GitHub repo"
+   - Choose your repository
 
-### Common Issues:
-1. **Build Fails**: Check package.json scripts
-2. **Database Connection**: Verify DATABASE_URL
-3. **CORS Issues**: Update frontend API URL
-4. **Domain Not Working**: Check DNS propagation (24-48 hours)
+2. **Configure Services**
+   - Railway will auto-detect the Node.js application
+   - Add a PostgreSQL database service
 
-### Debug Commands:
+3. **Set Environment Variables**
+   ```
+   JWT_SECRET=your_super_secure_jwt_secret_minimum_32_characters
+   NODE_ENV=production
+   PORT=4000
+   FRONTEND_URL=https://your-frontend-domain.railway.app
+   ```
+
+## Environment Variables
+
+### Required Variables
+- `JWT_SECRET`: Secure secret for JWT tokens (minimum 32 characters)
+- `NODE_ENV`: Set to "production"
+- `PORT`: Set to "4000" (or Railway will auto-assign)
+
+### Auto-Provided Variables
+- `DATABASE_URL`: Automatically provided when you add PostgreSQL service
+
+### Optional Variables
+- `FRONTEND_URL`: For CORS configuration
+- `SMTP_*`: For email notifications
+- `CLOUDINARY_*`: For image uploads
+
+## Build Process Optimization
+
+The optimized build process includes:
+
+1. **Environment Validation**: Checks all required variables
+2. **Dependency Installation**: Uses `npm ci` for faster, reliable installs
+3. **Frontend Build**: Compiles React application
+4. **Database Migration**: Runs PostgreSQL migration if DATABASE_URL exists
+5. **Health Checks**: Validates server startup
+
+## Configuration Files
+
+### `railway.json`
+- Optimized build commands
+- Health check configuration
+- Environment variable templates
+- Watch patterns for auto-deployment
+
+### `backend/railway.toml`
+- Service-specific configuration
+- Health check endpoints
+- Resource allocation
+
+## Troubleshooting
+
+### Build Failures
+
+1. **Check Build Logs**
+   ```bash
+   railway logs --service backend
+   ```
+
+2. **Common Issues**
+   - Missing environment variables
+   - Dependency installation failures
+   - Database connection issues
+
+### Runtime Issues
+
+1. **Database Connection**
+   - Ensure PostgreSQL service is added
+   - Check DATABASE_URL is set
+   - Verify migration completed
+
+2. **Environment Variables**
+   ```bash
+   # Validate environment
+   railway run node backend/scripts/validate_env.js
+   ```
+
+3. **Health Check Failures**
+   - Check `/api/health` endpoint
+   - Verify server is listening on correct port
+   - Check database connectivity
+
+## Monitoring
+
+### Health Checks
+- Endpoint: `/api/health`
+- Timeout: 300 seconds
+- Checks database connectivity
+
+### Logging
+```bash
+# View real-time logs
+railway logs --follow
+
+# View specific service logs
+railway logs --service backend --follow
+```
+
+### Status Monitoring
 ```bash
 # Check deployment status
 railway status
 
-# View build logs
-railway logs --service adonai-backend
-
-# Connect to database
-railway connect Postgres
+# Check service health
+railway ps
 ```
 
-## 🎉 Success!
-Once deployed, your Adonai Farm Management System will be live at:
-- **Website**: https://adonaifarm.co.ke
-- **API**: https://adonaifarm.co.ke/api/health
+## Production Checklist
 
-Login with: `admin` / `adonai123`
+- [ ] JWT_SECRET is set and secure (32+ characters)
+- [ ] DATABASE_URL is configured (PostgreSQL service added)
+- [ ] FRONTEND_URL matches your frontend domain
+- [ ] Health check endpoint responds successfully
+- [ ] Database migration completed without errors
+- [ ] Admin user can log in (admin/adonai123)
+- [ ] All core features work (animals, workers, gallery)
+
+## Security Considerations
+
+1. **Environment Variables**: Never commit secrets to git
+2. **JWT Secret**: Use a strong, unique secret
+3. **Database**: Railway PostgreSQL includes SSL by default
+4. **CORS**: Configure FRONTEND_URL properly
+
+## Cost Optimization
+
+- **Free Tier**: Railway offers generous free tier
+- **Sleep Mode**: Disabled for production reliability
+- **Resource Limits**: Configured for optimal performance
+- **Auto-scaling**: Enabled based on traffic
+
+## Support
+
+- **Railway Docs**: [docs.railway.app](https://docs.railway.app)
+- **Community**: [Railway Discord](https://discord.gg/railway)
+- **Status**: [status.railway.app](https://status.railway.app)
+
+## Advanced Configuration
+
+### Custom Domains
+1. Add domain in Railway dashboard
+2. Configure DNS records
+3. SSL certificates are auto-managed
+
+### Multiple Environments
+- Use Railway's environment feature
+- Separate staging and production
+- Environment-specific variables
+
+### Database Backups
+- Railway PostgreSQL includes automatic backups
+- Manual backups available via dashboard
+- Point-in-time recovery supported

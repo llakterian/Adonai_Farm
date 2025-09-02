@@ -3,8 +3,16 @@ builder = "NIXPACKS"
 
 [deploy]
 healthcheckPath = "/api/health"
-healthcheckTimeout = 100
+healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
+numReplicas = 1
 
 [env]
 NODE_ENV = "production"
+PORT = "4000"
+
+[variables]
+# Environment variables that should be set in Railway dashboard
+JWT_SECRET = { description = "JWT secret for authentication", required = true }
+DATABASE_URL = { description = "PostgreSQL connection string", required = false }
+FRONTEND_URL = { description = "Frontend URL for CORS", required = false, default = "https://localhost:3000" }

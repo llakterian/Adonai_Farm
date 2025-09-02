@@ -8,8 +8,13 @@
     "dev": "cd backend && npm run dev",
     "install-all": "cd backend && npm install && cd ../frontend && npm install",
     "build": "cd frontend && npm install && npm run build",
-    "railway:build": "npm run build && cd backend && npm install",
-    "railway:start": "sh -c 'cd backend && if [ -n \"$DATABASE_URL\" ]; then npm run pg:migrate; fi && node server.js'"
+    "railway:build": "echo 'Starting Railway build process...' && npm run railway:install && npm run railway:build-frontend",
+    "railway:install": "echo 'Installing backend dependencies...' && cd backend && npm ci --only=production && echo 'Installing frontend dependencies...' && cd ../frontend && npm ci",
+    "railway:build-frontend": "echo 'Building frontend...' && cd frontend && npm run build && echo 'Frontend build complete'",
+    "railway:start": "echo 'Starting Railway deployment...' && cd backend && npm run railway:migrate && npm run railway:serve",
+    "railway:migrate": "echo 'Running database migration...' && if [ -n \"$DATABASE_URL\" ]; then echo 'PostgreSQL detected, running migration...' && node scripts/pg_migrate.js; else echo 'No DATABASE_URL found, skipping migration'; fi",
+    "railway:serve": "echo 'Starting server...' && node server.js",
+    "validate:env": "node backend/scripts/validate_env.js"
   },
   "keywords": [
     "farm",

@@ -9,7 +9,10 @@
     "pg:migrate": "node scripts/pg_migrate.js",
     "pg:import": "node scripts/import_sqlite_to_pg.js",
     "export:sqlite": "node scripts/export_sqlite_to_json.js",
-    "import:json": "node scripts/import_json_to_pg.js"
+    "import:json": "node scripts/import_json_to_pg.js",
+    "railway:migrate": "echo 'Running database migration...' && node scripts/validate_env.js && if [ -n \"$DATABASE_URL\" ]; then echo 'PostgreSQL detected, running migration...' && node scripts/pg_migrate.js; else echo 'No DATABASE_URL found, skipping migration'; fi",
+    "railway:serve": "echo 'Starting server...' && node scripts/validate_env.js && node server.js",
+    "validate:env": "node scripts/validate_env.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
